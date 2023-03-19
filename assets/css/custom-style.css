@@ -1,0 +1,55 @@
+body {
+    font-family: 'Kanit';
+}
+
+.body-light {
+    background-color: #EBEBEB;
+}
+
+.body-dark {
+    background-color:#222e3c;
+}
+
+.clickable {
+    cursor: pointer;
+    transition: transform .2s;
+    border-radius: 10px;
+}
+
+.clickable:hover {
+    transform: scale(1.03); 
+}
+
+.container-middle {
+    display: flex;
+    flex-basis: 100%;
+    min-height: 100vh;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.icon-circle {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-color: #DCEAF4;
+    border-radius:50%;
+    height:50px;
+    width:50px;
+}
+
+.img-cover {
+    width: 100%;
+    background-position: center center;
+	background-size: cover;
+}
+
+.width-460 {
+    width: 460px;
+}
+
+.width-700 {
+    width: 700px;
+}
