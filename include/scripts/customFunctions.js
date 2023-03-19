@@ -1,6 +1,11 @@
 //Dynamic add active to sidebar (Require jquery.min.js)
 function activeSidebar(){
-    var currentPage = location.pathname.split('/').pop();
+    var currentPage = "";
+    if ($('.fix-menu').length) {
+        currentPage = $('.fix-menu').text();
+    }else{
+        currentPage = location.pathname.split('/').pop();
+    }
 
     //If the file name is empty, assume it's the first item if exist
     if(currentPage === ''){

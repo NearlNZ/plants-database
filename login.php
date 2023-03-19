@@ -118,7 +118,6 @@
         <!-- Page JS -->
         <script src="include/scripts/customFunctions.js"></script>
         <script>
-            //Data import 
             $('#formLogin').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);

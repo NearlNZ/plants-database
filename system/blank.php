@@ -1,6 +1,6 @@
 <?php
     //include permission check
-    require_once('../include/scripts/header-officer.php');
+    require_once('../include/scripts/header.php');
 ?>
 
 <!DOCTYPE html>

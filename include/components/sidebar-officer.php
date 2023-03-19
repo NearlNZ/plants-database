@@ -20,7 +20,7 @@
                 <div>Dashboard</div>
             </a>
         </li>
-
+        
         <!-- Device -->
         <li class="menu-item">
             <a href="device" class="menu-link">
@@ -41,7 +41,7 @@
         <li class="menu-item">
             <a href="alert" class="menu-link">
                 <i class="menu-icon fa-solid fa-bell"></i>
-                <div>จัดการข้อมูลการแจ้งเตือน</div>
+                <div>จัดการการแจ้งเตือน</div>
             </a>
         </li>
 

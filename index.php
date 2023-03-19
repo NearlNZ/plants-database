@@ -52,7 +52,7 @@
                                             <div class="card-body mb-0">
                                                 <div class="row d-table">
                                                     <div class="col-auto d-table-cell align-middle">
-                                                        <div class="icon-circle">
+                                                        <div class="icon-circle-primary">
                                                             <i class="fa-solid fa-user-doctor fa-xl"></i>
                                                         </div>
                                                     </div>
