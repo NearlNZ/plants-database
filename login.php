@@ -54,7 +54,7 @@
                                     <div class="row align-items-center">
                                         <div class="col-lg-6 d-none d-lg-flex p-0">
                                             <div class="align-middle">
-                                                <img class="img-cover" src="assets/img/common/page/login-cover.jpg">
+                                                <img class="img-cover" src="assets/img/common/element/login-cover.jpg">
                                             </div>
                                         </div>
                                         <div class="col-lg-6">

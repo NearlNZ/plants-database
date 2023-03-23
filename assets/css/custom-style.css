@@ -15,6 +15,7 @@ body {
     border-color: transparent;
     background: #ebeef0;
 }
+
 .btn-label-secondary:hover {
     color: #fff;
     background-color: #788393;
@@ -28,6 +29,7 @@ body {
     transition: transform .2s;
     border-radius: 10px;
 }
+
 .clickable:hover {
     transform: scale(1.03); 
 }
@@ -42,10 +44,12 @@ body {
     overflow: hidden;
 }
 
-.fixed-header {
-    position: sticky;
-    top: 0;
-    z-index: 1;
+.fit-contain {
+    object-fit:cover;
+}
+
+.maxh-200 {
+    max-height: 200px;
 }
 
 .icon-circle-primary {
@@ -76,8 +80,40 @@ body {
 	background-size: cover;
 }
 
+.scroll-y {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .table-nowrap th, .table-nowrap td {
     white-space: nowrap;
+}
+
+.user-profile-header-banner img {
+    width: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    height: 250px
+}
+
+.user-profile-header {
+    margin-top: -2rem
+}
+
+.user-profile-header .user-profile-img {
+    border: 5px solid;
+    width: 120px;
+    border-color: #fff
+}
+
+@media(max-width: 767.98px) {
+    .user-profile-header-banner img {
+        height:150px
+    }
+
+    .user-profile-header .user-profile-img {
+        width: 100px
+    }
 }
 
 .width-460 {

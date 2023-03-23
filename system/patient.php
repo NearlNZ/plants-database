@@ -8,7 +8,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Device</title>
+        <title>Patient</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -58,7 +58,7 @@
                                         <a>BPCS</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a class="active">อุปกรณ์</a>
+                                        <a class="active">ผู้ป่วย</a>
                                     </li>
                                 </ol>
                             </nav>
@@ -138,6 +138,7 @@
                                         เพิ่มอุปกรณ์ใหม่
                                     </a>
 
+                                    <!-- Data table -->
                                     <p class="h5 mt-3">
                                         ข้อมูลทั้งหมด <?php echo $resultCount?> รายการ
                                     </p>
@@ -167,7 +168,7 @@
                                                         <a href="<?php echo $device["deviceCameraIP"];?>" target="_blank" class="btn btn-success btn-icon rounded-pill"
                                                         data-bs-toggle="tooltip" data-bs-offset="0,2" data-bs-placement="top" 
                                                         data-bs-html="true" title="<i class='fa-solid fa-video me-2'></i><span>VDO Streaming</span>">
-                                                            <i class="fa-solid fa-circle-play fa-lg"></i>
+                                                            <i class="fa-solid fa-video"></i>
                                                         </a>
                                                     <?php }else{ ?>
                                                         <span class="text-warning">

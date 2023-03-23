@@ -20,6 +20,14 @@
                 <div>Dashboard</div>
             </a>
         </li>
+
+        <!-- Profile -->
+        <li class="menu-item">
+            <a href="profile" class="menu-link">
+                <i class="menu-icon fa-solid fa-user-gear"></i>
+                <div>จัดการข้อมูลบัญชีผู้ใช้</div>
+            </a>
+        </li>
         
         <!-- Device -->
         <li class="menu-item">

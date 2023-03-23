@@ -20,7 +20,7 @@
     }
 
     //2) Check if username exist
-    $sql = "SELECT caregiverID, username, password
+    $sql = "SELECT caregiverID, caregiverProfile, username, password
             FROM caregiver
             WHERE username = ? 
             LIMIT 1;";
@@ -58,6 +58,7 @@
     $_SESSION['BPCS-session-account'] = [
         "id" => $account['caregiverID'],
         "username" => $account['username'],
+        "profile" => $account['caregiverProfile'],
         "level" => 'ผู้ดูแล'
     ];
 

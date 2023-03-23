@@ -73,23 +73,28 @@
                                 <!-- Card form -->
                                 <div class="col-12">
                                     <div class="card mb-4">
-                                        <h4 class="card-header">
+                                        <h5 class="card-header">
                                             <i class="fa-solid fa-house-laptop me-1"></i>
                                             เพิ่มข้อมูลอุปกรณ์
-                                        </h4>
+                                        </h5>
                                         <div class="card-body">
                                             <form id="formAddDevice" method="post" action="../data/device/createNewDevice">
                                                 <div class="row g-2">
                                                     <div class="col-12 col-md-6">
                                                         หมายเลข Serial
-                                                        <input type="text" name="deviceSerial" class="form-control" placeholder="ระบุหมายเลข Serial..." autofocus autocomplete="off" required>
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
+                                                            <input type="text" name="deviceSerial" class="form-control" placeholder="ระบุหมายเลข Serial..." autofocus autocomplete="off" required>
+                                                        </div>
                                                         <div class="form-text">ตรวจสอบหมายเลข Serial ที่อุปกรณ์</div>
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         VDO Streaming URL
-                                                        <div class="input-group">
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i class="fa-solid fa-video"></i></span>
                                                             <input id="urlInput" type="url" name="deviceCameraIP" class="form-control" placeholder="ระบุ URL สำหรับ VDO Streaming" autocomplete="off">
-                                                            <a id="testStreaming" href="#" class="btn btn-primary text-white">
+                                                            <a id="testStreaming" href="#" class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,2" data-bs-placement="left" 
+                                                            data-bs-html="true" title="<i class='fa-solid fa-video me-2'></i><span>ทดสอบ Streaming</span>">
                                                                 <i class="fa-solid fa-video"></i>
                                                             </a>
                                                         </div>
@@ -101,8 +106,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <!-- /Account -->
-                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /Card form -->
                             </div>
@@ -168,7 +172,6 @@
                     $('#testStreaming').attr("href","#");
                     $('#testStreaming').attr("target","");
                 }
-                
             });
         </script>
     </body>
