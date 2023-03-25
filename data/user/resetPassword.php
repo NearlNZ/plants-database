@@ -3,9 +3,9 @@
     $response = new stdClass();
     require_once("../connect.php");
 
-    //1) Exit if user not verified yet.
+    //1) Exit if user not verified key yet.
     session_start();
-    if (!isset($_SESSION['BPCS-session-account'])) {
+    if (!isset($_SESSION['BPCS-session-userID']) && (!isset($_SESSION['BPCS-session-keyVerified']) || $_SESSION['BPCS-session-keyVerified'] != true)) {
         $response->status = "warning";
         $response->title = "เกิดข้อผิดพลาด";
         $response->text = "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
@@ -16,70 +16,72 @@
     }
 
     //Set parameter
-    $deviceID = uniqid("DEVICE-").rand(100,999);
-    $deviceSerial = $_POST['deviceSerial'] ?? null; 
-    $deviceCameraIP = $_POST['deviceCameraIP'] ?? null;
-    $deviceRegist = date('Y-m-d');
-    $deviceStatus = "อุปกรณ์ว่าง";
+    $userID = $_POST['caregiverID'] ?? null; 
+    $oldPassword = $_POST['oldPassword'] ?? null;
+    $password = $_POST['password'] ?? null;
 
     //2) Check for required parameter
-    if($deviceSerial == null){
+    if($userID == null || $oldPassword == null || $password == null){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุหมายเลข Serial ของอุปกรณ์';
+        $response->text = 'โปรดระบุข้อมูลในการรีเซ็ตรหัสผ่านให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $bpcsDB->close();
         exit();
     }
 
-    //3) Check if serial already exist
-    $sql = "SELECT deviceID
-            FROM device
-            WHERE deviceSerial = ?;";
+   //3) Check if user exist
+    $sql = "SELECT password
+            FROM caregiver
+            WHERE caregiverID = ?
+            LIMIT 1;";
 
     $stmt =  $bpcsDB->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $deviceSerial);
+    $stmt->bind_param('s', $userID);
     $stmt->execute();
-    $result = $stmt-> get_result();
+    $userResult = $stmt-> get_result();
     $stmt->close();
-
-    if($result->num_rows > 0){
+    
+    if($userResult->num_rows == 0){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'อุปกรณ์นี้ได้ทำการลงทะเบียนไปแล้ว';
+        $response->text = 'ไม่พบบัญชีผู้ใช้ในระบบ โปรดตรวจสอบอีกครั้ง';
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $bpcsDB->close();
+        exit();
+    };
+
+    //Check if old password correct
+    $user = $userResult->fetch_assoc();
+    if(!password_verify($oldPassword, $user['password'])){
+        $response->status = 'warning';
+        $response->title = 'เกิดข้อผิดพลาด';
+        $response->text = 'รหัสผ่านไม่ถูกต้อง โปรดตรวจสอบอีกครั้ง';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $bpcsDB->close();
         exit();
     }
 
-    //4) Validate URL
-    if(!empty($deviceCameraIP) && !filter_var($deviceCameraIP, FILTER_VALIDATE_URL)){
-        $response->status = 'warning';
-        $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุ VDO Streaming URL ที่ถูกต้อง';
-        
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $bpcsDB->close();
-        exit();
-    }
+    //Pass) Create new account
+    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    //Pass) Create new device
-    $sql = "INSERT INTO device(deviceID, deviceSerial, deviceCameraIP, deviceRegist, deviceStatus)
-            VALUES(?, ?, ?, ?, ?);";
+    $sql = "UPDATE caregiver SET password = ?
+            WHERE caregiverID = ?";
     
     $stmt =  $bpcsDB->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('sssss', $deviceID, $deviceSerial, $deviceCameraIP, $deviceRegist, $deviceStatus);
+    $stmt->bind_param('ss', $hashPassword, $userID);
 
     if($stmt->execute()){
         $stmt->close();
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'ลงทะเบียนอุปกรณ์สำเร็จแล้ว';
+        $response->text = 'รีเซ็ตรหัสผ่านของท่านแล้ว จะมีผลในการเข้าสู่ระบบครั้งถัดไป';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

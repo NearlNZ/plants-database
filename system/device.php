@@ -143,6 +143,7 @@
                                     </p>
                                 </div>
                                 <div class="table-responsive">
+                                    <?php if($resultCount > 0){?>
                                     <table class="table table-hover card-table table-nowrap">
                                         <thead>
                                             <tr>
@@ -156,7 +157,7 @@
                                         <tbody>
 
                                         <?php 
-                                            if($resultCount > 0){ while($device = $result->fetch_assoc()){
+                                             while($device = $result->fetch_assoc()){
                                         ?>
 
                                             <tr>
@@ -209,12 +210,14 @@
                                         
                                         <?php } }else{ ?>
 
-                                            <tr>
-                                                <td class="text-center text-warning py-4" colspan="6">
-                                                    <i class="fa-solid fa-triangle-exclamation fa-xl me-1"></i>
-                                                    ไม่พบข้อมูลอุปกรณ์ที่ลงทะเบียน
-                                                </td>
-                                            </tr>
+                                            <script>
+                                                Swal.fire({
+                                                    icon: 'warning',
+                                                    text: 'ไม่มีข้อมูล',
+                                                    showConfirmButton: false,
+                                                    timer: 2000
+                                                });
+                                            </script>
 
                                         <?php } ?>
                                             

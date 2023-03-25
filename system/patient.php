@@ -67,20 +67,12 @@
                             <!-- Search -->
                             <div class="card px-lg-2 mt-2">
                                 <div class="card-body py-3">
-                                    <form action="device" method="post">
+                                    <form action="patient" method="post">
                                         <div class="row row-cols-2 g-2">
-                                            <div class="col-12 col-lg-6">
-                                                หมายเลข Serial
-                                                <input type="text" name="filterText" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off">
-                                            </div>
-                                            <div class="col-12 col-lg-6">
-                                                สถานะอุปกรณ์
+                                            <div class="col-12">
+                                                ชื่อผู้ป่วย
                                                 <div class="input-group">
-                                                    <select class="form-select" name="filterStatus">
-                                                        <option selected value="">อุปกรณ์ทั้งหมด</option>
-                                                        <option value="กำลังใช้งาน">กำลังใช้งาน</option>
-                                                        <option value="อุปกรณ์ว่าง">อุปกรณ์ว่าง</option>
-                                                    </select>
+                                                    <input type="text" name="filterText" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off">
                                                     <button type="submit" class="btn btn-primary text-white">
                                                         <i class='bx bx-search-alt'></i>
                                                     </button>
@@ -94,25 +86,18 @@
 
                             <?php
                                 $filterText = $_POST['filterText'] ?? '';
-                                $filterStatus = $_POST['filterStatus'] ?? '';
                                 $filter = array();
                                 $filterType = "";
 
-                                $sql = "SELECT deviceID, deviceCameraIP, deviceSerial, deviceRegist, deviceStatus
-                                        FROM device
+                                $sql = "SELECT patientID, patientProfile, patientName, patientLastname, patientGender, YEAR(FROM_DAYS(DATEDIFF(NOW(),`patientBirthdate`))) AS patientAge, patientWeight, patientHeight
+                                        FROM patient
                                         WHERE 1=1 ";
 
                                 if(!empty($filterText)){
-                                    $sql .= "AND (deviceSerial LIKE ? OR deviceID = ?) ";
+                                    $sql .= "AND (patientName LIKE ? OR patientLastname LIKE ?) ";
                                     $filter[] = "%$filterText%";
                                     $filter[] = "%$filterText%";
                                     $filterType .= "ss";
-                                }
-
-                                if(!empty($filterStatus)){
-                                    $sql .= "AND deviceStatus = ? ";
-                                    $filter[] = $filterStatus;
-                                    $filterType .= "s";
                                 }
 
                                 $stmt = $bpcsDB->prepare($sql);
@@ -120,7 +105,7 @@
                                     $stmt->bind_param($filterType, ...$filter);
                                 }
 
-                                $sql.="ORDER BY deviceRegist DESC;";
+                                $sql.="ORDER BY patientID DESC;";
 
                                 $stmt->execute();
                                 $result = $stmt-> get_result();
@@ -133,12 +118,11 @@
                             <div class="card shadow mt-3">
                                 <div class="card-header mb-0">
                                     <!-- Add new -->
-                                    <a class="btn btn-success py-3 py-lg-2 col-12 col-lg-auto shadow-sm" href="device-add">
+                                    <a class="btn btn-success py-3 py-lg-2 col-12 col-lg-auto shadow-sm" href="patient-add">
                                         <i class="fa-solid fa-plus fa-xl me-2"></i>
-                                        เพิ่มอุปกรณ์ใหม่
+                                        ลงทะเบียนผู้ป่วย
                                     </a>
 
-                                    <!-- Data table -->
                                     <p class="h5 mt-3">
                                         ข้อมูลทั้งหมด <?php echo $resultCount?> รายการ
                                     </p>
@@ -147,62 +131,44 @@
                                     <table class="table table-hover card-table table-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>หมายเลข Serial</th>
-                                                <th>วันที่ลงทะเบียน</th>
-                                                <th>VDO Streaming</th>
-                                                <th>สถานะ</th>
+                                                <th>รูปโปรไฟล์</th>
+                                                <th>ชื่อ-สกุล</th>
+                                                <th>เพศ</th>
+                                                <th>อายุ</th>
                                                 <th>จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                         <?php 
-                                            if($resultCount > 0){ while($device = $result->fetch_assoc()){
+                                            if($resultCount > 0){ while($patient = $result->fetch_assoc()){
                                         ?>
 
                                             <tr>
-                                                <td><?php echo $device["deviceSerial"];?></td>
-                                                <td><?php echo date('d/m/Y', strtotime($device["deviceRegist"]));?></td>
                                                 <td>
-                                                    <?php if($device["deviceCameraIP"] != ""){ ?>
-                                                        <a href="<?php echo $device["deviceCameraIP"];?>" target="_blank" class="btn btn-success btn-icon rounded-pill"
-                                                        data-bs-toggle="tooltip" data-bs-offset="0,2" data-bs-placement="top" 
-                                                        data-bs-html="true" title="<i class='fa-solid fa-video me-2'></i><span>VDO Streaming</span>">
-                                                            <i class="fa-solid fa-video"></i>
-                                                        </a>
-                                                    <?php }else{ ?>
-                                                        <span class="text-warning">
-                                                            <a href="#" class="btn btn-warning btn-icon rounded-pill" data-bs-toggle="tooltip" data-bs-offset="0,2" data-bs-placement="top" 
-                                                            data-bs-html="true" title="<i class='fa-solid fa-triangle-exclamation me-2'></i><span>VDO Not available</span>">
-                                                                <i class="fa-solid fa-triangle-exclamation fa-lg"></i> 
-                                                            </a>
-                                                        </span>
-                                                                
-                                                    <?php } ?>
+                                                    <div class="avatar">
+                                                        <img src="../assets/img/avatars/<?php echo $patient["patientProfile"];?>" alt class="w-px-40 h-auto rounded-circle" />
+                                                    </div>
                                                 </td>
-                                                <td>
-                                                    <?php if($device['deviceStatus'] == "กำลังใช้งาน"){ ?>
-                                                        <span class="badge bg-success w-100 py-2">กำลังใช้งาน</span>
-                                                    <?php }else{ ?>
-                                                            <span class="badge bg-label-secondary w-100 py-2">อุปกรณ์ว่าง</span>
-                                                    <?php } ?>
-                                                </td>
+                                                <td><?php echo $patient["patientName"]." ".$patient["patientLastname"];?></td>
+                                                <td><?php echo $patient["patientGender"];?></td>
+                                                <td><?php echo $patient["patientAge"]." ปี";?></td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="device-view?deviceID=<?php echo $device['deviceID'];?>">
-                                                            <i class="fa-solid fa-laptop-file me-1"></i>       
-                                                            ดูข้อมูลอุปกรณ์
+                                                        <a class="dropdown-item" href="patient-view?patientID=<?php echo $patient['patientID'];?>">
+                                                            <i class="fa-solid fa-user-injured me-1"></i>    
+                                                            ดูข้อมูลผู้ป่วย
                                                         </a>
-                                                        <a class="dropdown-item" href="device-edit?deviceID=<?php echo $device['deviceID'];?>">
+                                                        <a class="dropdown-item" href="patient-edit?patientID=<?php echo $patient['patientID'];?>">
                                                             <i class="bx bx-edit-alt me-1"></i>
                                                             แก้ไขข้อมูล
                                                         </a>
-                                                        <a class="dropdown-item deleteBtn" href="../data/device/deleteDevice?deviceID=<?php echo $device['deviceID'];?>">
+                                                        <a class="dropdown-item deleteBtn" href="../data/patient/deletePatient?patientID=<?php echo $patient['patientID'];?>">
                                                             <i class="bx bx-trash me-1"></i>
-                                                            นำอุปกรณ์ออก
+                                                            ลบข้อมูลผู้ป่วย
                                                         </a>
                                                     </div>
                                                 </td>
@@ -213,7 +179,7 @@
                                             <tr>
                                                 <td class="text-center text-warning py-4" colspan="6">
                                                     <i class="fa-solid fa-triangle-exclamation fa-xl me-1"></i>
-                                                    ไม่พบข้อมูลอุปกรณ์ที่ลงทะเบียน
+                                                    ไม่พบข้อมูลผู้ป่วยที่ลงทะเบียน
                                                 </td>
                                             </tr>
 
@@ -256,7 +222,7 @@
                 
                 showConfirm({
                     icon: 'question',
-                    text: 'ต้องการนำอุปกรณ์ออกจากระบบหรือไม่',
+                    text: 'ต้องลบข้อมูลผู้ป่วยออกจากระบบหรือไม่',
                     confirmButtonText: 'ดำเนินการต่อ',
                     confirmCallback: function(){
                         ajaxRequest({

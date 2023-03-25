@@ -5,11 +5,11 @@
     require_once("../connect.php");
 
     //Set parameter
-    $username = $_POST['username'] ?? null;
-    $password = $_POST['password'] ?? null;
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
 
     //1) Check for required parameter
-    if($username == null || $password == null){
+    if($username == '' || $password == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุชื่อผู้ใช้และรหัสผ่านของท่าน';
@@ -55,12 +55,8 @@
     }
 
     //Pass) Create session for user
-    $_SESSION['BPCS-session-account'] = [
-        "id" => $account['caregiverID'],
-        "username" => $account['username'],
-        "profile" => $account['caregiverProfile'],
-        "level" => 'ผู้ดูแล'
-    ];
+    $_SESSION['BPCS-session-userID'] = $account['caregiverID'];
+
 
     $response->status = "success";
     $response->text = "กำลังเข้าสู่ระบบ กรุณารอสักครู่...";

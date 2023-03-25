@@ -16,27 +16,30 @@
     }
 
     //Set parameter
-    $deviceID = $_GET['deviceID'] ?? '';
-
+    $symptomID = $_POST['symptomID'] ?? '';
+    $symptomStart = $_POST['symptomStart'] ?? '';
+    $symptomEnd = $_POST['symptomEnd'] ?? '';
+    $symptomDetail = $_POST['symptomDetail'] ?? null;
+    
     //2) Check for required parameter
-    if($deviceID == ''){
+    if($symptomID == '' || $symptomStart == '' || $symptomDetail ==''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุรหัสของอุปกรณ์';
+        $response->text = 'โปรดระบุข้อมูลในการบันทึกให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $bpcsDB->close();
         exit();
     }
 
-    //3) Check if device exist
-    $sql = "SELECT deviceID, deviceStatus
-            FROM device
-            WHERE deviceID = ?;";
+    //3) Check if symptom data exist
+    $sql = "SELECT symptomID
+            FROM patientsymptom
+            WHERE symptomID = ?;";
 
     $stmt =  $bpcsDB->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $deviceID);
+    $stmt->bind_param('s', $symptomID);
     $stmt->execute();
     $result = $stmt-> get_result();
     $stmt->close();
@@ -44,39 +47,28 @@
     if($result->num_rows == 0){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'อุปกรณ์นี้ไม่ได้ลงทะเบียนในระบบ';
+        $response->text = 'ไม่พบข้อมูลบันทึกอาการป่วย โปรดตรวจสอบอีกครั้ง';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $bpcsDB->close();
         exit();
     }
 
-    //4) Check if device not in use
-    $device = $result->fetch_assoc();
-    if($device['deviceStatus'] == "กำลังใช้งาน"){
-        $response->status = 'warning';
-        $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'อุปกรณ์อยู่ระหว่างการใช้งาน ไม่สามารถนำอุปกรณ์ออกได้';
-        
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $bpcsDB->close();
-        exit();
-    }
-
-    //Pass) Delete device
-    $sql = "DELETE FROM device
-            WHERE deviceID = ?;";
+    //Pass) Update symptom data
+    $sql = "UPDATE patientsymptom
+            SET symptomStart = ?, symptomEnd = ?, symptomDetail = ?
+            WHERE symptomID = ?;";
     
     $stmt =  $bpcsDB->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $deviceID);
+    $stmt->bind_param('ssss', $symptomStart, $symptomEnd, $symptomDetail, $symptomID);
 
     if($stmt->execute()){
         $stmt->close();
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'นำอุปกรณ์ออกจากระบบสำเร็จแล้ว';
+        $response->text = 'บันทึกข้อมูลอาการป่วยสำเร็จแล้ว';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

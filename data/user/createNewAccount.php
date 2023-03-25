@@ -5,7 +5,7 @@
 
     //1) Exit if user not verified key yet.
     session_start();
-    if (!isset($_SESSION['BPCS-session-account']) && (!isset($_SESSION['BPCS-session-keyVerified']) || $_SESSION['BPCS-session-keyVerified'] != true)) {
+    if (!isset($_SESSION['BPCS-session-userID']) && (!isset($_SESSION['BPCS-session-keyVerified']) || $_SESSION['BPCS-session-keyVerified'] != true)) {
         $response->status = "warning";
         $response->title = "เกิดข้อผิดพลาด";
         $response->text = "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";

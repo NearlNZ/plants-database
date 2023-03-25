@@ -8,7 +8,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Device</title>
+        <title>Patient</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -58,7 +58,7 @@
                                         <a>BPCS</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="device">อุปกรณ์</a>
+                                        <a href="patient">ผู้ป่วย</a>
                                     </li>
                                     <li class="breadcrumb-item">
                                         <a class="active">แก้ไขข้อมูล</a>
@@ -66,22 +66,24 @@
                                 </ol>
                             </nav>
 
-                            <span class="d-none fix-menu">device</span>
+                            <span class="d-none fix-menu">patient</span>
                             <!-- /Breadcrumb -->
 
-                            <?php 
-                                $deviceID = $_GET['deviceID'] ?? '';
-                                $sql = "SELECT deviceID, deviceCameraIP, deviceSerial
-                                        FROM device
-                                        WHERE deviceID = ?
+                            <?php
+                                $symptomID = $_GET['symptomID'] ?? '';
+                                $patientID = $_GET['patientID'] ?? '';
+
+                                $sql = "SELECT symptomID, symptomStart, symptomEnd, symptomDetail
+                                        FROM patientsymptom
+                                        WHERE symptomID = ?
                                         LIMIT 1;";
 
                                 $stmt = $bpcsDB->prepare($sql);
-                                $stmt->bind_param('s', $deviceID);
+                                $stmt->bind_param('s', $symptomID);
                                 $stmt->execute();
                                 $result = $stmt-> get_result();
                                 $stmt->close();
-                                $device = $result->fetch_assoc();
+                                $symptom = $result->fetch_assoc();
                             ?>
 
                             <div class="row g-3">
@@ -89,36 +91,37 @@
                                 <div class="col-12">
                                     <div class="card mb-4">
                                         <h5 class="card-header">
-                                            <i class="fa-solid fa-house-laptop me-1"></i>
-                                            แก้ไขข้อมูลอุปกรณ์
+                                            <i class="fa-solid fa-head-side-cough me-1"></i>
+                                            แก้ไขข้อมูลอาการป่วย
                                         </h5>
                                         <div class="card-body">
-                                            <form id="formEditDevice" method="post" action="../data/device/updateDevice">
+                                            <form id="formEditSymptom" method="post" action="../data/patient/updateSymptom">
                                                 <div class="row g-2">
-                                                    <input type="hidden" name="deviceID" value="<?php echo $device['deviceID'];?>">
+                                                    <input type="hidden" name="symptomID" value="<?php echo $symptomID;?>">
                                                     <div class="col-12 col-md-6">
-                                                        หมายเลข Serial
+                                                        วันที่เริ่มเป็น
                                                         <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
-                                                            <input type="text" name="deviceSerial" class="form-control" value="<?php echo $device['deviceSerial'];?>" placeholder="ระบุหมายเลข Serial" autofocus autocomplete="off" required>   
+                                                            <span class="input-group-text"><i class="fa-solid fa-calendar-day"></i></span>
+                                                            <input type="date" name="symptomStart" class="form-control" required
+                                                            value="<?php echo $symptom['symptomStart']?>">   
                                                         </div>
-                                                        <div class="form-text">ตรวจสอบหมายเลข Serial ที่อุปกรณ์</div>
                                                     </div>
                                                     <div class="col-12 col-md-6">
-                                                        VDO Streaming URL
+                                                        วันที่หาย
                                                         <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i class="fa-solid fa-video"></i></span>
-                                                            <input id="urlInput" type="url" name="deviceCameraIP" class="form-control" value="<?php echo $device['deviceCameraIP'];?>" placeholder="ระบุ URL สำหรับ VDO Streaming" autocomplete="off">
-                                                            <a id="testStreaming" href="#" class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,2" data-bs-placement="left" 
-                                                            data-bs-html="true" title="<span>ทดสอบ Streaming</span>">
-                                                                <i class="fa-solid fa-video"></i>
-                                                            </a>
+                                                            <span class="input-group-text"><i class="fa-solid fa-calendar-day"></i></span>
+                                                            <input type="date" name="symptomEnd" class="form-control"
+                                                            value="<?php echo $symptom['symptomEnd']?>">   
                                                         </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        รายละเอียด
+                                                        <textarea name="symptomDetail" class="form-control" rows="5" required><?php echo $symptom['symptomDetail']?></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="mt-3">
                                                     <button type="submit" class="btn btn-primary me-2">บันทึกข้อมูล</button>
-                                                    <a href="device" class="btn btn-label-secondary">ย้อนกลับ</a>
+                                                    <a id="backBtn" href="patient-edit?patientID=<?php echo $patientID;?>" class="btn btn-label-secondary">ย้อนกลับ</a>
                                                 </div>
                                             </form>
                                         </div>
@@ -151,7 +154,7 @@
         <!-- Page JS -->
         <script src="../include/scripts/customFunctions.js"></script>
         <script>
-            $('#formEditDevice').submit(function(e) {
+            $('#formEditSymptom').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
 
@@ -166,7 +169,7 @@
                                 response: response,
                                 timer: 2000,
                                 callback: function() {
-                                    window.location.href="device";
+                                    window.location.href="patient-edit?patientID=<?php echo $patientID;?>";
                                 }
                             });
                         }else{
@@ -176,19 +179,6 @@
                         }
                     }
                 });
-            });
-
-            //Test Streaming URL
-            $('#testStreaming').click(function(){
-                let urlInput = $('#urlInput').val();
-                if(urlInput != '' && $('#urlInput')[0].checkValidity()){
-                    $('#testStreaming').attr("href",urlInput);
-                    $('#testStreaming').attr("target","_blank");
-                }else{
-                    $('#testStreaming').attr("href","#");
-                    $('#testStreaming').attr("target","");
-                }
-                
             });
         </script>
     </body>

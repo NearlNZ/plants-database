@@ -8,7 +8,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Profile</title>
+        <title>Patient</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -58,34 +58,40 @@
                                         <a>BPCS</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a class="active">บัญชีผู้ใช้</a>
+                                        <a href="patient">ผู้ป่วย</a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a class="active">ข้อมูล</a>
                                     </li>
                                 </ol>
                             </nav>
+
+                            <span class="d-none fix-menu">patient</span>
                             <!-- /Breadcrumb -->
 
                             <?php 
-                                $userID = $account->caregiverID;
-                                $sql = "SELECT caregiverID, caregiverName, caregiverLastname, caregiverProfile, caregiverTel, caregiverLineToken, username
-                                        FROM caregiver
-                                        WHERE caregiverID = ?
+                                $patientID = $_GET['patientID'];
+                                $sql = "SELECT patientID, patientName, patientLastname, patientProfile, patientGender, patientBirthdate, patientWeight, patientHeight
+                                        FROM patient
+                                        WHERE patientID = ?
                                         LIMIT 1;";
 
                                 $stmt = $bpcsDB->prepare($sql);
-                                $stmt->bind_param('s', $userID);
+                                $stmt->bind_param('s', $patientID);
                                 $stmt->execute();
                                 $result = $stmt-> get_result();
                                 $stmt->close();
-                                $caregiver = $result->fetch_assoc();
+                                $patient = $result->fetch_assoc();
 
                                 //Set variable
-                                $caregiverID = $caregiver["caregiverID"] ?? '';
-                                $caregiverName = $caregiver["caregiverName"] ?? '';
-                                $caregiverLastname = $caregiver["caregiverLastname"] ?? '';
-                                $caregiverProfile = $caregiver["caregiverProfile"] ?? '';
-                                $caregiverTel = $caregiver["caregiverTel"] ?? '';
-                                $caregiverLineToken = $caregiver["caregiverLineToken"] ?? '';
-                                $username = $caregiver["username"] ?? '';
+                                $patientID = $patient["patientID"] ?? '';
+                                $patientName = $patient["patientName"] ?? '';
+                                $patientLastname = $patient["patientLastname"] ?? '';
+                                $patientProfile = $patient["patientProfile"] ?? '';
+                                $patientGender = $patient["patientGender"] ?? '';
+                                $patientBirthdate = $patient["patientBirthdate"] ?? '';
+                                $patientWeight = $patient["patientWeight"] ?? '';
+                                $patientHeight = $patient["patientHeight"] ?? '';
                             ?>
 
                             <!-- Card header -->
@@ -97,20 +103,16 @@
                                         </div>
                                         <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
                                             <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
-                                                <img src="../assets/img/avatars/<?php echo $caregiverProfile?>" alt="user image" class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img">
+                                                <img src="../assets/img/avatars/<?php echo $patientProfile;?>" alt="user image" class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img">
                                             </div>
                                             <div class="flex-grow-1 mt-3 mt-sm-5">
                                                 <div class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-4 flex-md-row flex-column gap-4">
                                                     <div class="user-profile-info">
-                                                        <h4><?php echo "$caregiverName $caregiverLastname"?></h4>
+                                                        <h4><?php echo "$patientName $patientLastname";?></h4>
                                                         <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
                                                             <li class="list-inline-item fw-semibold">
-                                                                <i class="fa-solid fa-user me-1"></i>
-                                                                <?php echo $username?>
-                                                            </li>
-                                                            <li class="list-inline-item fw-semibold">
                                                                 <i class="fa-solid fa-user-tag me-1"></i>
-                                                                ผู้ดูแล
+                                                                ผู้ป่วย
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -128,66 +130,101 @@
                                     <!-- Card profile -->
                                     <div class="card h-100">
                                         <h5 class="card-header text-muted mb-0">
-                                            <i class="fa-solid fa-user-doctor me-1"></i>
-                                            ข้อมูลบัญชีผู้ใช้
+                                            <i class="fa-solid fa-user-injured me-1"></i>
+                                            ข้อมูลทั่วไปของผู้ป่วย
                                         </h5>
                                         <div class="card-body">
                                             <ul class="list-unstyled mb-2 mt-3">
                                                 <li class="d-flex align-items-center mb-3">
                                                     <i class="fa-solid fa-user"></i>
                                                     <span class="fw-semibold mx-2">ชื่อ-สกุล:</span>
-                                                    <span><?php echo "$caregiverName $caregiverLastname";?></span>
+                                                    <span><?php echo "$patientName $patientLastname";?></span>
                                                 </li>
                                                 <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-user"></i>
-                                                    <span class="fw-semibold mx-2">Username:</span>
-                                                    <span><?php echo $username;?></span>
+                                                    <i class="fa-solid fa-venus-mars"></i>
+                                                    <span class="fw-semibold mx-1">เพศ:</span>
+                                                    <span><?php echo $patientGender;?></span>
                                                 </li>
                                                 <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-phone"></i>
-                                                    <span class="fw-semibold mx-2">โทรศัพท์:</span>
-                                                    <span><?php echo $caregiverTel;?></span>
+                                                    <i class="fa-solid fa-calendar-day"></i>
+                                                    <span class="fw-semibold mx-2">วัน/เดือน/ปี เกิด:</span>
+                                                    <span><?php echo date('d/m/Y', strtotime($patientBirthdate));?></span>
+                                                </li>
+                                                <li class="d-flex align-items-center mb-3">
+                                                    <i class="fa-solid fa-weight-scale"></i>
+                                                    <span class="fw-semibold mx-2">น้ำหนัก:</span>
+                                                    <span><?php echo $patientWeight;?> กิโลกรัม</span>
                                                 </li>
                                                 <li class="d-flex align-items-center">
-                                                    <i class="fa-brands fa-line fa-lg"></i>
-                                                    <span class="fw-semibold mx-2">Line Token:</span>
-                                                    <span><?php echo $caregiverLineToken ? substr($caregiverLineToken, 0, 8).'***'.substr($caregiverLineToken, -4) : '';?></span>
+                                                    <i class="fa-solid fa-arrows-up-down"></i>
+                                                    <span class="fw-semibold mx-2">ส่วนสูง:</span>
+                                                    <span><?php echo $patientHeight;?> เซนติเมตร</span>
                                                 </li>
                                             </ul>
-                                            <div class="mt-5">
-                                                <a href="profile-edit" class="btn btn-primary me-2">แก้ไขข้อมูลบัญชีผู้ใช้</a>
-                                            </div>
                                         </div>
                                     </div>
                                     <!-- /Card profile -->
                                 </div>
+
+                                <?php
+                                    $sql = "SELECT symptomID, symptomDetail, symptomStart, symptomEnd
+                                            FROM patientsymptom
+                                            WHERE patientID = ?
+                                            ORDER BY symptomStart DESC;";
+                                            
+                                    $stmt = $bpcsDB->prepare($sql);
+                                    $stmt->bind_param('s', $patientID);
+                                    $stmt->execute();
+                                    $result = $stmt-> get_result();
+                                    $stmt->close();
+
+                                    $resultCount = $result->num_rows;
+                                ?>
+
                                 <div class="col">
                                     <!-- Card patient -->
                                     <div class="card h-100">
                                         <h5 class="card-header text-muted">
-                                            <i class="fa-solid fa-user-injured me-1"></i>
-                                            ประวัติการดูแลผู้ป่วย
+                                            <i class="fa-solid fa-head-side-cough me-1"></i>
+                                            บันทึกอาการป่วย
                                             <p class="h5 mt-3">
-                                                ข้อมูลทั้งหมด 0 รายการ
+                                                ข้อมูลทั้งหมด <?php echo $resultCount;?> รายการ
                                             </p>
                                         </h5>
                                         <div class="table-responsive scroll-y maxh-200">
                                             <table class="table table-hover card-table table-nowrap">
                                                 <thead>
                                                     <tr>
-                                                        <th>วันที่เริ่ม</th>
-                                                        <th>วันที่สิ้นสุด</th>
-                                                        <th>ผู้ป่วย</th>
-                                                        <th>สถานะ</th>
+                                                        <th>รายละเอียด</th>
+                                                        <th>วันที่เริ่มเป็น</th>
+                                                        <th>วันที่หาย</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+
+                                                <?php 
+                                                    if($resultCount > 0){ while($symptom = $result->fetch_assoc()){
+                                                ?>
+
+                                                <tr>
+                                                    <td><?php echo $symptom["symptomDetail"];?></td>
+                                                    <td><?php echo date('d/m/Y', strtotime($symptom["symptomStart"]));?></td>
+                                                    <td>
+                                                        <?php echo $symptom["symptomEnd"] != '0000-00-00' ? date('d/m/Y', strtotime($symptom["symptomEnd"])) : "-";?>
+                                                    </td>
+                                                </tr>
+
+                                                <?php } }else{ ?>
+
                                                     <tr>
                                                         <td class="text-center text-warning py-3" colspan="4">
                                                             <i class="fa-solid fa-triangle-exclamation fa-xl me-1"></i>
-                                                            ไม่พบข้อมูลการดูแลผู้ป่วย
+                                                            ไม่พบบันทึกข้อมูลอาการป่วย
                                                         </td>
                                                     </tr>
+
+                                                <?php } ?>
+
                                                 </tbody>
                                             </table>
                                         </div>

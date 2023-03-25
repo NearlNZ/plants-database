@@ -16,54 +16,31 @@
     }
 
     //Set parameter
-    $deviceID = $_POST['deviceID'] ?? '';
+    $deviceID = uniqid("DEVICE-").rand(100,999);
     $deviceSerial = $_POST['deviceSerial'] ?? ''; 
     $deviceCameraIP = $_POST['deviceCameraIP'] ?? '';
+    $deviceRegist = date('Y-m-d');
+    $deviceStatus = "อุปกรณ์ว่าง";
 
     //2) Check for required parameter
-    if($deviceID == '' || $deviceSerial == ''){
+    if($deviceSerial == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุหมายเลข Serial หรือรหัสอุปกรณ์';
+        $response->text = 'โปรดระบุหมายเลข Serial ของอุปกรณ์';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $bpcsDB->close();
         exit();
     }
 
-    //3) Check if device exist
-    $sql = "SELECT deviceID, deviceSerial
-            FROM device
-            WHERE deviceID = ?;";
-
-    $stmt =  $bpcsDB->stmt_init(); 
-    $stmt->prepare($sql);
-    $stmt->bind_param('s', $deviceID);
-    $stmt->execute();
-    $result = $stmt-> get_result();
-    $stmt->close();
-
-    if($result->num_rows == 0){
-        $response->status = 'warning';
-        $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'อุปกรณ์นี้ไม่ได้ลงทะเบียนในระบบ';
-        
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $bpcsDB->close();
-        exit();
-    }
-
-    //4) Check if serial already exist and not current device
-    $device = $result->fetch_assoc();
-    $oldSerial = $device['deviceSerial'];
-
+    //3) Check if serial already exist
     $sql = "SELECT deviceID
             FROM device
-            WHERE deviceSerial = ? AND deviceSerial <> ?;";
+            WHERE deviceSerial = ?;";
 
     $stmt =  $bpcsDB->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ss', $deviceSerial, $oldSerial);
+    $stmt->bind_param('s', $deviceSerial);
     $stmt->execute();
     $result = $stmt-> get_result();
     $stmt->close();
@@ -78,7 +55,7 @@
         exit();
     }
 
-    //5) Validate URL
+    //4) Validate URL
     if(!empty($deviceCameraIP) && !filter_var($deviceCameraIP, FILTER_VALIDATE_URL)){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
@@ -90,13 +67,12 @@
     }
 
     //Pass) Create new device
-    $sql = "UPDATE device 
-            SET deviceSerial = ?, deviceCameraIP = ?
-            WHERE deviceID = ?;";
+    $sql = "INSERT INTO device(deviceID, deviceSerial, deviceCameraIP, deviceRegist, deviceStatus)
+            VALUES(?, ?, ?, ?, ?);";
     
     $stmt =  $bpcsDB->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('sss', $deviceSerial, $deviceCameraIP, $deviceID);
+    $stmt->bind_param('sssss', $deviceID, $deviceSerial, $deviceCameraIP, $deviceRegist, $deviceStatus);
 
     if($stmt->execute()){
         $stmt->close();
