@@ -7,7 +7,7 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <ul class="navbar-nav d-none d-md-block">
-            ระบบสนับสนุนการดูแลผู้ป่วยติดเตียง
+            ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์
         </ul>
     </div>
 </nav>

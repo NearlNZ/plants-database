@@ -3,9 +3,9 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //1) Exit if user not verified key yet.
+    //1) Exit if user not verified yet.
     session_start();
-    if (!isset($_SESSION['CSP-session-userID']) && (!isset($_SESSION['CSP-session-keyVerified']) || $_SESSION['CSP-session-keyVerified'] != true)) {
+    if (!isset($_SESSION['CSP-session-userID'])) {
         $response->status = "warning";
         $response->title = "เกิดข้อผิดพลาด";
         $response->text = "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
@@ -16,42 +16,50 @@
     }
 
     //Set parameter
-    $username = $_POST['username'] ?? null; 
-    $password = $_POST['password'] ?? null;
-    $confirmPassword = $_POST['confirmPassword'] ?? null;
-    $level = $_POST['userLevel'] ?? 'Officer';
-    $department = $_POST['userDepartment'] ?? '';
+    $cateID = $_POST["cateID"] ?? '';
+    $cateName = $_POST["cateName"] ?? '';
 
     //2) Check for required parameter
-    if($username == null || $password == null){
+    if($cateID == '' || $cateName == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลในการสร้างบัญชีผู้ใช้ให้ครบถ้วน';
+        $response->text = 'โปรดระบุรายละเอียดให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
         exit();
     }
 
-    //3) Check if password and confirm password not match when confirm password not null
-    if($confirmPassword != null && $password != $confirmPassword){
-        $response->status = 'warning';
-        $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'รหัสผ่านไม่ตรงกัน โปรดตรวจสอบและลองใหม่อีกครั้ง';
-        
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $database->close();
-        exit();
-    }
-
-    //4) Check if username already exist
-    $sql = "SELECT user_id
-            FROM user_Account
-            WHERE user_name = ?;";
+    //3) Check if this cate not exist
+    $sql = "SELECT cateID
+            FROM categories
+            WHERE cateID = ?";
 
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $username);
+    $stmt->bind_param('s', $cateID);
+    $stmt->execute();
+    $result = $stmt-> get_result();
+    $stmt->close();
+
+    if($result->num_rows == 0){
+        $response->status = 'warning';
+        $response->title = 'เกิดข้อผิดพลาด';
+        $response->text = 'ไม่พบข้อมูลหมวดหมู่นี้ในระบบ';
+        
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $database->close();
+        exit();
+    }
+
+    //4) Check if cateName already exist
+    $sql = "SELECT cateID
+            FROM categories
+            WHERE cateName = ? AND cateID <> ?;";
+
+    $stmt =  $database->stmt_init(); 
+    $stmt->prepare($sql);
+    $stmt->bind_param('ss', $cateName, $cateID);
     $stmt->execute();
     $result = $stmt-> get_result();
     $stmt->close();
@@ -59,29 +67,28 @@
     if($result->num_rows > 0){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'Username นี้ได้ทำการลงทะเบียนไปแล้ว';
+        $response->text = 'หมวดหมู่นี้ได้ทำการลงทะเบียนไปแล้ว';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
         exit();
     }
 
-    //Pass) Create new account
-    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    $sql = "INSERT INTO user_Account(user_name, user_password, user_level, user_department)
-            VALUES(?, ?, ?, ?);";
+    //Pass) Update category
+    $sql = "UPDATE categories
+            SET cateName = ?
+            WHERE cateID = ?;";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssss', $username, $hashPassword, $level, $department);
+    $stmt->bind_param('ss', $cateName, $cateID);
 
     if($stmt->execute()){
         $stmt->close();
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'เพิ่มบัญชีผู้ใหม่เข้าสู่ระบบแล้ว';
+        $response->text = 'แก้ไขข้อมูลหมวดหมู่พืชสำเร็จแล้ว';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

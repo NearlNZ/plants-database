@@ -136,16 +136,12 @@ function showRequestError(error, errorUrl){
         didOpen: () => {
             $('.swal2-close').blur();
         }
+    }).then(() =>{
+        //Set errorLog
+        localStorage.setItem('GR-localStorage-errorLog', error);
+
+        window.open(errorUrl, '_blank');
     });
-
-    //Set errorLog
-    localStorage.setItem('GR-localStorage-errorLog', error);
-
-    const link = document.createElement('a');
-    link.href = errorUrl;
-    link.target = '_blank';
-
-    console.log('%cAn error occurred while processing you request!! \nFor more information open url below \n' + link.href,'color: red;');
 }
 
 //Swal response from Ajax (Require sweetalert2.all.min.js)
@@ -175,19 +171,5 @@ function showResponse(option){
 
     Swal.fire(swalOption).then(() =>{
         callback();
-    });
-}
-
-//Backup database (Require sweetalert2.all.min.js)
-function backup(){
-    showConfirm({
-        icon: 'question',
-        title: 'สำรองข้อมูล',
-        text: 'ระบบจะดำเนินการสำรองข้อมูลปัจจุบัน ข้อมูลที่มีการเปลี่ยนแปลงหลังจากการสำรองข้อมูลจะไม่ได้รับการบันทึก',
-        cancelButtonText: 'ยกเลิกการสำรองข้อมูล',
-        confirmButtonText: 'เริ่มการสำรองข้อมูล',
-        confirmCallback : function() {
-            
-        }
     });
 }

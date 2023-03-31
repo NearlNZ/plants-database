@@ -3,7 +3,7 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //1) Exit if user not verified key yet.
+    //1) Exit if user not verified yet.
     session_start();
     if (!isset($_SESSION['CSP-session-userID'])) {
         $response->status = "warning";
@@ -16,12 +16,10 @@
     }
 
     //Set parameter
-    $userID = $_POST['userID'] ?? null; 
-    $oldPassword = $_POST['oldPassword'] ?? null;
-    $password = $_POST['password'] ?? null;
+    $plantID = $_GET["plantID"] ?? '';
 
     //2) Check for required parameter
-    if($userID == null || $oldPassword == null || $password == null){
+    if($plantID == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุรายละเอียดให้ครบถ้วน';
@@ -31,58 +29,61 @@
         exit();
     }
 
-   //3) Check if user exist
-    $sql = "SELECT password
-            FROM users
-            WHERE userID = ?
-            LIMIT 1;";
+    //3) Check if this plant not exist
+    $sql = "SELECT plantID
+            FROM plants
+            WHERE plantID = ?";
 
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $userID);
+    $stmt->bind_param('s', $plantID);
     $stmt->execute();
-    $userResult = $stmt-> get_result();
+    $result = $stmt-> get_result();
     $stmt->close();
-    
-    if($userResult->num_rows == 0){
+
+    if($result->num_rows == 0){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'ไม่พบบัญชีผู้ใช้ในระบบ โปรดตรวจสอบอีกครั้ง';
-
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $database->close();
-        exit();
-    };
-
-    //Check if old password correct
-    $user = $userResult->fetch_assoc();
-    if(!password_verify($oldPassword, $user['password'])){
-        $response->status = 'warning';
-        $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'รหัสผ่านไม่ถูกต้อง โปรดตรวจสอบอีกครั้ง';
+        $response->text = 'ไม่พบข้อมูลพืชรายการนี้ในระบบ';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
         exit();
     }
 
-    //Pass) Create new account
-    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+    //4) Remove all plant img
+    $sql = "SELECT imgID, imgPath
+            FROM plantimages
+            WHERE plantID = ?";
 
-    $sql = "UPDATE users 
-            SET password = ?
-            WHERE userID = ?";
+    $stmt =  $database->stmt_init(); 
+    $stmt->prepare($sql);
+    $stmt->bind_param('s', $plantID);
+    $stmt->execute();
+    $result = $stmt-> get_result();
+    $stmt->close();
+    if($result -> num_rows > 0){
+        while($img = $result->fetch_assoc()){
+            $imgFile = "../../assets/img/plantImgs/".$img["imgPath"];
+            unlink("$imgFile");
+        }
+    }
+
+    //Pass) Delete plant
+    $sql = "DELETE
+            FROM plants
+            WHERE plantID = ?;";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ss', $hashPassword, $userID);
+    $stmt->bind_param('s', $plantID);
 
     if($stmt->execute()){
         $stmt->close();
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'รีเซ็ตรหัสผ่านของท่านแล้ว จะมีผลในการเข้าสู่ระบบครั้งถัดไป';
+        $response->text = 'ลบข้อมูลพืชสำเร็จแล้ว';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

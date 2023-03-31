@@ -45,11 +45,7 @@ body {
 }
 
 .fit-contain {
-    object-fit:cover;
-}
-
-.maxh-200 {
-    max-height: 200px;
+    object-fit:contain;
 }
 
 .icon-circle-primary {
@@ -76,8 +72,13 @@ body {
 
 .img-cover {
     width: 100%;
-    background-position: center center;
-	background-size: cover;
+    max-height:796px;
+    max-width:796px;
+	object-fit: cover;
+}
+
+.maxh-200 {
+    max-height: 200px;
 }
 
 .scroll-y {

@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>เข้าสู่ระบบ</title>
+        <title>login</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="assets/font/Kanit.css"/>
@@ -37,7 +37,7 @@
                     font-size: 12px !important;
                 }
                 .logo {
-                    width: 40px !important;
+                    width: 50px !important;
                 }
             }
         </style>
@@ -49,28 +49,38 @@
                 <div class="row vh-100 p-0">
                     <div class="col-xl-10 col-lg-12 col-md-9 mx-auto d-table h-100">
                         <div class="d-table-cell align-middle">
+                            
+                            <div class="mb-2">
+                                <div class="d-table-cell align-middle">
+                                    <img src="assets/img/element/logo.png" class="logo me-2" style="width:70px;">
+                                </div>
+                                <div class="d-table-cell align-middle">
+                                    <p class="text-light mb-0 h3 head-1">สาขาวิทยาการคอมพิวเตอร์</p>
+                                    <p class="text-light h5 head-2">มหาวิทยาลัยราชภัฏสุราษฎร์ธานี</p>
+                                </div>
+                            </div>
                             <div class="card o-hidden border-0 shadow-lg mb-0">
                                 <div class="card-body p-0">
                                     <div class="row align-items-center">
-                                        <div class="col-lg-6 d-none d-lg-flex p-0">
-                                            <div class="align-middle">
-                                                <img class="img-cover" src="assets/img/common/element/login-cover.jpg">
+                                        <div class="col-lg-6 d-none d-lg-block p-0 h-100">
+                                            <div class="align-middle overflow-hidden">
+                                                <img class="w-100" src="assets/img/element/login-cover.jpg">
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="p-4">
-                                                <div class="text-center mb-5 mt-2">
+                                                <div class="text-center mb-lg-5 mb-4 mt-2">
                                                     <a class="h3 justify-content-center head-1">
-                                                        <span class="fw-bolder text-dark h1">
-                                                            <i class='bx bx-capsule bx-lg me-0'></i>
-                                                            BPCS
+                                                        <i class="fa-solid fa-seedling fa-lg text-success"></i>
+                                                        <span class="fw-bolder text-dark ms-1">
+                                                            ระบบฐานข้อมูลพืช
                                                         </span>
-                                                        <br>
-                                                        <span class="fw-bold head-1">
-                                                            เข้าสู่ระบบสำหรับผู้ดูแล
-                                                        </span>
+                                                        <p class="fw-bold mt-1">
+                                                            สาขาวิทยาการคอมพิวเตอร์
+                                                        </p>
                                                     </a>
                                                 </div>
+
                                                 <!-- START login form -->
                                                 <form id="formLogin" class="user" action="data/user/createloginSession.php" method="POST">
                                                     <div class="input-group input-group-merge mb-3">
@@ -104,7 +114,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="small text-white mt-2 head-2 text-center text-md-end">Copyright &copy; 2023, ❤️Surapat Thippakdee</p> 
+                            <p class="small text-white mt-2 head-2 text-center text-md-end">Copyright &copy; 2023, ❤️Computer Science</p> 
 
                         </div>
                     </div>
@@ -118,6 +128,7 @@
         <!-- Page JS -->
         <script src="include/scripts/customFunctions.js"></script>
         <script>
+            //Data import 
             $('#formLogin').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
@@ -133,7 +144,7 @@
                                 response: response,
                                 timer: 2000,
                                 callback: function() {
-                                    window.location.href="system/dashboard";
+                                    window.location.href="redirect";
                                 }
                             });
                         }else{

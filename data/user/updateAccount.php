@@ -1,50 +1,48 @@
 <?php
     header('Content-Type: application/json; charset=utf-8');
     $response = new stdClass();
-    require_once("../connect.php");
+    require_once("../database.php");
 
     //1) Exit if user not verified key yet.
     session_start();
-    if (!isset($_SESSION['BPCS-session-userID']) && (!isset($_SESSION['BPCS-session-keyVerified']) || $_SESSION['BPCS-session-keyVerified'] != true)) {
+    if (!isset($_SESSION['CSP-session-userID'])) {
         $response->status = "warning";
         $response->title = "เกิดข้อผิดพลาด";
         $response->text = "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
 
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $bpcsDB->close();
+        $database->close();
         exit();
     }
 
     //Set parameter
-    $caregiverID = $_POST['caregiverID'] ?? '';
-    $caregiverName = $_POST['caregiverName'] ?? '';
-    $caregiverLastname = $_POST['caregiverLastname'] ?? '';
-    $caregiverTel = $_POST['caregiverTel'] ?? '';
-    $caregiverLineToken = $_POST['caregiverLineToken'] ?? '';
+    $userID = $_POST['userID'] ?? '';
+    $userFname = $_POST['userFname'] ?? '';
+    $userLname = $_POST['userLname'] ?? '';
     $oldProfile = $_POST['oldProfile'] ?? 'default-avatar.png';
 
-    $caregiverProfile = (!empty($_FILES['caregiverProfile']['tmp_name'])) ? $_FILES['caregiverProfile'] : $oldProfile;
+    $userProfile = (!empty($_FILES['userProfile']['tmp_name'])) ? $_FILES['userProfile'] : $oldProfile;
 
     //2) Check for required parameter
-    if($caregiverID == '' || $caregiverName == '' || $caregiverLastname == '' || $caregiverTel == ''){
+    if($userID == '' || $userFname == '' || $userLname == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลในการแก้ไขบัญชีผู้ใช้ให้ครบถ้วน';
+        $response->text = 'โปรดระบุรายละเอียดให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $bpcsDB->close();
+        $database->close();
         exit();
     }
 
     //3) Check if user exist
-    $sql = "SELECT caregiverID
-            FROM caregiver
-            WHERE caregiverID = ?
+    $sql = "SELECT userID
+            FROM users
+            WHERE userID = ?
             LIMIT 1;";
 
-    $stmt =  $bpcsDB->stmt_init(); 
+    $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $caregiverID);
+    $stmt->bind_param('s', $userID);
     $stmt->execute();
     $userResult = $stmt-> get_result();
     $stmt->close();
@@ -55,23 +53,23 @@
         $response->text = 'ไม่พบบัญชีผู้ใช้ในระบบ โปรดตรวจสอบอีกครั้ง';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $bpcsDB->close();
+        $database->close();
         exit();
     }
 
     //4) Try to upload profile if not null
-    if($caregiverProfile != 'default-avatar.png' && $caregiverProfile != $oldProfile){
+    if($userProfile != 'default-avatar.png' && $userProfile != $oldProfile){
         $uploaddir = '../../assets/img/avatars/';
         
         //Generate profile img name
-        list($name, $extension) = explode(".",$caregiverProfile['name']);
-        $name = uniqid("IMG-").rand(100,999);
+        list($name, $extension) = explode(".",$userProfile['name']);
+        $name = uniqid("USER-").rand(100,999);
         $file="$name.$extension";
         
         //Copy img to server
         $uploadfile = $uploaddir.$file;
-        if (copy($caregiverProfile['tmp_name'], $uploadfile)) {
-            $caregiverProfile = $file;
+        if (copy($userProfile['tmp_name'], $uploadfile)) {
+            $userProfile = $file;
 
             //Delete old profile img if it not default-avatar.png
             if($oldProfile != "default-avatar.png"){
@@ -81,22 +79,22 @@
         }else{
             $response->status = 'warning';
             $response->title = 'เกิดข้อผิดพลาด';
-            $response->text = 'ไม่สามารถอัพโหลดรูปที่เลือกได้ โปรดเปลี่ยนรูป';
+            $response->text = 'ไม่สามารถอัพโหลดรูปที่เลือกได้ โปรดเปลี่ยนรูปแล้วลองอีกครั้ง';
             
             echo json_encode($response, JSON_UNESCAPED_UNICODE);
-            $bpcsDB->close();
+            $database->close();
             exit();
         }   
     }
 
     //Pass) Update account
-    $sql = "UPDATE caregiver
-            SET caregiverName = ?, caregiverLastname = ?, caregiverTel = ?, caregiverLineToken = ?, caregiverProfile = ?
-            WHERE caregiverID = ?;";
+    $sql = "UPDATE users
+            SET userFname = ?, userLname = ?, userProfile = ?
+            WHERE userID = ?;";
     
-    $stmt =  $bpcsDB->stmt_init(); 
+    $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssssss', $caregiverName, $caregiverLastname, $caregiverTel, $caregiverLineToken, $caregiverProfile, $caregiverID);
+    $stmt->bind_param('ssss', $userFname, $userLname, $userProfile, $userID);
 
     if($stmt->execute()){
         $stmt->close();
@@ -107,9 +105,9 @@
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{
-        echo $bpcsDB->error;
+        echo $database->error;
     }
 
-    $bpcsDB->close();
+    $database->close();
     exit();
 ?>
