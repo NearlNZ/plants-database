@@ -1,0 +1,13 @@
+enu. -->
+<li id="account-select-menu-item-template" class="account-switcher-menu mdc-deprecated-list-item hidden" role="menuitem">
+  <span class="mdc-deprecated-list-item__ripple"></span>
+  <img class="mdc-deprecated-list-item__graphic" alt="" src=""/>
+  <div class="vertical-container">
+    <span class="mdc-deprecated-list-item__text menu-item-title gmTypographySubhead2"></span>
+    <span class="mdc-deprecated-list-item__text menu-item-subtitle gmTypographyCaption"></span>
+  </div>
+  <img class="account-select-menu-item-checkmark mdc-deprecated-list-item__meta blueIcon hidden" alt="" src="ic_checkmark_blue_24dp.svg"/>
+</li>
+
+<!-- Template for the add account button in the full view. -->
+<button id="account-switcher-add-account-template" cl
