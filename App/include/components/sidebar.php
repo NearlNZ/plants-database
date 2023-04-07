@@ -2,8 +2,8 @@
     <!-- Brand -->
     <div class="app-brand demo">
         <a class="app-brand-link mt-3">
-            <i class='bx bx-capsule bx-md h3'></i>
-            <span class="h4 fw-bolder ms-1">BPCS System</span>
+            <i class="fa-solid fa-seedling text-success h3"></i>
+            <span class="h4 fw-bolder ms-2">CS-Plants</span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
@@ -17,12 +17,6 @@
             <a href="index" class="menu-link">
                 <i class="menu-icon fa-solid fa-house-chimney"></i>
                 <div data-i18n="Analytics">หน้าหลัก</div>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a href="login" class="menu-link">
-                <i class="menu-icon fa-solid fa-user-doctor"></i>
-                <div data-i18n="Analytics">เข้าสู่ระบบสำหรับผู้ดูแล</div>
             </a>
         </li>
     </ul>

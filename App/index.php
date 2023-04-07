@@ -45,20 +45,13 @@
                     <div class="content-wrapper">
                         <!-- Content -->
                         <div class="container-fluid py-3 py-lg-5">
-                            <div class="row g-3 p-0">
+                            <div class="row g-3 p-0 justify-content-center">
                                 <div class="col-12 col-md-6">
                                     <a class="text-decoration-none" href="login">
                                         <div class="card clickable shadow mb-0">
                                             <div class="card-body mb-0">
-                                                <div class="row d-table">
-                                                    <div class="col-auto d-table-cell align-middle">
-                                                        <div class="icon-circle-primary">
-                                                            <i class="fa-solid fa-user-doctor fa-xl"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col d-table-cell align-middle py-3">
-                                                        <p class="h5 mb-0">เข้าสู่ระบบสำหรับผู้ดูแล</p>
-                                                    </div>
+                                                <div class="row">
+                                                    <p class="h3 text-success text-center p-4 mb-0">เข้าสู่ระบบ</p>
                                                 </div>
                                             </div>
                                         </div>
