@@ -1,3 +1,7 @@
+.active-menu-url {
+    display: none;
+}
+
 body {
     font-family: 'Kanit';
 }
