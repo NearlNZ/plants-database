@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="small text-white mt-2 head-2 text-center text-md-end">Copyright &copy; 2023, ❤️Surapat Thippakdee</p> 
+                            <p class="small text-white mt-2 head-2 text-center text-md-end">Copyright &copy; 2023, ❤️Computer Science</p> 
 
                         </div>
                     </div>

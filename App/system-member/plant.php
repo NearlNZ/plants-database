@@ -22,13 +22,11 @@
         <script src="../assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
         <link rel="stylesheet" href="../assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
-        <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
@@ -53,7 +51,7 @@
                     <div class="content-wrapper">
                         <!-- Content -->
                         <div class="container-fluid flex-grow-1 container-p-y">
-                            <!-- Breadcrumb & Active menu-->
+                            <!-- Breadcrumb -->
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
@@ -61,68 +59,56 @@
                                     </li>
                                 </ol>
                             </nav>
+                            <!-- /Breadcrumb -->
 
-                            <span class="active-menu-url">plant</span>
-                            <!-- /Breadcrumb & Active menu-->
-
-                            <!-- Search card -->
+                            <!-- Search -->
                             <div class="card mt-2">
                                 <div class="card-body py-3">
-                                    <form action="" method="GET">
-                                        <div class="row g-2">
+                                    <form action="plant" method="GET">
+                                        <div class="row row-cols-2 g-2">
                                             <div class="col-12 col-lg-6">
                                                 ชื่อพืช
-                                                <input type="text" name="word" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
-                                                value="<?php if(isset($_GET["word"])) echo $_GET["word"]; ?>">
+                                                <input type="text" name="filterWord" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
+                                                value="<?php if(isset($_GET["filterWord"])) echo $_GET["filterWord"]; ?>">
                                             </div>
                                             <div class="col-12 col-lg-6">
                                                 หมวดหมู่
-                                                <div class="row g-3 g-lg-2">
-                                                    <div class="col-12 col-lg">
-                                                        <select class="select2 form-select" name="tag">
-                                                            <option selected value="All">ทั้งหมด</option>
+                                                <div class="input-group">
+                                                    <select class="form-select" name="filterCategory">
+                                                        <option selected value="">ทั้งหมด</option>
 
-                                                            <?php
-                                                                $sql = "SELECT tagID, tagName
-                                                                        FROM tags
-                                                                        ORDER BY tagName;";
-                                                                    
-                                                                $tagResult = $database->query($sql);
-                                                                if($result->num_rows > 0){
-                                                                    while($tag = $tagResult->fetch_assoc()){
-                                                            ?>
-                                                                <option value="<?php echo $tag['tagID']; ?>"
-                                                                <?php if(isset($_GET["tag"]) && $_GET["tag"] == $tag['tagID']) echo "selected"; ?>>
-                                                                    <?php echo $tag["tagName"]; ?>
-                                                                </option>
-                                                            <?php
-                                                                    }
+                                                        <?php
+                                                            $sql = "SELECT cateID, cateName
+                                                                    FROM categories
+                                                                    ORDER BY cateName;";
+                                                            
+                                                            $result = $database->query($sql);
+                                                            if($result->num_rows > 0){
+                                                                while($category = $result->fetch_assoc()){
+                                                        ?>
+                                                            <option value="<?php echo $category['cateID']; ?>"
+                                                                <?php if(isset($_GET["filterCategory"]) && $_GET["filterCategory"] == $category['cateID']) echo "selected"; ?>>
+                                                                <?php echo $category["cateName"]; ?>
+                                                            </option>
+                                                        <?php
                                                                 }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                    <!-- Search button-->
-                                                    <div class="col-12 col-lg-auto">
-                                                        <button type="submit" name="filter" value="true" class="btn btn-primary text-white w-100">
-                                                            <i class='bx bx-search-alt'></i>
-                                                            <span class="d-inline d-lg-none p-0">ค้นหา</span>
-                                                        </button>
-                                                    </div>
-                                                    <!-- /Search button-->
+                                                            }
+                                                        ?>
+                                                    </select>
+                                                    <button type="submit" name="filter" value="true" class="btn btn-primary text-white">
+                                                        <i class='bx bx-search-alt'></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                            <!-- /Search card -->
+                            <!-- /Search -->
 
                             <?php
-                                $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, TL.tagID,
-                                                U.userFname, U.userLname
-                                        FROM    plants P 
-                                                LEFT JOIN tag_lists TL ON P.plantID = TL.PlantID
-                                                LEFT JOIN users U ON P.userID = U.userID
+                                $sql = "SELECT P.plantID, P.plantName, P.plantRegist, C.cateName, U.userFname, U.userLname
+                                        FROM plants P LEFT JOIN categories C ON P.cateID = C.cateID LEFT JOIN users U ON P.userID = U.userID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -130,24 +116,23 @@
 
                                 //Check if filter send
                                 if(isset($_GET["filter"])){
-                                    $filterWord = $_GET['word'] ?? '';
-                                    $filterTag = $_GET['tag'] ?? '';
+                                    $filterWord = $_GET['filterWord'] ?? '';
+                                    $filterCategory = $_GET['filterCategory'] ?? '';
 
                                     if(!empty($filterWord)){
                                         $sql .= "AND plantName LIKE ? ";
                                         $filter[] = "%$filterWord%";
                                         $filterDatatype .= "s";
                                     }
-                                    if(!empty($filterTag) && $filterTag != "All"){
-                                        $sql .= "AND TL.tagID = ? ";
-                                        $filter[] = $filterTag;
+                                    if(!empty($filterCategory)){
+                                        $sql .= "AND P.cateID = ? ";
+                                        $filter[] = $filterCategory;
                                         $filterDatatype .= "s";
                                     }
                                 }
                                 
-                                $sql.= "GROUP BY plantID
-                                        ORDER BY plantRegist, plantName DESC;";
-
+                                $sql.="ORDER BY plantRegist DESC;";
+                                
                                 $stmt = $database->prepare($sql);
                                 
                                 if (!empty($filter)){ 
@@ -180,8 +165,9 @@
                                     <table class="table table-hover card-table table-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>ลำดับ</th>
+                                                <th>ลำดับที่</th>
                                                 <th>ชื่อพืช</th>
+                                                <th>หมวดหมู่พืช</th>
                                                 <th>ผู้ลงทะเบียน</th>
                                                 <th>วันที่ลงทะเบียน</th>
                                                 <th class="not-print">จัดการข้อมูล</th>
@@ -196,6 +182,7 @@
                                             <tr>
                                                 <td><?php echo $plantIndex; ?></td>
                                                 <td><?php echo $plant["plantName"]; ?></td>
+                                                <td><?php echo $plant["cateName"]; ?></td>
                                                 <td><?php echo $plant["userFname"]." ".$plant["userLname"]; ?></td>
                                                 <td><?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?></td>
                                                 <td class="not-print">
@@ -257,18 +244,6 @@
         <!-- Page JS -->
         <script src="../include/scripts/customFunctions.js"></script>
         <script>
-            //Select
-            $(function(){
-                select = $(".select2");
-                select.length&&select.each(function(){
-                    var element=$(this);
-                    element.wrap('<div class="position-relative"></div>').select2({
-                        dropdownParent:element.parent()
-                    });
-                });
-            });
-
-            //Delete record
             $('.deleteBtn').click(function(){
                 event.preventDefault();
                 let url = $(this).attr('href');

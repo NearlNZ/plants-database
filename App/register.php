@@ -31,14 +31,14 @@
 
     <body class="body-dark">
         <!-- Content -->
-        <div class="container-middle p-4">
+        <div class="container-middle">
             <div class="row justify-content-center">
                 <!-- Card form -->
-                <div class="col-12 col-md-8 col-lg-7">
-                    <div class="card mb-2">
+                <div class="col-12 col-lg-10">
+                    <div class="card mb-3">
                         <h5 class="card-header mb-0">
                             <i class="fa-solid fa-address-card me-1"></i>
-                            ลงทะเบียนผู้ใช้ใหม่
+                            ข้อมูลบัญชีผู้ใช้
                         </h5>
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
@@ -62,28 +62,28 @@
                             <form id="formCreateProfile" method="POST" action="data/user/createNewAccount">
                                 <div class="row g-3">
                                     <input type="file" id="userProfile" class="d-none" name="userProfile" accept=".jpg,.jpeg,.png">
-                                    <div class="col-12">
+                                    <div class="col-12 col-md-6">
                                         ชื่อ
                                         <div class="input-group input-group-merge">
                                             <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
                                             <input type="text" name="userFname" class="form-control" value="" placeholder="ระบุชื่อ" autofocus autocomplete="off" required>
                                         </div>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-12 col-md-6">
                                         นามสกุล
                                         <div class="input-group input-group-merge">
                                             <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
                                             <input type="text" name="userLname" class="form-control" value="" placeholder="ระบุนามสกุล" autocomplete="off" required>
                                         </div>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-12 col-md-6">
                                         Username
                                         <div class="input-group input-group-merge">
                                             <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                                             <input type="text" name="username" class="form-control" value="" placeholder="ระบุ Username" autocomplete="off" required>
                                         </div>
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-12 col-md-6">
                                         รหัสผ่าน
                                         <div class="form-password-toggle">
                                             <div class="input-group input-group-merge">
@@ -101,10 +101,8 @@
                             </form>
                         </div>
                     </div>
-                    <p class="small text-white mt-2 head-2 text-center">Copyright &copy; 2023, ❤️Surapat Thippakdee</p> 
                 </div>
                 <!-- /Card form -->
-                
             </div>
 
         </div>

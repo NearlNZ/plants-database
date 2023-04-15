@@ -51,7 +51,7 @@
                     <div class="content-wrapper">
                         <!-- Content -->
                         <div class="container-fluid flex-grow-1 container-p-y">
-                            <!-- Breadcrumb & Active menu-->
+                            <!-- Breadcrumb -->
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
@@ -63,8 +63,8 @@
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">plant</span>
-                            <!-- /Breadcrumb & Active menu-->
+                            <span class="d-none fix-menu">plant</span>
+                            <!-- /Breadcrumb -->
 
                             <div class="row g-3">
                                 <!-- Card form -->

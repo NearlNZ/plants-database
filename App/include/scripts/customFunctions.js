@@ -1,27 +1,33 @@
 //Dynamic add active to sidebar (Require jquery.min.js)
 function activeSidebar(){
-    let pageUrl = "";
-
-    if ($('.active-menu-url').length) {
-        pageUrl = $('.active-menu-url').text();
+    var currentPage = "";
+    if ($('.fix-menu').length) {
+        currentPage = $('.fix-menu').text();
+    }else{
+        currentPage = location.pathname.split('/').pop();
     }
 
-    if(pageUrl !== ''){
+    //If the file name is empty, assume it's the first item if exist
+    if(currentPage === ''){
+        currentPage = $('.menu-item:first-child').find('a').attr('href') || "";
+    }
+
+    if(currentPage !== ''){
         //Remove .php extension
-        if(pageUrl.indexOf('.php') !== -1){
-            pageUrl = pageUrl.replace('.php', '');
+        if(currentPage.indexOf('.php') !== -1){
+            currentPage = currentPage.replace('.php', '');
         }
 
         //Add the "active" classe to the menu item with a matching URL
         $('.menu-item').each(function () {
             var menuItemUrl = $(this).find('a').attr('href');
 
-            if (menuItemUrl === pageUrl) {
+            if (menuItemUrl === currentPage) {
                 $(this).addClass('active');
 
-                //If the menu item is a sub-menu, add the "active" and "open" classes to the "havesub" element
+                //If the menu item is in a sub-menu, add the "active" and "open" classes to the "havesub"
                 var parentSubMenu = $(this).parent('.menu-sub');
-                if (parentSubMenu.length) {
+                if (parentSubMenu.length > 0) {
                     parentHavesub = parentSubMenu.closest('.havesub').addClass('active open');
                 }
             }
