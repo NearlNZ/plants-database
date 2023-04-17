@@ -9,13 +9,10 @@
         exit();
     }
 
-    if($userLevel == null || $userLevel != "สมาชิก"){
+    if($userLevel == null || $userLevel != "ผู้ดูแลระบบ"){
         header("Location: ../login.php");
         exit();
     }
-
-	//Include database connection
-	require_once("../data/database.php");
     
     //Get account data
     $sql = "SELECT userID, userFname, userLname, userProfile, username, userLevel, userRegist

@@ -88,24 +88,25 @@ function logout(){
 }
 
 //Print table content
-function printReport() {
-	var table = $(".table-responsive").html();
-	printView = window.open("");
+function printContent(contentContainer) {
+	let content = contentContainer.html();
 
-	printView.document.write('<link rel="stylesheet" href="../assets/font/Kanit.css"/>');
-    printView.document.write('<link rel="stylesheet" href="../assets/css/template.css"/>');
-	printView.document.write('<script src="../assets/js/bootstrap.min.js"></script>');
-	printView.document.write('<link rel="stylesheet" href="../assets/css/custom-style.css"/>');
+	printWindow = window.open("");
+	printWindow.document.write('<link rel="stylesheet" href="../assets/font/Kanit.css"/>');
+    printWindow.document.write('<link rel="stylesheet" href="../assets/css/template.css"/>');
+	printWindow.document.write('<script src="../assets/js/bootstrap.min.js"></script>');
+	printWindow.document.write('<link rel="stylesheet" href="../assets/css/custom-style.css"/>');
     
-	printView.document.write('<script src="../assets/vendor/fontawesome/js/all.min.js"></script>');
-	printView.document.write('<STYLE type="text/css">body {font-family: "Kanit";} td {font-size: 12px;} th {font-size: 13px !important;}</STYLE>');
-	printView.document.write('<STYLE media="print">.not-print {display: none;} tr, td, th {padding: 10 !important;}</STYLE>');
-	printView.document.write('<img src="../assets/img/element/logo.png" class="border me-2 mb-2" style="width:50px;"></img><span class="h4">ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์</span><br><br>');
-	printView.document.write(table);
+	printWindow.document.write('<script src="../assets/vendor/fontawesome/js/all.min.js"></script>');
+	printWindow.document.write('<STYLE type="text/css">body {font-family: "Kanit";} td {font-size: 12px;} th {font-size: 13px !important;}</STYLE>');
+	printWindow.document.write('<STYLE media="print">.not-print {display: none;} tr, td, th {padding: 10 !important;}</STYLE>');
+	printWindow.document.write('<img src="../assets/img/element/logo.png" class="border me-2 mb-2" style="width:50px;"></img><span class="h4">ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์</span><br><br>');
+	
+    printWindow.document.write(content);
 	
 	setTimeout(function(){
-		printView.print();
-		printView.close();
+		printWindow.print();
+		printWindow.close();
 	}, 100);
 	
 }
