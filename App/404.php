@@ -43,12 +43,12 @@
     <body>
         <div class="container-xxl container-p-y">
         <div class="misc-wrapper">
-            <h2 class="mb-2 mx-2">Page Not Found :(</h2>
+            <h2 class="mb-2 mx-2">Data Not Found :(</h2>
             <p class="mb-4 mx-2">Oops! 😖 The requested URL was not found on this server.</p>
             <div class="mt-3">
             <img
-                src="assets/img/common/page/404.png"
-                width="500"
+                src="assets/img/page/404.png"
+                width="requestError"
                 class="img-fluid"
             />
             </div>

@@ -28,6 +28,20 @@ body {
     transform: translateY(-1px);
 }
 
+.btn-label-primary {
+    color: #696cff;
+    border-color: rgba(0,0,0,0);
+    background: #e7e7ff;
+}
+
+.btn-label-primary:hover {
+    border-color: rgba(0,0,0,0);
+    background: #5f61e6;
+    color: #fff;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105,108,255,.4);
+    transform: translateY(-1px);
+}
+
 .clickable {
     cursor: pointer;
     transition: transform .2s;

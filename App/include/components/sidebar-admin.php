@@ -15,7 +15,7 @@
     <ul class="menu-inner py-1">
         <!-- Plant -->
         <li class="menu-item">
-            <a href="plant" class="menu-link">
+            <a href="plant-manage" class="menu-link">
                 <i class="menu-icon fa-solid fa-seedling"></i>
                 <div>ข้อมูลพืช</div>
             </a>
@@ -23,7 +23,7 @@
 
         <!-- Tag -->
         <li class="menu-item">
-            <a href="tag" class="menu-link">
+            <a href="tag-manage" class="menu-link">
                 <i class="menu-icon fa-solid fa-tags"></i>
                 <div>หมวดหมู่พืช</div>
             </a>
@@ -31,7 +31,7 @@
 
         <!-- User -->
         <li class="menu-item">
-            <a href="tag" class="menu-link">
+            <a href="user-manage" class="menu-link">
                 <i class="menu-icon fa-solid fa-users"></i>
                 <div>ข้อมูลผู้ใช้</div>
             </a>

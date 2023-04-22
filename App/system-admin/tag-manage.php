@@ -1,4 +1,7 @@
 <?php
+    //Include database connection
+	require_once("../data/database.php");
+
     //include permission check
     require_once('../include/scripts/admin-header.php');
 ?>
@@ -8,7 +11,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>จัดการข้อมูลหมวดหมู่พืช</title>
+        <title>หมวดหมู่พืช</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -22,11 +25,13 @@
         <script src="../assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
+        <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
         <link rel="stylesheet" href="../assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
+        <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
@@ -59,48 +64,59 @@
                                     </li>
                                 </ol>
                             </nav>
+
+                            <span class="active-menu-url">tag-manage</span>
                             <!-- /Breadcrumb & Active menu-->
 
-                            <!-- Search -->
+                            <!-- Search card -->
                             <div class="card mt-2">
-                                <div class="card-body py-3">
-                                    <form action="category" method="GET">
-                                        <div class="row row-cols-2 g-2">
+                                <div class="card-body p-3">
+                                    <form action="" method="GET">
+                                        <div class="row g-2">
                                             <div class="col-12">
-                                                ชื่อหมวดหมู่พืช
-                                                <div class="input-group">
-                                                    <input type="text" name="filterWord" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
-                                                    value="<?php if(isset($_GET["filterWord"])) echo $_GET["filterWord"]; ?>">
-                                                    <button type="submit" name="filter" value="true" class="btn btn-primary text-white">
-                                                        <i class='bx bx-search-alt'></i>
-                                                    </button>
+                                                ชื่อหมวดหมู่
+                                                <div class="row g-3 g-lg-2">
+                                                    <div class="col-12 col-lg">
+                                                        <input type="search" name="word" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
+                                                        value="<?php if(isset($_GET["word"])) echo $_GET["word"]; ?>">
+                                                    </div>
+                                                    <!-- Search button-->
+                                                    <div class="col-12 col-lg-auto">
+                                                        <button type="submit" name="search" value="true" class="btn btn-primary text-white w-100">
+                                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                                            <span class="d-inline d-lg-none p-0 ms-2">ค้นหา</span>
+                                                        </button>
+                                                    </div>
+                                                    <!-- /Search button-->
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                            <!-- /Search -->
+                            <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT cateID, cateName, (SELECT count(*) FROM plants WHERE cateID = categories.cateID) as plantCount
-                                        FROM categories
+                                $sql = "SELECT  tagID, tagName, 
+                                                (SELECT count(*) FROM tag_lists WHERE tagID = T.tagID) as plantCount
+                                        FROM    Tags T
                                         WHERE 1=1 ";
-                                
+
                                 $filter = array();
                                 $filterDatatype = "";
 
                                 //Check if filter send
-                                if(isset($_GET["filter"])){
-                                    $filterWord = $_GET['filterWord'] ?? '';
-                                    if(!empty($filterWord)){
-                                        $sql .= "AND cateName LIKE ? ";
-                                        $filter[] = "%$filterWord%";
+                                if(isset($_GET["search"])){
+                                    $searchWord = $_GET['word'] ?? '';
+
+                                    if(!empty($searchWord)){
+                                        $sql .= "AND tagName LIKE ? ";
+                                        $filter[] = "%$searchWord%";
                                         $filterDatatype .= "s";
                                     }
                                 }
                                 
-                                $sql.="ORDER BY plantCount, cateName;";
+                                $sql.= "ORDER BY plantCount DESC, tagName;";
 
                                 $stmt = $database->prepare($sql);
                                 
@@ -109,57 +125,62 @@
                                 }
                                 
                                 $stmt->execute();
-                                $categoryResult = $stmt-> get_result();
+                                $tagResult = $stmt-> get_result();
                                 $stmt->close();
 
-                                $resultCount = $categoryResult->num_rows;
+                                $resultCount = $tagResult->num_rows;
                             ?>
                             
                             <!-- Data card -->
                             <div class="card shadow mt-3">
                                 <div class="card-header mb-0">
-                                    <!-- Add new -->
+                                    <!-- Action -->
                                     <div class="row g-2">
-                                        <a class="btn btn-success py-3 py-lg-2 col-12 col-lg-auto shadow-sm me-2" href="category-add">
-                                            <i class="fa-solid fa-plus fa-xl me-2"></i>
-                                            เพิ่มหมวดหมู่
+                                        <a class="btn btn-success col-12 col-lg-auto shadow-sm me-2" href="tag-add">
+                                            <i class="fa-solid fa-plus me-2"></i>
+                                            เพิ่มข้อมูล
                                         </a>
-                                        <a class="btn btn-primary text-white py-3 py-lg-2 col-12 col-lg-auto shadow-sm d-none d-lg-block" onclick="printReport()">
+                                        <a class="btn btn-label-primary col-12 col-lg-auto shadow-sm d-none d-lg-block" href="#" onclick="printContent($('#dataTable'))">
                                             <i class="fa-solid fa-print me-2"></i>
                                             พิมพ์รายงาน
                                         </a>
                                     </div>
+                                    <!-- /Action -->
                                 </div>
-                                <div class="table-responsive">
+                                <div id="dataTable" class="table-responsive">
                                     <table class="table table-hover card-table table-nowrap">
                                         <thead>
                                             <tr>
                                                 <th>ลำดับที่</th>
-                                                <th>ชื่อหมวดหมู่พืช</th>
-                                                <th>จำนวนพืชที่ลงทะเบียน</th>
+                                                <th>ชื่อหมวดหมู่</th>
+                                                <th>จำนวนพืช</th>
                                                 <th class="not-print">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                         <?php 
-                                            if($resultCount > 0){$cateIndex = 1; while($category = $categoryResult->fetch_assoc()){
+                                            if($resultCount > 0){ $tagIndex = 1; while($tag = $tagResult->fetch_assoc()){
                                         ?>
 
                                             <tr>
-                                                <td><?php echo $cateIndex; ?></td>
-                                                <td><?php echo $category["cateName"]; ?></td>
-                                                <td><?php echo $category["plantCount"]; ?></td>
+                                                <td><?php echo $tagIndex; ?></td>
+                                                <td><?php echo $tag["tagName"]; ?></td>
+                                                <td><?php echo $tag["plantCount"]; ?></td>
                                                 <td class="not-print">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="category-edit?cateID=<?php echo $category['cateID'];?>">
+                                                        <a class="dropdown-item" href="plant-manage?tag=<?php echo $tag['tagID'];?>&search=true">
+                                                            <i class="bx bx-show-alt me-1"></i>
+                                                            ดูข้อมูล
+                                                        </a>
+                                                        <a class="dropdown-item" href="tag-edit?tagID=<?php echo $tag['tagID'];?>">
                                                             <i class="bx bx-edit-alt me-1"></i>
                                                             แก้ไขข้อมูล
                                                         </a>
-                                                        <a class="dropdown-item deleteBtn" href="../data/category/deleteCategory?cateID=<?php echo $category['cateID'];?>">
+                                                        <a class="dropdown-item deleteBtn" href="../data/tag/deleteTag?tagID=<?php echo $tag['tagID'];?>">
                                                             <i class="bx bx-trash me-1"></i>
                                                             ลบข้อมูล
                                                         </a>
@@ -167,14 +188,11 @@
                                                 </td>
                                             </tr>
                                         
-                                        <?php
-                                            $cateIndex++;}}else{
-                                        ?>
+                                        <?php $tagIndex++;} }else{ ?>
 
                                             <tr>
-                                                <td class="text-center text-warning py-4" colspan="4">
-                                                    <i class="fa-solid fa-triangle-exclamation fa-xl me-1"></i>
-                                                    ไม่พบข้อมูลหมวดหมู่
+                                                <td class="text-center text-warning py-3" colspan="4">
+                                                    --- ไม่พบข้อมูลในระบบ ---
                                                 </td>
                                             </tr>
 
@@ -211,19 +229,31 @@
         <!-- Page JS -->
         <script src="../include/scripts/customFunctions.js"></script>
         <script>
+            //Select
+            $(function(){
+                select = $(".select2");
+                select.length&&select.each(function(){
+                    var element=$(this);
+                    element.wrap('<div class="position-relative"></div>').select2({
+                        dropdownParent:element.parent()
+                    });
+                });
+            });
+
+            //Delete record
             $('.deleteBtn').click(function(){
                 event.preventDefault();
                 let url = $(this).attr('href');
                 
                 showConfirm({
                     icon: 'question',
-                    text: 'ต้องการลบลบข้อมูลหมวดหมู่พืชหรือไม่',
+                    text: 'ต้องการลบข้อมูลที่เลือกหรือไม่',
                     confirmButtonText: 'ดำเนินการต่อ',
                     confirmCallback: function(){
                         ajaxRequest({
                             type: 'GET',
                             url: url,
-                            errorUrl: '../500',
+                            errorUrl: '../requestError',
                             successCallback: function(response){
                                 if(response.status == "success"){
                                     showResponse({
@@ -246,3 +276,8 @@
         </script>
     </body>
 </html>
+
+<?php
+    //Close connection
+    $database->close();
+?>

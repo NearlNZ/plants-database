@@ -11,7 +11,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>จัดการข้อมูลพืช</title>
+        <title>ข้อมูลพืช</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -65,12 +65,12 @@
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">plant</span>
+                            <span class="active-menu-url">plant-manage</span>
                             <!-- /Breadcrumb & Active menu-->
 
                             <!-- Search card -->
                             <div class="card mt-2">
-                                <div class="card-body py-3">
+                                <div class="card-body p-3">
                                     <form action="" method="GET">
                                         <div class="row g-2">
                                             <div class="col-12 col-lg-6">
@@ -106,7 +106,7 @@
                                                     </div>
                                                     <!-- Search button-->
                                                     <div class="col-12 col-lg-auto">
-                                                        <button type="submit" name="filter" value="true" class="btn btn-primary text-white w-100">
+                                                        <button type="submit" name="search" value="true" class="btn btn-primary text-white w-100">
                                                             <i class="fa-solid fa-magnifying-glass"></i>
                                                             <span class="d-inline d-lg-none p-0 ms-2">ค้นหา</span>
                                                         </button>
@@ -132,24 +132,24 @@
                                 $filterDatatype = "";
 
                                 //Check if filter send
-                                if(isset($_GET["filter"])){
-                                    $filterWord = $_GET['word'] ?? '';
-                                    $filterTag = $_GET['tag'] ?? '';
+                                if(isset($_GET["search"])){
+                                    $searchWord = $_GET['word'] ?? '';
+                                    $searchTag = $_GET['tag'] ?? '';
 
-                                    if(!empty($filterWord)){
+                                    if(!empty($searchWord)){
                                         $sql .= "AND plantName LIKE ? ";
-                                        $filter[] = "%$filterWord%";
+                                        $filter[] = "%$searchWord%";
                                         $filterDatatype .= "s";
                                     }
-                                    if(!empty($filterTag) && $filterTag != "All"){
+                                    if(!empty($searchTag) && $searchTag != "All"){
                                         $sql .= "AND TL.tagID = ? ";
-                                        $filter[] = $filterTag;
+                                        $filter[] = $searchTag;
                                         $filterDatatype .= "s";
                                     }
                                 }
                                 
                                 $sql.= "GROUP BY plantID
-                                        ORDER BY plantRegist, plantName DESC;";
+                                        ORDER BY plantRegist DESC, plantName;";
 
                                 $stmt = $database->prepare($sql);
                                 
@@ -167,17 +167,18 @@
                             <!-- Data card -->
                             <div class="card shadow mt-3">
                                 <div class="card-header mb-0">
-                                    <!-- Add new -->
+                                    <!-- Action -->
                                     <div class="row g-2">
-                                        <a class="btn btn-success py-2 col-12 col-lg-auto shadow-sm me-2" href="plant-add">
+                                        <a class="btn btn-success col-12 col-lg-auto shadow-sm me-2" href="plant-add">
                                             <i class="fa-solid fa-plus me-2"></i>
-                                            เพิ่มข้อมูลพืช
+                                            เพิ่มข้อมูล
                                         </a>
-                                        <a class="btn btn-primary text-white py-3 py-lg-2 col-12 col-lg-auto shadow-sm d-none d-lg-block" onclick="printContent($('#dataTable'))">
+                                        <a class="btn btn-label-primary col-12 col-lg-auto shadow-sm d-none d-lg-block" href="#" onclick="printContent($('#dataTable'))">
                                             <i class="fa-solid fa-print me-2"></i>
                                             พิมพ์รายงาน
                                         </a>
                                     </div>
+                                    <!-- /Action -->
                                 </div>
                                 <div id="dataTable" class="table-responsive">
                                     <table class="table table-hover card-table table-nowrap">
@@ -225,9 +226,8 @@
                                         <?php $plantIndex++;} }else{ ?>
 
                                             <tr>
-                                                <td class="text-center text-warning py-4" colspan="6">
-                                                    <i class="fa-solid fa-triangle-exclamation fa-xl me-1"></i>
-                                                    ไม่พบข้อมูลพืช
+                                                <td class="text-center text-warning py-3" colspan="6">
+                                                    --- ไม่พบข้อมูลในระบบ ---
                                                 </td>
                                             </tr>
 
@@ -282,13 +282,13 @@
                 
                 showConfirm({
                     icon: 'question',
-                    text: 'ต้องการนำอุปกรณ์ออกจากระบบหรือไม่',
+                    text: 'ต้องการลบข้อมูลที่เลือกหรือไม่',
                     confirmButtonText: 'ดำเนินการต่อ',
                     confirmCallback: function(){
                         ajaxRequest({
                             type: 'GET',
                             url: url,
-                            errorUrl: '../500',
+                            errorUrl: '../requestError',
                             successCallback: function(response){
                                 if(response.status == "success"){
                                     showResponse({

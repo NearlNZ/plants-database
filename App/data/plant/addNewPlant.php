@@ -3,7 +3,7 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //1) Exit if user not verified yet.
+    //1) Exit if user not verified.
     session_start();
     if (!isset($_SESSION['CSP-session-userID'])) {
         $response->status = "warning";
@@ -27,7 +27,7 @@
     if($plantName == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุรายละเอียดให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();

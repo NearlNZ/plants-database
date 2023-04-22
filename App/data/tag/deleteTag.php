@@ -6,20 +6,16 @@
     //1) Exit if user not verified.
     session_start();
     if (!isset($_SESSION['CSP-session-userID'])) {
-        $response->status = "warning";
-        $response->title = "เกิดข้อผิดพลาด";
-        $response->text = "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
-
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        echo "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
         $database->close();
         exit();
     }
 
     //Set parameter
-    $imgID = $_GET["imgID"] ?? '';
+    $tagID = $_GET["tagID"] ?? '';
 
     //2) Check for required parameter
-    if($imgID == ''){
+    if($tagID == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
@@ -29,14 +25,14 @@
         exit();
     }
 
-    //3) Check if this plant not exist
-    $sql = "SELECT imgID, imgPath
-            FROM plantimages
-            WHERE imgID = ?";
+    //3) Check if this cate not exist
+    $sql = "SELECT tagID
+            FROM tags
+            WHERE tagID = ?";
 
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $imgID);
+    $stmt->bind_param('s', $tagID);
     $stmt->execute();
     $result = $stmt-> get_result();
     $stmt->close();
@@ -44,33 +40,28 @@
     if($result->num_rows == 0){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'ไม่พบรูปพืชที่ระบุในระบบ';
+        $response->text = 'ไม่พบข้อมูลหมวดหมู่นี้ในระบบ';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
         exit();
     }
 
-    //4) Remove plant img
-    $img = $result->fetch_assoc();
-    $imgFile = "../../assets/img/plantImgs/".$img["imgPath"];
-    unlink("$imgFile");
-
-    //Pass) Delete plant
+    //Pass) Delete category
     $sql = "DELETE
-            FROM plantimages
-            WHERE imgID = ?;";
-
+            FROM tags
+            WHERE tagID = ?;";
+    
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $imgID);
+    $stmt->bind_param('s', $tagID);
 
     if($stmt->execute()){
         $stmt->close();
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'ลบรูปภาพพืชที่เลือกสำเร็จแล้ว';
+        $response->text = 'ลบข้อมูลหมวดหมู่สำเร็จแล้ว';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

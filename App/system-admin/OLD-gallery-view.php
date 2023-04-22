@@ -214,7 +214,7 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../500',
+                    errorUrl: '../requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
@@ -244,7 +244,7 @@
                     data: data,
                     processData: false,
                     contentType: false,
-                    errorUrl: '../500',
+                    errorUrl: '../requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
@@ -270,7 +270,7 @@
                 ajaxRequest({
                     type: 'GET',
                     url: url,
-                    errorUrl: '../500',
+                    errorUrl: '../requestError',
                     successCallback: function(response){
                         if(response.status == "success"){
                             showResponse({
