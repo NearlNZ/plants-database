@@ -16,11 +16,11 @@
     }
 
     //Set parameter
-    $cateID = $_POST["cateID"] ?? '';
-    $cateName = $_POST["cateName"] ?? '';
+    $tagID = $_POST["tagID"] ?? '';
+    $tagName = $_POST["tagName"] ?? '';
 
     //2) Check for required parameter
-    if($cateID == '' || $cateName == ''){
+    if($tagID == '' || $tagName == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
@@ -30,14 +30,14 @@
         exit();
     }
 
-    //3) Check if this cate not exist
-    $sql = "SELECT cateID
-            FROM categories
-            WHERE cateID = ?";
+    //3) Check if this tagID not exist
+    $sql = "SELECT tagID
+            FROM tags
+            WHERE tagID = ?";
 
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $cateID);
+    $stmt->bind_param('s', $tagID);
     $stmt->execute();
     $result = $stmt-> get_result();
     $stmt->close();
@@ -52,14 +52,14 @@
         exit();
     }
 
-    //4) Check if cateName already exist
-    $sql = "SELECT cateID
-            FROM categories
-            WHERE cateName = ? AND cateID <> ?;";
+    //4) Check if tagName duplicate
+    $sql = "SELECT tagID
+            FROM tags
+            WHERE tagName = ? AND tagID <> ?;";
 
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ss', $cateName, $cateID);
+    $stmt->bind_param('ss', $tagName, $tagID);
     $stmt->execute();
     $result = $stmt-> get_result();
     $stmt->close();
@@ -75,20 +75,20 @@
     }
 
     //Pass) Update category
-    $sql = "UPDATE categories
-            SET cateName = ?
-            WHERE cateID = ?;";
+    $sql = "UPDATE tags
+            SET tagName = ?
+            WHERE tagID = ?;";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ss', $cateName, $cateID);
+    $stmt->bind_param('ss', $tagName, $tagID);
 
     if($stmt->execute()){
         $stmt->close();
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'แก้ไขข้อมูลหมวดหมู่พืชสำเร็จแล้ว';
+        $response->text = 'แก้ไขข้อมูลหมวดหมู่สำเร็จแล้ว';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

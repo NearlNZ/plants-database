@@ -67,19 +67,19 @@
                             <!-- /Breadcrumb & Active menu-->
 
                             <?php
-                                if(!isset($_GET["cateID"])){
+                                if(!isset($_GET["tagID"])){
                                     echo "<script>window.location.href='category';</script>";
                                     exit();
                                 }else{
-                                    $cateID = $_GET["cateID"];
+                                    $tagID = $_GET["tagID"];
 
-                                    $sql = "SELECT cateID, cateName
+                                    $sql = "SELECT tagID, tagName
                                             FROM categories
-                                            WHERE cateID = ?
+                                            WHERE tagID = ?
                                             LIMIT 1;";
                                     
                                     $stmt = $database->prepare($sql);
-                                    $stmt->bind_param('s', $cateID);
+                                    $stmt->bind_param('s', $tagID);
                                     $stmt->execute();
                                     $categoryResult = $stmt-> get_result();
                                     $stmt->close();
@@ -98,13 +98,13 @@
                                         <div class="card-body">
                                             <form id="formEditCategory" method="post" action="../data/category/updateCategory">
                                                 <div class="row g-2">
-                                                    <input type="hidden" name="cateID" value="<?php echo $category["cateID"]; ?>">
+                                                    <input type="hidden" name="tagID" value="<?php echo $category["tagID"]; ?>">
                                                     <div class="col-12">
                                                         ชื่อหมวดหมู่พืช
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
-                                                            <input type="text" name="cateName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" autofocus autocomplete="off" required
-                                                            value="<?php echo $category["cateName"]; ?>">
+                                                            <input type="text" name="tagName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" autofocus autocomplete="off" required
+                                                            value="<?php echo $category["tagName"]; ?>">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -151,7 +151,6 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({

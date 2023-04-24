@@ -36,5 +36,33 @@
                 <div>ข้อมูลผู้ใช้</div>
             </a>
         </li>
+
+        <!-- Report -->
+        <li class="menu-item havesub">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon fa-solid fa-file-lines"></i>
+                <div>พิมพ์รายงาน</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <div>รายงานข้อมูลพืช</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <div>รายงานบัญชีผู้ใช้</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Logout -->
+        <li class="menu-item">
+            <a  href="#" class="menu-link" onclick="logout()">
+                <i class="menu-icon fa-solid fa-power-off"></i>
+                <div>ออกจากระบบ</div>
+            </a>
+        </li>
     </ul>
 </aside>

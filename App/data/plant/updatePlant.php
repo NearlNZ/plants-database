@@ -18,7 +18,7 @@
     //Set parameter
     $plantID = $_POST['plantID'] ?? '';
     $plantName = $_POST['plantName'] ?? '';
-    $cateID = !empty($_POST['cateID']) ? $_POST['cateID'] : Null;
+    $tagID = !empty($_POST['tagID']) ? $_POST['tagID'] : Null;
     $plantDescription = $_POST["plantDescription"] ?? '';
 
     //2) Check for required parameter
@@ -56,12 +56,12 @@
 
     //Pass) Update plant
     $sql = "UPDATE plants
-            SET plantName = ?, cateID = ?, plantDescription = ?
+            SET plantName = ?, tagID = ?, plantDescription = ?
             WHERE plantID = ?;";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssss', $plantName, $cateID, $plantDescription, $plantID);
+    $stmt->bind_param('ssss', $plantName, $tagID, $plantDescription, $plantID);
 
     if($stmt->execute()){
         $stmt->close();

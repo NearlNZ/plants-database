@@ -73,8 +73,8 @@
                                 }else{
                                     $plantID = $_GET["plantID"];
 
-                                    $sql = "SELECT P.plantID, P.plantName, P.plantRegist, plantDescription, C.cateName, U.userFname, U.userLname
-                                            FROM plants P LEFT JOIN categories C ON P.cateID = C.cateID LEFT JOIN users U ON P.userID = U.userID
+                                    $sql = "SELECT P.plantID, P.plantName, P.plantRegist, plantDescription, C.tagName, U.userFname, U.userLname
+                                            FROM plants P LEFT JOIN categories C ON P.tagID = C.tagID LEFT JOIN users U ON P.userID = U.userID
                                             WHERE plantID = ?
                                             LIMIT 1;";
                                     
@@ -105,7 +105,7 @@
                                                 <div class="col-12 col-md-6">
                                                     หมวดหมู่พืช
                                                     <input type="text" class="form-control" placeholder="ไม่มีหมวดหมู่"
-                                                    value="<?php echo $plant['cateName']; ?>" readonly>
+                                                    value="<?php echo $plant['tagName']; ?>" readonly>
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     ผู้ลงทะเบียน
@@ -214,7 +214,6 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({

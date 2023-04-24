@@ -19,7 +19,7 @@
     $plantID = uniqid("PLANT-").rand(100,999);
     $userID = $_SESSION['CSP-session-userID'];
     $plantName = $_POST['plantName'] ?? '';
-    $cateID = !empty($_POST['cateID']) ? $_POST['cateID'] : Null;
+    $tagID = !empty($_POST['tagID']) ? $_POST['tagID'] : Null;
     $plantDescription = $_POST["plantDescription"] ?? '';
     $plantRegist = date("Y-m-d");
 
@@ -35,12 +35,12 @@
     }
 
     //Pass) Create new plant
-    $sql = "INSERT INTO plants(plantID, plantName, userID, cateID, plantDescription, plantRegist)
+    $sql = "INSERT INTO plants(plantID, plantName, userID, tagID, plantDescription, plantRegist)
             VALUES(?, ?, ?, ?, ?, ?);";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssssss', $plantID, $plantName, $userID, $cateID, $plantDescription, $plantRegist);
+    $stmt->bind_param('ssssss', $plantID, $plantName, $userID, $tagID, $plantDescription, $plantRegist);
 
     if($stmt->execute()){
         $stmt->close();

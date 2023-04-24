@@ -75,7 +75,7 @@
                                         <div class="row g-2">
                                             <div class="col-12 col-lg-6">
                                                 ชื่อพืช
-                                                <input type="text" name="word" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
+                                                <input type="search" name="word" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
                                                 value="<?php if(isset($_GET["word"])) echo $_GET["word"]; ?>">
                                             </div>
                                             <div class="col-12 col-lg-6">
@@ -173,10 +173,6 @@
                                             <i class="fa-solid fa-plus me-2"></i>
                                             เพิ่มข้อมูล
                                         </a>
-                                        <a class="btn btn-label-primary col-12 col-lg-auto shadow-sm d-none d-lg-block" href="#" onclick="printContent($('#dataTable'))">
-                                            <i class="fa-solid fa-print me-2"></i>
-                                            พิมพ์รายงาน
-                                        </a>
                                     </div>
                                     <!-- /Action -->
                                 </div>
@@ -184,11 +180,11 @@
                                     <table class="table table-hover card-table table-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>ลำดับ</th>
+                                                <th>ลำดับที่</th>
                                                 <th>ชื่อพืช</th>
                                                 <th>ผู้ลงทะเบียน</th>
                                                 <th>วันที่ลงทะเบียน</th>
-                                                <th class="not-print">จัดการข้อมูล</th>
+                                                <th class="not-print text-center" width="150px">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -202,7 +198,7 @@
                                                 <td><?php echo $plant["plantName"]; ?></td>
                                                 <td><?php echo $plant["userFname"]." ".$plant["userLname"]; ?></td>
                                                 <td><?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?></td>
-                                                <td class="not-print">
+                                                <td class="not-print text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
@@ -288,7 +284,6 @@
                         ajaxRequest({
                             type: 'GET',
                             url: url,
-                            errorUrl: '../requestError',
                             successCallback: function(response){
                                 if(response.status == "success"){
                                     showResponse({

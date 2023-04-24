@@ -73,7 +73,7 @@
                                 }else{
                                     $plantID = $_GET["plantID"];
 
-                                    $sql = "SELECT plantID, plantName, cateID, plantDescription
+                                    $sql = "SELECT plantID, plantName, tagID, plantDescription
                                             FROM plants
                                             WHERE plantID = ?
                                             LIMIT 1;";
@@ -109,19 +109,19 @@
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         หมวดหมู่พืช
-                                                        <select class="form-select" name="cateID">
+                                                        <select class="form-select" name="tagID">
                                                             <option selected value="">ไม่ระบุ</option>
 
                                                             <?php
-                                                                $sql = "SELECT cateID, cateName
+                                                                $sql = "SELECT tagID, tagName
                                                                         FROM categories
-                                                                        ORDER BY cateName;";
+                                                                        ORDER BY tagName;";
                                                                     
                                                                 $result = $database->query($sql);
                                                                 if($result->num_rows > 0){
                                                                     while($category = $result->fetch_assoc()){
                                                             ?>
-                                                                        <option value="<?php echo $category["cateID"]; ?>" <?php if($plant["cateID"] == $category["cateID"]) echo "selected"; ?>><?php echo $category["cateName"]; ?></option>
+                                                                        <option value="<?php echo $category["tagID"]; ?>" <?php if($plant["tagID"] == $category["tagID"]) echo "selected"; ?>><?php echo $category["tagName"]; ?></option>
                                                             <?php
                                                                     }
                                                                 }
@@ -250,7 +250,6 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({

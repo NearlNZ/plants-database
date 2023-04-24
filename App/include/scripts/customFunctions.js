@@ -38,7 +38,7 @@ function ajaxRequest(option){
         type = 'POST',
         url = '',
         data = {},
-        errorUrl = '',
+        errorUrl = '../requestError',
         processData = true,
         contentType = 'application/x-www-form-urlencoded',
         successCallback = () => { },

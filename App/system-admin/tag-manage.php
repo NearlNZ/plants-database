@@ -140,10 +140,6 @@
                                             <i class="fa-solid fa-plus me-2"></i>
                                             เพิ่มข้อมูล
                                         </a>
-                                        <a class="btn btn-label-primary col-12 col-lg-auto shadow-sm d-none d-lg-block" href="#" onclick="printContent($('#dataTable'))">
-                                            <i class="fa-solid fa-print me-2"></i>
-                                            พิมพ์รายงาน
-                                        </a>
                                     </div>
                                     <!-- /Action -->
                                 </div>
@@ -154,7 +150,7 @@
                                                 <th>ลำดับที่</th>
                                                 <th>ชื่อหมวดหมู่</th>
                                                 <th>จำนวนพืช</th>
-                                                <th class="not-print">จัดการข้อมูล</th>
+                                                <th class="not-print text-center" width="150px">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -167,7 +163,7 @@
                                                 <td><?php echo $tagIndex; ?></td>
                                                 <td><?php echo $tag["tagName"]; ?></td>
                                                 <td><?php echo $tag["plantCount"]; ?></td>
-                                                <td class="not-print">
+                                                <td class="not-print text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
@@ -253,7 +249,6 @@
                         ajaxRequest({
                             type: 'GET',
                             url: url,
-                            errorUrl: '../requestError',
                             successCallback: function(response){
                                 if(response.status == "success"){
                                     showResponse({

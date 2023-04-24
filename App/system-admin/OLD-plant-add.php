@@ -86,18 +86,18 @@
                                                     </div>
                                                     <div class="col-12 col-md-6">
                                                         หมวดหมู่พืช
-                                                        <select class="form-select" name="cateID">
+                                                        <select class="form-select" name="tagID">
                                                             <option selected value="">ไม่ระบุ</option>
 
                                                             <?php
-                                                                $sql = "SELECT cateID, cateName
+                                                                $sql = "SELECT tagID, tagName
                                                                         FROM categories
-                                                                        ORDER BY cateName;";
+                                                                        ORDER BY tagName;";
                                                                     
                                                                 $result = $database->query($sql);
                                                                 if($result->num_rows > 0){
                                                                     while($category = $result->fetch_assoc()){
-                                                                        echo '<option value="'.$category["cateID"].'">'.$category["cateName"].'</option>';
+                                                                        echo '<option value="'.$category["tagID"].'">'.$category["tagName"].'</option>';
                                                                     }
                                                                 }
                                                             ?>
@@ -151,7 +151,6 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
