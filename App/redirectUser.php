@@ -9,7 +9,7 @@
     $level = $_SESSION['CSP-session-userLevel'];
 
     if($level == "ผู้ดูแลระบบ"){
-        header('Location: system-admin/gallery');
+        header('Location: system-admin/dashboard');
         exit();
     }
     else{

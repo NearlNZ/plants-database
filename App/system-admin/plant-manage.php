@@ -60,7 +60,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a class="active">ข้อมูลพืช</a>
+                                        <a class="active">รายการพืช</a>
                                     </li>
                                 </ol>
                             </nav>
@@ -165,7 +165,7 @@
                             ?>
                             
                             <!-- Data card -->
-                            <div class="card shadow mt-3">
+                            <div class="card mt-3">
                                 <div class="card-header mb-0">
                                     <!-- Action -->
                                     <div class="row g-2">
@@ -182,9 +182,10 @@
                                             <tr>
                                                 <th>ลำดับที่</th>
                                                 <th>ชื่อพืช</th>
-                                                <th>ผู้ลงทะเบียน</th>
                                                 <th>วันที่ลงทะเบียน</th>
-                                                <th class="not-print text-center" width="150px">จัดการข้อมูล</th>
+                                                <th>สถิติผู้เข้าชม</th>
+                                                <th>คลังภาพ</th>
+                                                <th class="text-center" width="150px">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -194,11 +195,21 @@
                                         ?>
 
                                             <tr>
-                                                <td><?php echo $plantIndex; ?></td>
+                                                <td><?php echo number_format($plantIndex); ?></td>
                                                 <td><?php echo $plant["plantName"]; ?></td>
-                                                <td><?php echo $plant["userFname"]." ".$plant["userLname"]; ?></td>
                                                 <td><?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?></td>
-                                                <td class="not-print text-center">
+                                                <td>
+                                                    <span class="text-secondary me-2">
+                                                        <i class="fa-solid fa-eye me-1"></i>
+                                                        <?php echo number_format(12545); ?>
+                                                    </span>
+                                                    <span class="text-danger">
+                                                        <i class="fa-solid fa-heart me-1"></i>
+                                                        <?php echo number_format(12545); ?>
+                                                    </span>
+                                                </td>
+                                                <td><?php echo number_format(124); ?> ภาพ</td>
+                                                <td class="text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>

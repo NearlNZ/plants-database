@@ -132,7 +132,7 @@
                             ?>
                             
                             <!-- Data card -->
-                            <div class="card shadow mt-3">
+                            <div class="card mt-3">
                                 <div class="card-header mb-0">
                                     <!-- Action -->
                                     <div class="row g-2">
@@ -150,7 +150,7 @@
                                                 <th>ลำดับที่</th>
                                                 <th>ชื่อหมวดหมู่</th>
                                                 <th>จำนวนพืช</th>
-                                                <th class="not-print text-center" width="150px">จัดการข้อมูล</th>
+                                                <th class="text-center" width="150px">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -160,10 +160,10 @@
                                         ?>
 
                                             <tr>
-                                                <td><?php echo $tagIndex; ?></td>
+                                                <td><?php echo number_format($tagIndex); ?></td>
                                                 <td><?php echo $tag["tagName"]; ?></td>
-                                                <td><?php echo $tag["plantCount"]; ?></td>
-                                                <td class="not-print text-center">
+                                                <td><?php echo number_format($tag["plantCount"]); ?></td>
+                                                <td class="text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>

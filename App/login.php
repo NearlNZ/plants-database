@@ -146,7 +146,7 @@
                                 response: response,
                                 timer: 2000,
                                 callback: function() {
-                                    window.location.href="redirect";
+                                    window.location.href="rediretUser";
                                 }
                             });
                         }else{
