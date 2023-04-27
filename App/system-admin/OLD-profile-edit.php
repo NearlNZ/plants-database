@@ -1,6 +1,6 @@
 <?php
     //include permission check
-    require_once('../include/scripts/member-header.php');
+    require_once('../include/scripts/admin-header.php');
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +38,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-member.php");?>
+                <?php require_once("../include/components/sidebar-admin.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -187,7 +187,7 @@
                     data: data,
                     processData: false,
                     contentType: false,
-                    errorUrl: '../500',
+                    errorUrl: '../requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
@@ -215,7 +215,6 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../500',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({

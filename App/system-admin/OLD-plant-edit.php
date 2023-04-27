@@ -1,6 +1,6 @@
 <?php
     //include permission check
-    require_once('../include/scripts/member-header.php');
+    require_once('../include/scripts/admin-header.php');
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>รายการพืช</title>
+        <title>ข้อมูลพืช</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -38,7 +38,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-member.php");?>
+                <?php require_once("../include/components/sidebar-admin.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -55,26 +55,26 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a href="gallery">รายการพืช</a>
+                                        <a href="plant">ข้อมูลพืช</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a class="active">ข้อมูลพืช</a>
+                                        <a class="active">แก้ไขข้อมูล</a>
                                     </li>
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">gallery</span>
+                            <span class="active-menu-url">plant</span>
                             <!-- /Breadcrumb & Active menu-->
 
                             <?php
                                 if(!isset($_GET["plantID"])){
-                                    echo "<script>window.location.href='gallery';</script>";
+                                    echo "<script>window.location.href='plant';</script>";
                                     exit();
                                 }else{
                                     $plantID = $_GET["plantID"];
 
-                                    $sql = "SELECT P.plantID, P.plantName, P.plantRegist, plantDescription, C.cateName, U.userFname, U.userLname
-                                            FROM plants P LEFT JOIN categories C ON P.cateID = C.cateID LEFT JOIN users U ON P.userID = U.userID
+                                    $sql = "SELECT plantID, plantName, tagID, plantDescription
+                                            FROM plants
                                             WHERE plantID = ?
                                             LIMIT 1;";
                                     
@@ -93,38 +93,51 @@
                                     <div class="card mb-2">
                                         <h5 class="card-header">
                                             <i class="fa-solid fa-seedling me-1"></i>
-                                            ข้อมูลพืช
+                                            แก้ไขข้อมูลพืช
                                         </h5>
                                         <div class="card-body">
-                                            <div class="row g-2">
-                                                <div class="col-12 col-md-6">
-                                                    ชื่อพืช
-                                                    <input type="text" class="form-control" placeholder="ไม่มีชื่อ"
-                                                    value="<?php echo $plant['plantName']; ?>" readonly>
+                                            <form id="formAddPlant" method="post" action="../data/plant/updatePlant">
+                                                <div class="row g-2">
+                                                    <input type="hidden" name="plantID" value="<?php echo $plant['plantID']; ?>">
+                                                    <div class="col-12 col-md-6">
+                                                        ชื่อพืช
+                                                        <div class="input-group input-group-merge">
+                                                            <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
+                                                            <input type="text" name="plantName" class="form-control" placeholder="ระบุชื่อพืช" autofocus autocomplete="off" required
+                                                            value="<?php echo $plant['plantName']; ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        หมวดหมู่พืช
+                                                        <select class="form-select" name="tagID">
+                                                            <option selected value="">ไม่ระบุ</option>
+
+                                                            <?php
+                                                                $sql = "SELECT tagID, tagName
+                                                                        FROM categories
+                                                                        ORDER BY tagName;";
+                                                                    
+                                                                $result = $database->query($sql);
+                                                                if($result->num_rows > 0){
+                                                                    while($category = $result->fetch_assoc()){
+                                                            ?>
+                                                                        <option value="<?php echo $category["tagID"]; ?>" <?php if($plant["tagID"] == $category["tagID"]) echo "selected"; ?>><?php echo $category["tagName"]; ?></option>
+                                                            <?php
+                                                                    }
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        รายละเอียดพืช
+                                                        <textarea name="plantDescription" class="form-control" rows="5"><?php echo $plant["plantDescription"]; ?></textarea>
+                                                    </div>
                                                 </div>
-                                                <div class="col-12 col-md-6">
-                                                    หมวดหมู่พืช
-                                                    <input type="text" class="form-control" placeholder="ไม่มีหมวดหมู่"
-                                                    value="<?php echo $plant['cateName']; ?>" readonly>
+                                                <div class="mt-3">
+                                                    <button type="submit" class="btn btn-primary me-2">บันทึกข้อมูล</button>
+                                                    <a href="plant" class="btn btn-label-secondary">ย้อนกลับ</a>
                                                 </div>
-                                                <div class="col-12 col-md-6">
-                                                    ผู้ลงทะเบียน
-                                                    <input type="text" class="form-control" placeholder="ไม่มีข้อมูลผู้ลงทะเบียน"
-                                                    value="<?php echo $plant['userFname']." ".$plant['userLname']; ?>" readonly>
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    วันที่ลงทะเบียน
-                                                    <input type="text" class="form-control" placeholder="ไม่ได้ระบุวันลงทะเบียน"
-                                                    value="<?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?>" readonly>
-                                                </div>
-                                                <div class="col-12">
-                                                    รายละเอียดพืช
-                                                    <textarea class="form-control" rows="3" readonly><?php echo $plant["plantDescription"]; ?></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="mt-3">
-                                                <a href="gallery" class="btn btn-primary">ย้อนกลับ</a>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -135,8 +148,25 @@
                                     <div class="card mb-3">
                                         <h5 class="card-header mb-0">
                                             <i class="fa-solid fa-image me-1"></i>
-                                            รูปภาพของพืช
+                                            จัดการรูปภาพของพืช
                                         </h5>
+                                        <div class="card-body">
+                                            <form id="formAddImg" method="POST" action="../data/plant/addPlantImg">
+                                                <input type="hidden" name="plantID" value="<?php echo $plant['plantID']; ?>">
+                                                <div class="col-12">
+                                                    เลือกรูปพืช
+                                                    <div class="input-group">
+                                                        <input name="plantImg[]" class="form-control" type="file" multiple required>
+                                                        <button type="submit" class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,2" 
+                                                        data-bs-placement="left" data-bs-html="true" title="<span>อัพโหลดรูป</span>">
+                                                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                                                        </button>
+                                                    </div>
+                                                    <small class="text-muted mb-0">รองรับไฟล์รูปภาพ JPG, JPEG และ PNG</small>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <hr class="my-0">
                                         <div class="card-body">
                                             <div class="row g-2">
                                                 <?php
@@ -162,6 +192,12 @@
                                                                 <img src="../assets/img/plantImgs/<?php echo $img['imgPath']; ?>" class="w-100 h-100 fit-contain rounded-3" style="max-height:260px;">
                                                             </a>
                                                         </div>
+                                                        <a class="btn-sm p-2 btn-warning text-white clickable position-absolute top-100 start-50 translate-middle rounded deleteBtn"
+                                                        href="../data/plant/deleteImg?imgID=<?php echo $img['imgID'];?>">
+                                                            <i class="fa-solid fa-trash-can fa-lg"></i>
+                                                            นำรูปออก
+                                                        </a>
+                                                        
                                                     </div>
 
                                                 <?php
@@ -214,7 +250,6 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../500',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
@@ -244,7 +279,7 @@
                     data: data,
                     processData: false,
                     contentType: false,
-                    errorUrl: '../500',
+                    errorUrl: '../requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
@@ -270,7 +305,7 @@
                 ajaxRequest({
                     type: 'GET',
                     url: url,
-                    errorUrl: '../500',
+                    errorUrl: '../requestError',
                     successCallback: function(response){
                         if(response.status == "success"){
                             showResponse({

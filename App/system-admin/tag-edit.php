@@ -1,14 +1,17 @@
 <?php
+    //Include database connection
+    require_once("../data/database.php");
+
     //include permission check
-    require_once('../include/scripts/member-header.php');
+    require_once('../include/scripts/admin-header.php');
 ?>
 
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed">
     <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>จัดการข้อมูลหมวดหมู่พืช</title>
+        <title>หมวดหมู่พืช</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -38,7 +41,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-member.php");?>
+                <?php require_once("../include/components/sidebar-admin.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -55,7 +58,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a href="category">หมวดหมู่พืช</a>
+                                        <a href="tag-manage">หมวดหมู่พืช</a>
                                     </li>
                                     <li class="breadcrumb-item">
                                         <a class="active">แก้ไขข้อมูล</a>
@@ -63,28 +66,37 @@
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">category</span>
+                            <span class="active-menu-url">tag-manage</span>
                             <!-- /Breadcrumb & Active menu-->
 
                             <?php
-                                if(!isset($_GET["cateID"])){
-                                    echo "<script>window.location.href='category';</script>";
-                                    exit();
-                                }else{
-                                    $cateID = $_GET["cateID"];
+                                $tagID = $_GET["tagID"] ?? "";
+                                
+                                function selectTagData ($database, $tagID){
+                                    if(empty($tagID)){
+                                        return false;
+                                    }
 
-                                    $sql = "SELECT cateID, cateName
-                                            FROM categories
-                                            WHERE cateID = ?
-                                            LIMIT 1;";
+                                    $sql = "SELECT tagID, tagName
+                                            FROM tags
+                                            WHERE tagID = ?";
                                     
-                                    $stmt = $database->prepare($sql);
-                                    $stmt->bind_param('s', $cateID);
+                                    $stmt = $database->stmt_init(); 
+                                    $stmt->prepare($sql);
+                                    $stmt->bind_param('s', $tagID);
                                     $stmt->execute();
-                                    $categoryResult = $stmt-> get_result();
+                                    $tagResult = $stmt-> get_result();
                                     $stmt->close();
-                                    $category = $categoryResult->fetch_assoc();
+
+                                    if($tagResult->num_rows == 0){
+                                        return false;
+                                    }
+
+                                    return $tagResult->fetch_assoc();
                                 }
+
+                                $tag = selectTagData($database, $tagID);
+                                if($tag != false){
                             ?>
 
                             <div class="row g-3">
@@ -92,25 +104,25 @@
                                 <div class="col-12">
                                     <div class="card mb-4">
                                         <h5 class="card-header">
-                                            <i class="fa-regular fa-rectangle-list me-1"></i>
+                                            <i class="fa-solid fa-tags me-1"></i>
                                             แก้ไขข้อมูลหมวดหมู่
                                         </h5>
                                         <div class="card-body">
-                                            <form id="formEditCategory" method="post" action="../data/category/updateCategory">
+                                            <form id="formAddTag" method="post" action="../data/tag/updateTag">
                                                 <div class="row g-2">
-                                                    <input type="hidden" name="cateID" value="<?php echo $category["cateID"]; ?>">
                                                     <div class="col-12">
-                                                        ชื่อหมวดหมู่พืช
+                                                        ชื่อหมวดหมู่
+                                                        <input type="hidden" name="tagID" value="<?php echo $tag['tagID']; ?>">
                                                         <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
-                                                            <input type="text" name="cateName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" autofocus autocomplete="off" required
-                                                            value="<?php echo $category["cateName"]; ?>">
+                                                            <span class="input-group-text"><i class="fa-solid fa-tag"></i></span>
+                                                            <input type="text" name="tagName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" maxlength="50" autofocus autocomplete="off" required
+                                                            value="<?php echo $tag['tagName']; ?>">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="mt-3">
                                                     <button type="submit" class="btn btn-primary me-2">บันทึกข้อมูล</button>
-                                                    <a href="category" class="btn btn-label-secondary">ย้อนกลับ</a>
+                                                    <a href="tag-manage" class="btn btn-label-secondary">ย้อนกลับ</a>
                                                 </div>
                                             </form>
                                         </div>
@@ -118,6 +130,37 @@
                                 </div>
                                 <!-- /Card form -->
                             </div>
+
+                            <?php
+                                }else{
+                            ?>
+
+                            <div class="row g-3">
+                                <!-- Card Not found -->
+                                <div class="col-12">
+                                    <div class="card mb-2">
+                                        <div class="card-body text-center">
+                                            <div>
+                                                <img class="img-fluid" width="480px" src="../assets/img/page/data-not-found.jpg" alt="data not found"/>
+                                            </div>
+                                            <p class="h2 mt-2 fw-bold" style="color: #6749F1;">
+                                                ไม่พบข้อมูลในระบบ
+                                            </p>
+                                            <p class="h5 mt-0">
+                                                โปรดตรวจสอบความถูกต้องของข้อมูลแล้วลองอีกครั้ง
+                                            </p>
+                                            <a href="tag-manage" class="btn btn-primary mt-2">
+                                                ย้อนกลับ
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Card Not found -->
+                            </div>
+
+                            <?php
+                                }
+                            ?>
                         </div>
                         <!-- /Content -->
 
@@ -143,7 +186,7 @@
         <!-- Page JS -->
         <script src="../include/scripts/customFunctions.js"></script>
         <script>
-            $('#formEditCategory').submit(function(e) {
+            $('#formAddTag').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
 
@@ -151,14 +194,13 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../500',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
                                 response: response,
                                 timer: 2000,
                                 callback: function() {
-                                    window.location.href="category";
+                                    window.location.href="tag-manage";
                                 }
                             });
                         }else{
@@ -172,3 +214,8 @@
         </script>
     </body>
 </html>
+
+<?php
+    //Close connection
+    $database->close();
+?>

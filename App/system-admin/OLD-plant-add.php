@@ -1,6 +1,6 @@
 <?php
     //include permission check
-    require_once('../include/scripts/member-header.php');
+    require_once('../include/scripts/admin-header.php');
 ?>
 
 <!DOCTYPE html>
@@ -8,7 +8,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>จัดการข้อมูลหมวดหมู่พืช</title>
+        <title>ข้อมูลพืช</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -38,7 +38,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-member.php");?>
+                <?php require_once("../include/components/sidebar-admin.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -55,7 +55,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a href="category">หมวดหมู่พืช</a>
+                                        <a href="plant">ข้อมูลพืช</a>
                                     </li>
                                     <li class="breadcrumb-item">
                                         <a class="active">เพิ่มข้อมูล</a>
@@ -63,7 +63,7 @@
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">category</span>
+                            <span class="active-menu-url">plant</span>
                             <!-- /Breadcrumb & Active menu-->
 
                             <div class="row g-3">
@@ -71,23 +71,46 @@
                                 <div class="col-12">
                                     <div class="card mb-4">
                                         <h5 class="card-header">
-                                            <i class="fa-regular fa-rectangle-list me-1"></i>
-                                            เพิ่มข้อมูลหมวดหมู่
+                                            <i class="fa-solid fa-seedling me-1"></i>
+                                            เพิ่มข้อมูลพืช
                                         </h5>
                                         <div class="card-body">
-                                            <form id="formAddCategory" method="post" action="../data/category/addNewCategory">
+                                            <form id="formAddPlant" method="post" action="../data/plant/addNewPlant">
                                                 <div class="row g-2">
-                                                    <div class="col-12">
-                                                        ชื่อหมวดหมู่พืช
+                                                    <div class="col-12 col-md-6">
+                                                        ชื่อพืช
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
-                                                            <input type="text" name="cateName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" autofocus autocomplete="off" required>
+                                                            <input type="text" name="plantName" class="form-control" placeholder="ระบุชื่อพืช" autofocus autocomplete="off" required>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        หมวดหมู่พืช
+                                                        <select class="form-select" name="tagID">
+                                                            <option selected value="">ไม่ระบุ</option>
+
+                                                            <?php
+                                                                $sql = "SELECT tagID, tagName
+                                                                        FROM categories
+                                                                        ORDER BY tagName;";
+                                                                    
+                                                                $result = $database->query($sql);
+                                                                if($result->num_rows > 0){
+                                                                    while($category = $result->fetch_assoc()){
+                                                                        echo '<option value="'.$category["tagID"].'">'.$category["tagName"].'</option>';
+                                                                    }
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        รายละเอียดพืช
+                                                        <textarea name="plantDescription" class="form-control" rows="5"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="mt-3">
                                                     <button type="submit" class="btn btn-primary me-2">บันทึกข้อมูล</button>
-                                                    <a href="category" class="btn btn-label-secondary">ย้อนกลับ</a>
+                                                    <a href="plant" class="btn btn-label-secondary">ย้อนกลับ</a>
                                                 </div>
                                             </form>
                                         </div>
@@ -120,7 +143,7 @@
         <!-- Page JS -->
         <script src="../include/scripts/customFunctions.js"></script>
         <script>
-            $('#formAddCategory').submit(function(e) {
+            $('#formAddPlant').submit(function(e) {
                 e.preventDefault();
                 var form = $(this);
 
@@ -128,14 +151,13 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '../500',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
                                 response: response,
                                 timer: 2000,
                                 callback: function() {
-                                    window.location.href="category";
+                                    window.location.href="plant";
                                 }
                             });
                         }else{

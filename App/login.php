@@ -139,14 +139,14 @@
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
-                    errorUrl: '500',
+                    errorUrl: 'requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({
                                 response: response,
                                 timer: 2000,
                                 callback: function() {
-                                    window.location.href="redirect";
+                                    window.location.href="rediretUser";
                                 }
                             });
                         }else{

@@ -54,10 +54,23 @@
         exit();
     }
 
-    //Pass) Create session for user
+    //Pass) Create session for user & timestamp last login
     $_SESSION['CSP-session-userID'] = $user['userID'];
     $_SESSION['CSP-session-userLevel'] = $user['userLevel'];
 
+    $userID = $user['userID'];
+    $loginTime = date('Y-m-d H:i:s');
+
+    $sql = "UPDATE users
+            SET userLastLogin = ?
+            WHERE userID = ?;";
+
+    $stmt =  $database->stmt_init(); 
+    $stmt->prepare($sql);
+    $stmt->bind_param('ss', $loginTime, $userID);
+    $stmt->execute();
+    $userResult = $stmt-> get_result();
+    $stmt->close();
 
     $response->status = "success";
     $response->text = "กำลังเข้าสู่ระบบ กรุณารอสักครู่...";

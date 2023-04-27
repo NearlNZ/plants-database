@@ -18,14 +18,14 @@
     //Set parameter
     $plantID = $_POST['plantID'] ?? '';
     $plantName = $_POST['plantName'] ?? '';
-    $cateID = !empty($_POST['cateID']) ? $_POST['cateID'] : Null;
+    $tagID = !empty($_POST['tagID']) ? $_POST['tagID'] : Null;
     $plantDescription = $_POST["plantDescription"] ?? '';
 
     //2) Check for required parameter
     if($plantID == '' || $plantName == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุรายละเอียดให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
@@ -56,12 +56,12 @@
 
     //Pass) Update plant
     $sql = "UPDATE plants
-            SET plantName = ?, cateID = ?, plantDescription = ?
+            SET plantName = ?, tagID = ?, plantDescription = ?
             WHERE plantID = ?;";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssss', $plantName, $cateID, $plantDescription, $plantID);
+    $stmt->bind_param('ssss', $plantName, $tagID, $plantDescription, $plantID);
 
     if($stmt->execute()){
         $stmt->close();

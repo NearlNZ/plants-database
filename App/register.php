@@ -128,7 +128,7 @@
                     data: data,
                     processData: false,
                     contentType: false,
-                    errorUrl: '500',
+                    errorUrl: 'requestError',
                     successCallback: function(response) {
                         if(response.status == "success"){
                             showResponse({

@@ -1,6 +1,6 @@
 <?php
     //include permission check
-    require_once('../include/scripts/member-header.php');
+    require_once('../include/scripts/admin-header.php');
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +38,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-member.php");?>
+                <?php require_once("../include/components/sidebar-admin.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -125,8 +125,8 @@
                                 </div>
 
                                 <?php
-                                    $sql = "SELECT P.plantID, P.plantName, P.plantRegist, C.cateName
-                                    FROM plants P LEFT JOIN categories C ON P.cateID = C.cateID
+                                    $sql = "SELECT P.plantID, P.plantName, P.plantRegist, C.tagName
+                                    FROM plants P LEFT JOIN categories C ON P.tagID = C.tagID
                                     WHERE P.userID = ?;";
                                     
                                     $stmt = $database->prepare($sql);
@@ -164,7 +164,7 @@
                                                     <tr>
                                                         <td><?php echo $plantIndex; ?></td>
                                                         <td><?php echo $plant["plantName"]; ?></td>
-                                                        <td><?php echo $plant["cateName"]; ?></td>
+                                                        <td><?php echo $plant["tagName"]; ?></td>
                                                         <td><?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?></td>
                                                     </tr>
 

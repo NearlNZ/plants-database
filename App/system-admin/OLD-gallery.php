@@ -1,6 +1,6 @@
 <?php
     //include permission check
-    require_once('../include/scripts/member-header.php');
+    require_once('../include/scripts/admin-header.php');
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +38,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-member.php");?>
+                <?php require_once("../include/components/sidebar-admin.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -78,17 +78,17 @@
                                                         <option selected value="">ทั้งหมด</option>
 
                                                         <?php
-                                                            $sql = "SELECT cateID, cateName
+                                                            $sql = "SELECT tagID, tagName
                                                                     FROM categories
-                                                                    ORDER BY cateName;";
+                                                                    ORDER BY tagName;";
                                                             
                                                             $result = $database->query($sql);
                                                             if($result->num_rows > 0){
                                                                 while($category = $result->fetch_assoc()){
                                                         ?>
-                                                            <option value="<?php echo $category['cateID']; ?>"
-                                                                <?php if(isset($_GET["filterCategory"]) && $_GET["filterCategory"] == $category['cateID']) echo "selected"; ?>>
-                                                                <?php echo $category["cateName"]; ?>
+                                                            <option value="<?php echo $category['tagID']; ?>"
+                                                                <?php if(isset($_GET["filterCategory"]) && $_GET["filterCategory"] == $category['tagID']) echo "selected"; ?>>
+                                                                <?php echo $category["tagName"]; ?>
                                                             </option>
                                                         <?php
                                                                 }
@@ -107,8 +107,8 @@
                             <!-- /Search -->
 
                             <?php
-                                $sql = "SELECT P.plantID, P.plantName, P.plantRegist, C.cateName, U.userFname, U.userLname, (SELECT imgPath FROM plantimages WHERE plantID = P.plantID LIMIT 1) AS plantImg
-                                        FROM plants P LEFT JOIN categories C ON P.cateID = C.cateID LEFT JOIN users U ON P.userID = U.userID
+                                $sql = "SELECT P.plantID, P.plantName, P.plantRegist, C.tagName, U.userFname, U.userLname, (SELECT imgPath FROM plantimages WHERE plantID = P.plantID LIMIT 1) AS plantImg
+                                        FROM plants P LEFT JOIN categories C ON P.tagID = C.tagID LEFT JOIN users U ON P.userID = U.userID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -125,7 +125,7 @@
                                         $filterDatatype .= "s";
                                     }
                                     if(!empty($filterCategory)){
-                                        $sql .= "AND P.cateID = ? ";
+                                        $sql .= "AND P.tagID = ? ";
                                         $filter[] = $filterCategory;
                                         $filterDatatype .= "s";
                                     }
@@ -165,7 +165,7 @@
                                                 <li class="d-flex align-items-center mb-1">
                                                     <i class="fa-regular fa-rectangle-list me-1"></i>
                                                     <span class="fw-semibold mx-2">หมวดหมู่ :</span>
-                                                    <span><?php echo $plant["cateName"];?></span>
+                                                    <span><?php echo $plant["tagName"];?></span>
                                                 </li>
                                                 <li class="d-flex align-items-center mb-1">
                                                     <i class="fa-solid fa-user me-1"></i>

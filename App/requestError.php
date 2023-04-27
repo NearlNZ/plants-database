@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>500</title>
+        <title>requestError</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="assets/font/Kanit.css" />
@@ -33,7 +33,7 @@
         <div class="container-xxl">
             <div class="container-middle">
                 <div class="py-4 text-center width-700">
-                    <h2 class="mb-2 mx-2">Internal Error :(</h2>
+                    <h2 class="mb-2 mx-2">Request Error :(</h2>
                     <p class="mb-4 mx-2 h5">Oops! 😖 An error occurred while processing your request.</p>
                     <div class="card">
                         <div class="card-body">
@@ -43,7 +43,7 @@
                                     Error Log
                                 </span>
                                 <hr class="mb-0">
-                                <div id="logContainer" class="text-danger text-start"></div>
+                                <div id="logContainer" class="text-danger text-start mt-3"></div>
                             </div>
                         </div>
                     </div>
@@ -64,6 +64,9 @@
             const errorLog = localStorage.getItem('GR-localStorage-errorLog');
             if(errorLog){
                 $('#logContainer').html(errorLog);
+                localStorage.removeItem('GR-localStorage-errorLog');
+            }else{
+                $('#logContainer').html('<strong>Nothing</strong> to show here. I wonnder why this page showing up.');
             }
         </script>
     </body>

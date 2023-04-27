@@ -8,8 +8,8 @@
         
     $level = $_SESSION['CSP-session-userLevel'];
 
-    if($level == "สมาชิก"){
-        header('Location: system-member/gallery');
+    if($level == "ผู้ดูแลระบบ"){
+        header('Location: system-admin/dashboard');
         exit();
     }
     else{
