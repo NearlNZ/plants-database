@@ -66,21 +66,21 @@
                                         ชื่อ
                                         <div class="input-group input-group-merge">
                                             <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
-                                            <input type="text" name="userFname" class="form-control" value="" placeholder="ระบุชื่อ" autofocus autocomplete="off" required>
+                                            <input type="text" name="userFname" class="form-control" value="" maxlength="50" placeholder="ระบุชื่อ" autofocus autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         นามสกุล
                                         <div class="input-group input-group-merge">
                                             <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
-                                            <input type="text" name="userLname" class="form-control" value="" placeholder="ระบุนามสกุล" autocomplete="off" required>
+                                            <input type="text" name="userLname" class="form-control" value="" maxlength="50" placeholder="ระบุนามสกุล" autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         Username
                                         <div class="input-group input-group-merge">
                                             <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                            <input type="text" name="username" class="form-control" value="" placeholder="ระบุ Username" autocomplete="off" required>
+                                            <input type="text" name="username" class="form-control" value="" maxlength="50" placeholder="ระบุ Username" autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -88,10 +88,11 @@
                                         <div class="form-password-toggle">
                                             <div class="input-group input-group-merge">
                                                 <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                                                <input type="password" name="password" class="form-control" value="" placeholder="ระบุรหัสผ่าน" autocomplete="off" required>
+                                                <input type="password" name="password" class="form-control" value="" minlength="8" maxlength="12" placeholder="ระบุรหัสผ่าน" autocomplete="off" required>
                                                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                             </div>
                                         </div>
+                                        <div class="form-text">ความยาวรหัสผ่าน 8-12 ตัวอักษร</div>
                                     </div>
                                 </div>
                                 <div class="mt-3">

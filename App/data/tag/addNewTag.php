@@ -13,6 +13,7 @@
 
     //Set parameter
     $tagID = uniqid("TAG-").rand(100,999);
+    $tagAdd = date('Y-m-d');
     $tagName = $_POST['tagName'] ?? '';
 
     //2) Check for required parameter
@@ -49,12 +50,12 @@
     }
 
     //Pass) Create new category
-    $sql = "INSERT INTO tags (tagID, tagName)
-            VALUES(?, ?);";
+    $sql = "INSERT INTO tags (tagID, tagName, tagAdd)
+            VALUES(?, ?, ?);";
     
     $stmt = $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ss', $tagID, $tagName);
+    $stmt->bind_param('sss', $tagID, $tagName, $tagAdd);
 
     if($stmt->execute()){
         $stmt->close();

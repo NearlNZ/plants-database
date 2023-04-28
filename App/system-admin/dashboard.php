@@ -4,6 +4,9 @@
 
     //include permission check
     require_once('../include/scripts/admin-header.php');
+
+    //include statistics update
+    include("../include/scripts/updateStatRecord.php");
 ?>
 
 <!DOCTYPE html>
@@ -67,78 +70,58 @@
 
                             <span class="active-menu-url">dashboard</span>
                             <!-- /Breadcrumb & Active menu-->
-
-                            <?php
-                                $yesterday = date('Y-m-d', strtotime('-1 day'));
-
-                                //select plants count data
-                                $sql = "SELECT 
-                                        (SELECT count(plantID) FROM plants) AS totalPlant,
-                                        (SELECT count(tagID) FROM tags) AS totalTag,
-                                        (SELECT count(imgID) FROM plant_images) AS totalImg,
-                                        (SELECT count(userID) FROM users) AS totalUser;";
-                                
-                                $todayStatResult = $database->query($sql);
-                                $todayStat = $todayStatResult->fetch_assoc();
-                        
-                                //Check statistics record for yesterday
-                                $sql = "SELECT recordID
-                                        FROM stat_records
-                                        WHERE recordDate = '$yesterday';";
-                                $recordResult = $database->query($sql);
-                        
-                                if ($recordResult->num_rows == 0) {
-                                        $statID = uniqid("REC-").rand(100,999);
-                        
-                                        $sql = "INSERT INTO stat_records(recordID, recordDate, totalPlant, totalTag, totalImg, totalUser)
-                                                VALUES(?, ?, ?, ?, ?, ?);";
-                        
-                                        $stmt = $database->stmt_init(); 
-                                        $stmt->prepare($sql);
-                                        $stmt->bind_param('ssiiii', $statID, $yesterday, $todayStat['totalPlant'], $todayStat['totalTag'], $todayStat['totalImg'], $todayStat['totalUser']);
-                                        $stmt->execute();
-                                        $result = $stmt-> get_result();
-                                        $stmt->close();
-                                }
-
-                                //select statistics data
-                                $sql = "SELECT totalPlant, totalTag, totalImg, totalUser
-                                        FROM stat_records
-                                        WHERE recordDate = '$yesterday';";
-                                $yesterdayStatResult = $database->query($sql);
-                                $yesterdayStat = $yesterdayStatResult->fetch_assoc();
-
-                                $cardData = array();
-
-                                foreach ($todayStat as $key => $value){
-                                    $current = $value;
-                                    $previous = $yesterdayStat[$key];
-
-                                    $colorClass = "";
-                                    $statDiff = "";
-                                    $diff = $current - $previous;
-
-                                    if($diff > 0){
-                                        $colorClass = "text-success";
-                                        $statDiff = "(+".number_format($diff).")";
-                                    }
-                                    else if($diff < 0){
-                                        $colorClass = "text-danger";
-                                        $statDiff = "(".number_format($diff).")";
-                                    }
-
-                                    $statArray =    array(  
-                                                        "current" => number_format($current), 
-                                                        "statDiff" => $statDiff,
-                                                        "colorClass" => $colorClass
-                                                    );
-
-                                    $cardData[$key] = $statArray;
-                                }
-                            ?>
                             
                             <!-- Stat card -->
                             <div class="row">
+                                <?php
+                                    //Select current count data
+                                    $sql = "SELECT 
+                                            (SELECT count(plantID) FROM plants) AS plantCount,
+                                            (SELECT count(tagID) FROM tags) AS tagCount,
+                                            (SELECT count(imgID) FROM plant_images) AS imgCount,
+                                            (SELECT count(userID) FROM users) AS userCount;";
+                                    
+                                    $currentStat = $database->query($sql);
+                                    $currentStat = $currentStat->fetch_assoc();
+
+                                    //Select last count data
+                                    $sql = "SELECT recordDate, plantCount, tagCount, imgCount, userCount
+                                            FROM stat_records
+                                            ORDER BY recordDate DESC
+                                            LIMIT 1;";
+                                    $lastStatResult = $database->query($sql);
+
+                                    $cardData = array();
+                                    $lastStat = $lastStatResult->num_rows > 0 ? $lastStatResult->fetch_assoc() : [];
+
+                                    //Set each stat card property to show
+                                    foreach ($currentStat as $key => $value){
+                                        $currentCount = $value;
+                                        $lastCount = $lastStat[$key] ?? 0;
+
+                                        $statColor = "";
+                                        $statText = "";
+                                        $difference = $currentCount - $lastCount;
+
+                                        if($difference > 0){
+                                            $statColor = "text-success";
+                                            $statText = "(+".number_format($difference).")";
+                                        }
+                                        else if($difference < 0){
+                                            $statColor = "text-danger";
+                                            $statText = "(".number_format($difference).")";
+                                        }
+
+                                        $statArray =    array(  
+                                                            "currentCount" => number_format($currentCount), 
+                                                            "statText" => $statText,
+                                                            "statColor" => $statColor
+                                                        );
+
+                                        $cardData[$key] = $statArray;
+                                    }
+                                ?>
+
                                 <!-- Card plant -->
                                 <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
                                     <div class="card">
@@ -148,14 +131,14 @@
                                                     <p class="card-text">พืชที่ลงทะเบียน</p>
                                                     <div class="d-flex align-items-end mb-2">
                                                         <h4 class="card-title mb-0 me-2">
-                                                            <?php echo $cardData["totalPlant"]["current"]; ?>
+                                                            <?php echo $cardData["plantCount"]["currentCount"]; ?>
                                                         </h4>
                                                         
-                                                        <small class="<?php echo $cardData["totalPlant"]["colorClass"]; ?>">
-                                                            <?php echo $cardData["totalPlant"]["statDiff"]; ?>
+                                                        <small class="<?php echo $cardData["plantCount"]["statColor"]; ?>">
+                                                            <?php echo $cardData["plantCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>เปรียบเทียบจาก 1 วันที่แล้ว</small>
+                                                    <small>บันทึกล่าสุด <?php echo date("d/m/Y", strtotime($lastStat["recordDate"])); ?></small>
                                                 </div>
                                                 <div class="card-icon">
                                                     <span class="badge bg-label-success rounded">
@@ -177,14 +160,14 @@
                                                     <p class="card-text">หมวดหมู่พืช</p>
                                                     <div class="d-flex align-items-end mb-2">
                                                         <h4 class="card-title mb-0 me-2">
-                                                            <?php echo $cardData["totalTag"]["current"]; ?>
+                                                            <?php echo $cardData["tagCount"]["currentCount"]; ?>
                                                         </h4>
                                                         
-                                                        <small class="<?php echo $cardData["totalTag"]["colorClass"]; ?>">
-                                                            <?php echo $cardData["totalTag"]["statDiff"]; ?>
+                                                        <small class="<?php echo $cardData["tagCount"]["statColor"]; ?>">
+                                                            <?php echo $cardData["tagCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>เปรียบเทียบจาก 1 วันที่แล้ว</small>
+                                                    <small>บันทึกล่าสุด <?php echo date("d/m/Y", strtotime($lastStat["recordDate"])); ?></small>
                                                 </div>
                                                 <div class="card-icon">
                                                     <span class="badge bg-label-warning rounded">
@@ -206,14 +189,14 @@
                                                     <p class="card-text">คลังรูป</p>
                                                     <div class="d-flex align-items-end mb-2">
                                                         <h4 class="card-title mb-0 me-2">
-                                                            <?php echo $cardData["totalImg"]["current"]; ?>
+                                                            <?php echo $cardData["imgCount"]["currentCount"]; ?>
                                                         </h4>
                                                         
-                                                        <small class="<?php echo $cardData["totalImg"]["colorClass"]; ?>">
-                                                            <?php echo $cardData["totalImg"]["statDiff"]; ?>
+                                                        <small class="<?php echo $cardData["imgCount"]["statColor"]; ?>">
+                                                            <?php echo $cardData["imgCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>เปรียบเทียบจาก 1 วันที่แล้ว</small>
+                                                    <small>บันทึกล่าสุด <?php echo date("d/m/Y", strtotime($lastStat["recordDate"])); ?></small>
                                                 </div>
                                                 <div class="card-icon">
                                                     <span class="badge bg-label-info rounded">
@@ -235,14 +218,14 @@
                                                     <p class="card-text">บัญชีผู้ใช้</p>
                                                     <div class="d-flex align-items-end mb-2">
                                                         <h4 class="card-title mb-0 me-2">
-                                                            <?php echo $cardData["totalUser"]["current"]; ?>
+                                                            <?php echo $cardData["userCount"]["currentCount"]; ?>
                                                         </h4>
                                                         
-                                                        <small class="<?php echo $cardData["totalUser"]["colorClass"]; ?>">
-                                                            <?php echo $cardData["totalUser"]["statDiff"]; ?>
+                                                        <small class="<?php echo $cardData["userCount"]["statColor"]; ?>">
+                                                            <?php echo $cardData["userCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>เปรียบเทียบจาก 1 วันที่แล้ว</small>
+                                                    <small>บันทึกล่าสุด <?php echo date("d/m/Y", strtotime($lastStat["recordDate"])); ?></small>
                                                 </div>
                                                 <div class="card-icon">
                                                     <span class="badge bg-label-primary rounded">

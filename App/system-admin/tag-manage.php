@@ -162,16 +162,15 @@
                                             <tr>
                                                 <td><?php echo number_format($tagIndex); ?></td>
                                                 <td><?php echo $tag["tagName"]; ?></td>
-                                                <td><?php echo number_format($tag["plantCount"]); ?></td>
+                                                <td>
+                                                    <i class="fa-solid fa-seedling text-success me-1"></i>
+                                                    <?php echo number_format($tag["plantCount"])." รายการ"; ?>
+                                                </td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="plant-manage?tag=<?php echo $tag['tagID'];?>&search=true">
-                                                            <i class="bx bx-show-alt me-1"></i>
-                                                            ดูข้อมูล
-                                                        </a>
                                                         <a class="dropdown-item" href="tag-edit?tagID=<?php echo $tag['tagID'];?>">
                                                             <i class="bx bx-edit-alt me-1"></i>
                                                             แก้ไขข้อมูล

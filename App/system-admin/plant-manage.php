@@ -122,10 +122,10 @@
 
                             <?php
                                 $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, TL.tagID,
-                                                U.userFname, U.userLname
+                                                count(imgID) AS imgCount
                                         FROM    plants P 
                                                 LEFT JOIN tag_lists TL ON P.plantID = TL.PlantID
-                                                LEFT JOIN users U ON P.userID = U.userID
+                                                LEFT JOIN plant_images PI ON P.plantID = PI.plantID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -197,18 +197,24 @@
                                             <tr>
                                                 <td><?php echo number_format($plantIndex); ?></td>
                                                 <td><?php echo $plant["plantName"]; ?></td>
-                                                <td><?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?></td>
                                                 <td>
-                                                    <span class="text-secondary me-2">
-                                                        <i class="fa-solid fa-eye me-1"></i>
+                                                    <i class="fa-solid fa-calendar-day text-info me-1"></i>
+                                                    <?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?>
+                                                </td>
+                                                <td>
+                                                    <span class="me-2">
+                                                        <i class="fa-solid fa-eye text-primary me-1"></i>
                                                         <?php echo number_format(12545); ?>
                                                     </span>
-                                                    <span class="text-danger">
-                                                        <i class="fa-solid fa-heart me-1"></i>
+                                                    <span>
+                                                        <i class="fa-solid fa-heart text-danger me-1"></i>
                                                         <?php echo number_format(12545); ?>
                                                     </span>
                                                 </td>
-                                                <td><?php echo number_format(124); ?> ภาพ</td>
+                                                <td>
+                                                    <i class="fa-solid fa-image text-success me-1"></i>
+                                                    <?php echo number_format($plant["imgCount"]); ?> ภาพ
+                                                </td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>

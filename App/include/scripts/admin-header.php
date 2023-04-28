@@ -31,5 +31,6 @@
         exit();
     }
 
+    //Create user account object
     $user = (object) $result->fetch_assoc();
 ?>
