@@ -52,7 +52,7 @@
                             
                             <div class="mb-2">
                                 <div class="d-table-cell align-middle">
-                                    <img src="assets/img/element/logo.png" class="logo me-2" style="width:70px;">
+                                    <img src="assets/img/element/comsci-logo.png" class="logo me-2" style="width:70px;">
                                 </div>
                                 <div class="d-table-cell align-middle">
                                     <p class="text-light mb-0 h3 head-1">สาขาวิทยาการคอมพิวเตอร์</p>

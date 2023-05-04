@@ -186,7 +186,7 @@
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
                                                 <div class="card-info">
-                                                    <p class="card-text">คลังรูป</p>
+                                                    <p class="card-text">คลังภาพ</p>
                                                     <div class="d-flex align-items-end mb-2">
                                                         <h4 class="card-title mb-0 me-2">
                                                             <?php echo $cardData["imgCount"]["currentCount"]; ?>

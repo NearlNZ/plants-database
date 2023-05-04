@@ -97,9 +97,9 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  tagID, tagName, 
+                                $sql = "SELECT  T.tagID, T.tagName, T.tagAdd, U.userFname, U.userLname, 
                                                 (SELECT count(*) FROM tag_lists WHERE tagID = T.tagID) as plantCount
-                                        FROM    Tags T
+                                        FROM    Tags T LEFT JOIN users U ON U.userID = T.userID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -149,6 +149,7 @@
                                             <tr>
                                                 <th>ลำดับที่</th>
                                                 <th>ชื่อหมวดหมู่</th>
+                                                <th>วันที่ลงทะเบียน</th>
                                                 <th>จำนวนพืช</th>
                                                 <th class="text-center" width="150px">จัดการข้อมูล</th>
                                             </tr>
@@ -162,6 +163,16 @@
                                             <tr>
                                                 <td><?php echo number_format($tagIndex); ?></td>
                                                 <td><?php echo $tag["tagName"]; ?></td>
+                                                <td>
+                                                    <div class="d-flex flex-column">
+                                                        <span class="d-block">
+                                                            <?php echo date("d/m/Y", strtotime($tag["tagAdd"])); ?>
+                                                        </span>
+                                                        <small class="text-muted">
+                                                            <?php echo !empty($tag["userFname"]) ? "เพิ่มโดย ".$tag["userFname"]." ".$tag["userLname"] : ""; ?>
+                                                        </small>
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <i class="fa-solid fa-seedling text-success me-1"></i>
                                                     <?php echo number_format($tag["plantCount"])." รายการ"; ?>

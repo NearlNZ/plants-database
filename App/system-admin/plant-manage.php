@@ -121,11 +121,12 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, TL.tagID,
+                                $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, TL.tagID, U.userFname, U.userLname,
                                                 count(imgID) AS imgCount
                                         FROM    plants P 
                                                 LEFT JOIN tag_lists TL ON P.plantID = TL.PlantID
                                                 LEFT JOIN plant_images PI ON P.plantID = PI.plantID
+                                                LEFT JOIN users U ON P.userID = U.userID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -198,8 +199,14 @@
                                                 <td><?php echo number_format($plantIndex); ?></td>
                                                 <td><?php echo $plant["plantName"]; ?></td>
                                                 <td>
-                                                    <i class="fa-solid fa-calendar-day text-info me-1"></i>
-                                                    <?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?>
+                                                    <div class="d-flex flex-column">
+                                                        <span class="d-block">
+                                                            <?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?>
+                                                        </span>
+                                                        <small class="text-muted">
+                                                            <?php echo !empty($plant["userFname"]) ? "เพิ่มโดย ".$plant["userFname"]." ".$plant["userLname"] : ""; ?>
+                                                        </small>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <span class="me-2">
@@ -212,7 +219,7 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <i class="fa-solid fa-image text-success me-1"></i>
+                                                    <i class="fa-solid fa-image text-info me-1"></i>
                                                     <?php echo number_format($plant["imgCount"]); ?> ภาพ
                                                 </td>
                                                 <td class="text-center">

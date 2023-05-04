@@ -100,7 +100,7 @@ function printContent(contentContainer) {
 	printWindow.document.write('<script src="../assets/vendor/fontawesome/js/all.min.js"></script>');
 	printWindow.document.write('<STYLE type="text/css">body {font-family: "Kanit";} td {font-size: 12px;} th {font-size: 13px !important;}</STYLE>');
 	printWindow.document.write('<STYLE media="print">.not-print {display: none;} tr, td, th {padding: 10 !important;}</STYLE>');
-	printWindow.document.write('<img src="../assets/img/element/logo.png" class="border me-2 mb-2" style="width:50px;"></img><span class="h4">ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์</span><br><br>');
+	printWindow.document.write('<img src="../assets/img/element/comsci-logo.png" class="border me-2 mb-2" style="width:50px;"></img><span class="h4">ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์</span><br><br>');
 	
     printWindow.document.write(content);
 	
