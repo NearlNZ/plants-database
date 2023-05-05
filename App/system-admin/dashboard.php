@@ -138,7 +138,7 @@
                                                             <?php echo $cardData["plantCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>บันทึกล่าสุด <?php echo date("d/m/Y", strtotime($lastStat["recordDate"])); ?></small>
+                                                    <small>บันทึกล่าสุด <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?></small>
                                                 </div>
                                                 <div class="card-icon">
                                                     <span class="badge bg-label-success rounded">
@@ -167,7 +167,7 @@
                                                             <?php echo $cardData["tagCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>บันทึกล่าสุด <?php echo date("d/m/Y", strtotime($lastStat["recordDate"])); ?></small>
+                                                    <small>บันทึกล่าสุด <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?></small>
                                                 </div>
                                                 <div class="card-icon">
                                                     <span class="badge bg-label-warning rounded">
@@ -196,7 +196,7 @@
                                                             <?php echo $cardData["imgCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>บันทึกล่าสุด <?php echo date("d/m/Y", strtotime($lastStat["recordDate"])); ?></small>
+                                                    <small>บันทึกล่าสุด <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?></small>
                                                 </div>
                                                 <div class="card-icon">
                                                     <span class="badge bg-label-info rounded">
@@ -225,7 +225,7 @@
                                                             <?php echo $cardData["userCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>บันทึกล่าสุด <?php echo date("d/m/Y", strtotime($lastStat["recordDate"])); ?></small>
+                                                    <small>บันทึกล่าสุด <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?></small>
                                                 </div>
                                                 <div class="card-icon">
                                                     <span class="badge bg-label-primary rounded">

@@ -17520,7 +17520,7 @@ html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item .menu-lin
 }
 
 .app-brand .layout-menu-toggle {
-  background-color: #0381B9;
+  background-color: rgba(46, 204, 113, 1);
   border: 7px solid #f5f5f9;
 }
 .app-brand .layout-menu-toggle i {

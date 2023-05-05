@@ -201,7 +201,7 @@
                                                 <td>
                                                     <div class="d-flex flex-column">
                                                         <span class="d-block">
-                                                            <?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?>
+                                                            <?php echo date("j/n/Y", strtotime($plant["plantRegist"])); ?>
                                                         </span>
                                                         <small class="text-muted">
                                                             <?php echo !empty($plant["userFname"]) ? "เพิ่มโดย ".$plant["userFname"]." ".$plant["userLname"] : ""; ?>

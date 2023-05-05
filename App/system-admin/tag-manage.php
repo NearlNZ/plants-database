@@ -166,7 +166,7 @@
                                                 <td>
                                                     <div class="d-flex flex-column">
                                                         <span class="d-block">
-                                                            <?php echo date("d/m/Y", strtotime($tag["tagAdd"])); ?>
+                                                            <?php echo date("j/n/Y", strtotime($tag["tagAdd"])); ?>
                                                         </span>
                                                         <small class="text-muted">
                                                             <?php echo !empty($tag["userFname"]) ? "เพิ่มโดย ".$tag["userFname"]." ".$tag["userLname"] : ""; ?>

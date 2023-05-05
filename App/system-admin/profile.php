@@ -93,74 +93,137 @@
                             <!-- /Card profile banner -->
 
                             <div class="row g-3">
-                                <div class="col-xl-4 col-lg-5 col-md-5">
-                                    <!-- Card profile info -->
-                                    <div class="card mb-4">
-                                        <div class="card-body">
-                                            <p class="text-muted">ข้อมูลผู้ใช้</p>
-                                            <ul class="list-unstyled mt-3 mb-4">
-                                                <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-comment text-seondary me-2"></i>
-                                                    <span class="fw-semibold me-2">ชื่อ-สกุล:</span> 
-                                                    <span><?php echo $user->userFname." ".$user->userLname;?></span>
-                                                </li>
-                                                <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-user text-seondary me-2"></i>
-                                                    <span class="fw-semibold me-2">Username:</span> 
-                                                    <span><?php echo $user->username;?></span>
-                                                </li>
-                                                <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-user-tag text-seondary me-1"></i>
-                                                    <span class="fw-semibold me-2">ระดับผู้ใช้:</span> 
-                                                    <span><?php echo $user->userLevel;?></span>
-                                                </li>
-                                                <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-calendar text-seondary me-2"></i>
-                                                    <span class="fw-semibold me-2">วันลงทะเบียน:</span> 
-                                                    <span><?php echo date("d/m/Y", strtotime($user->userRegist));?></span>
-                                                </li>
-                                                <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-clock-rotate-left text-seondary me-2"></i>
-                                                    <span class="fw-semibold me-2">ใช้งานล่าสุด:</span> 
-                                                    <span>
-                                                        <?php 
-                                                            $lastlogin = !empty($user->userLastLogin) ? date("d/m/Y - H:i", strtotime($user->userLastLogin)) : "ผู้ใช้ไม่มีการเข้าสู่ระบบ";
-                                                            echo $lastlogin;
-                                                        ?>
-                                                    </span>
-                                                </li>
-                                            </ul>
+                                <div class="col-xxl-4 col-lg-5">
+                                    <div class="row p-0 g-3">
+                                        <div class="col-md-6 col-lg-12">
+                                            <!-- Card profile info -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <p class="text-muted">ข้อมูลผู้ใช้</p>
+                                                    <table class="table table-borderless p-0 m-0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold text-seondary">
+                                                                    <i class="fa-solid fa-comment me-2"></i>
+                                                                    ชื่อ-สกุล
+                                                                </td>
+                                                                <td class="text-start">
+                                                                    <?php echo $user->userFname." ".$user->userLname;?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold text-seondary">
+                                                                    <i class="fa-solid fa-user me-2"></i>
+                                                                    Username
+                                                                </td>
+                                                                <td td class="text-start">
+                                                                    <?php echo $user->username;?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold text-seondary">
+                                                                    <i class="fa-solid fa-user-tag me-1"></i>
+                                                                    ระดับผู้ใช้
+                                                                </td>
+                                                                <td td class="text-start">
+                                                                    <?php echo $user->userLevel;?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold text-seondary">
+                                                                    <i class="fa-solid fa-calendar me-2"></i>
+                                                                    ลงทะเบียน
+                                                                </td>
+                                                                <td td class="text-start">
+                                                                    <?php echo date("j/n/Y", strtotime($user->userRegist));?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold text-seondary">
+                                                                    <i class="fa-solid fa-clock-rotate-left me-2"></i>
+                                                                    ใช้งานล่าสุด
+                                                                </td>
+                                                                <td td class="text-start">
+                                                                    <?php 
+                                                                        $lastlogin = !empty($user->userLastLogin) ? date("j/n/Y - H:i", strtotime($user->userLastLogin)) : "ผู้ใช้ไม่มีการเข้าสู่ระบบ";
+                                                                        echo $lastlogin;
+                                                                    ?>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- /Card profile info -->
+                                        </div>
+                                        <div class="col">
+                                            <!-- Card profile activities -->
+                                            <div class="card h-100">
+                                                <div class="card-body">
+                                                    <?php
+                                                        //Select user activities (count of plant they add etc.)
+                                                        $userID = $user->userID;
+                                                        $sql = "SELECT
+                                                                (SELECT count(favID) FROM favorite_plants WHERE userID = '$userID') AS favoriteCount,
+                                                                (SELECT count(plantID) FROM plants WHERE userID = '$userID') AS plantAdd,
+                                                                (SELECT count(tagID) FROM tags WHERE userID = '$userID') AS tagAdd,
+                                                                (SELECT count(imgID) FROM plant_images WHERE userID = '$userID') AS imgAdd;";
+                                                        $activitiesresult = $database->query($sql);
+                                                        $activities = $activitiesresult->fetch_assoc();
+                                                    ?>
 
-                                            <?php ?>
-
-                                            <p class="text-muted">การมีส่วนร่วม</p>
-                                            <ul class="list-unstyled mt-3">
-                                                <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-seedling text-success me-2"></i>
-                                                    <span class="fw-semibold me-2">เพิ่มข้อมูลพืช:</span> 
-                                                    <span><?php echo 0;?></span>
-                                                </li>
-                                                <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-tags text-warning me-2"></i>
-                                                    <span class="fw-semibold me-2">เพิ่มหมวดหมู่:</span> 
-                                                    <span><?php echo 0;?></span>
-                                                </li>
-                                                <li class="d-flex align-items-center mb-3">
-                                                    <i class="fa-solid fa-image text-info me-2"></i>
-                                                    <span class="fw-semibold me-2">เพิ่มภาพพืช:</span> 
-                                                    <span><?php echo 0;?></span>
-                                                </li>
-                                            </ul>
+                                                    <p class="text-muted">กิจกรรมของผู้ใช้</p>
+                                                    <table class="table table-borderless">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold">
+                                                                    <i class="fa-solid fa-heart text-danger me-2"></i>
+                                                                    รายการโปรด
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <?php echo number_format($activities["favoriteCount"]);?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold">
+                                                                    <i class="fa-solid fa-seedling text-success me-2"></i>
+                                                                    เพิ่มข้อมูลพืช
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <?php echo number_format($activities["plantAdd"]);?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold">
+                                                                    <i class="fa-solid fa-tags text-warning me-2"></i>
+                                                                    เพิ่มหมวดหมู่ 
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <?php echo number_format($activities["tagAdd"]);?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold">
+                                                                    <i class="fa-solid fa-image text-info me-2"></i>
+                                                                    เพิ่มภาพพืช
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <?php echo number_format($activities["imgAdd"]);?>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- Card profile activities -->
                                         </div>
                                     </div>
-                                    <!-- /Card profile info -->
                                 </div>
-
                                 <div class="col">
-                                    <!-- Card profile activities -->
-                                    <div class="card">
+                                    <!-- Card login history -->
+                                    <div class="card h-100">
                                         <div class="card-body">
-                                            <p class="text-muted">ประวัติกิจกรรม</p>
+                                            <p class="text-muted">ประวัติการเข้าใช้งาน</p>
 
                                         </div>
                                     </div>
