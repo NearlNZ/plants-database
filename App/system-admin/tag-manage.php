@@ -97,9 +97,9 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  tagID, tagName, 
+                                $sql = "SELECT  T.tagID, T.tagName, T.tagAdd, U.userFname, U.userLname, 
                                                 (SELECT count(*) FROM tag_lists WHERE tagID = T.tagID) as plantCount
-                                        FROM    Tags T
+                                        FROM    Tags T LEFT JOIN users U ON U.userID = T.userID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -149,6 +149,7 @@
                                             <tr>
                                                 <th>ลำดับที่</th>
                                                 <th>ชื่อหมวดหมู่</th>
+                                                <th>วันที่ลงทะเบียน</th>
                                                 <th>จำนวนพืช</th>
                                                 <th class="text-center" width="150px">จัดการข้อมูล</th>
                                             </tr>
@@ -162,16 +163,25 @@
                                             <tr>
                                                 <td><?php echo number_format($tagIndex); ?></td>
                                                 <td><?php echo $tag["tagName"]; ?></td>
-                                                <td><?php echo number_format($tag["plantCount"]); ?></td>
+                                                <td>
+                                                    <div class="d-flex flex-column">
+                                                        <span class="d-block">
+                                                            <?php echo date("j/n/Y", strtotime($tag["tagAdd"])); ?>
+                                                        </span>
+                                                        <small class="text-muted">
+                                                            <?php echo !empty($tag["userFname"]) ? "เพิ่มโดย ".$tag["userFname"]." ".$tag["userLname"] : ""; ?>
+                                                        </small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <i class="fa-solid fa-seedling text-success me-1"></i>
+                                                    <?php echo number_format($tag["plantCount"])." รายการ"; ?>
+                                                </td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="plant-manage?tag=<?php echo $tag['tagID'];?>&search=true">
-                                                            <i class="bx bx-show-alt me-1"></i>
-                                                            ดูข้อมูล
-                                                        </a>
                                                         <a class="dropdown-item" href="tag-edit?tagID=<?php echo $tag['tagID'];?>">
                                                             <i class="bx bx-edit-alt me-1"></i>
                                                             แก้ไขข้อมูล

@@ -115,7 +115,7 @@
                                                 <div class="col-12 col-md-6">
                                                     วันที่ลงทะเบียน
                                                     <input type="text" class="form-control" placeholder="ไม่ได้ระบุวันลงทะเบียน"
-                                                    value="<?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?>" readonly>
+                                                    value="<?php echo date("j/n/Y", strtotime($plant["plantRegist"])); ?>" readonly>
                                                 </div>
                                                 <div class="col-12">
                                                     รายละเอียดพืช

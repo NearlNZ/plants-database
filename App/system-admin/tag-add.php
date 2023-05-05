@@ -82,6 +82,7 @@
                                                 <div class="row g-2">
                                                     <div class="col-12">
                                                         ชื่อหมวดหมู่
+                                                        <input type="hidden" name="userID" value="<?php echo $user->userID; ?>">
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="fa-solid fa-tag"></i></span>
                                                             <input type="text" name="tagName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" maxlength="50" autofocus autocomplete="off" required>

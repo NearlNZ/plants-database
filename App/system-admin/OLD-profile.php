@@ -113,7 +113,7 @@
                                                 <li class="d-flex align-items-center mb-3">
                                                     <i class="fa-solid fa-calendar-day"></i>
                                                     <span class="fw-semibold mx-2">วันที่ลงทะเบียน:</span>
-                                                    <span><?php echo date("d/m/Y", strtotime($user->userRegist));?></span>
+                                                    <span><?php echo date("j/n/Y", strtotime($user->userRegist));?></span>
                                                 </li>
                                             </ul>
                                             <div class="mt-5">
@@ -165,7 +165,7 @@
                                                         <td><?php echo $plantIndex; ?></td>
                                                         <td><?php echo $plant["plantName"]; ?></td>
                                                         <td><?php echo $plant["tagName"]; ?></td>
-                                                        <td><?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?></td>
+                                                        <td><?php echo date("j/n/Y", strtotime($plant["plantRegist"])); ?></td>
                                                     </tr>
 
                                                     <?php $plantIndex++;} }else{ ?>

@@ -15,7 +15,7 @@
     }
     
     //Get account data
-    $sql = "SELECT userID, userFname, userLname, userProfile, username, userLevel, userRegist
+    $sql = "SELECT userID, userFname, userLname, userProfile, username, userLevel, userRegist, userLastLogin
             FROM users
             WHERE userID = ?;";
     
@@ -31,5 +31,6 @@
         exit();
     }
 
+    //Create user account object
     $user = (object) $result->fetch_assoc();
 ?>

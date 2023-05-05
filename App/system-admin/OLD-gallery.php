@@ -175,7 +175,7 @@
                                                 <li class="d-flex align-items-center mb-1">
                                                     <i class="fa-solid fa-calendar-day me-1"></i>
                                                     <span class="fw-semibold mx-2">วันลงทะเบียน :</span>
-                                                    <span><?php echo date("d/m/Y", strtotime($plant["plantRegist"]));?></span>
+                                                    <span><?php echo date("j/n/Y", strtotime($plant["plantRegist"]));?></span>
                                                 </li>
                                             </ul>
                                             <a href="gallery-view?plantID=<?php echo $plant["plantID"];?>" class="btn btn-success w-100">

@@ -121,10 +121,11 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, TL.tagID,
-                                                U.userFname, U.userLname
+                                $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, TL.tagID, U.userFname, U.userLname,
+                                                count(imgID) AS imgCount
                                         FROM    plants P 
                                                 LEFT JOIN tag_lists TL ON P.plantID = TL.PlantID
+                                                LEFT JOIN plant_images PI ON P.plantID = PI.plantID
                                                 LEFT JOIN users U ON P.userID = U.userID
                                         WHERE 1=1 ";
 
@@ -197,18 +198,30 @@
                                             <tr>
                                                 <td><?php echo number_format($plantIndex); ?></td>
                                                 <td><?php echo $plant["plantName"]; ?></td>
-                                                <td><?php echo date("d/m/Y", strtotime($plant["plantRegist"])); ?></td>
                                                 <td>
-                                                    <span class="text-secondary me-2">
-                                                        <i class="fa-solid fa-eye me-1"></i>
+                                                    <div class="d-flex flex-column">
+                                                        <span class="d-block">
+                                                            <?php echo date("j/n/Y", strtotime($plant["plantRegist"])); ?>
+                                                        </span>
+                                                        <small class="text-muted">
+                                                            <?php echo !empty($plant["userFname"]) ? "เพิ่มโดย ".$plant["userFname"]." ".$plant["userLname"] : ""; ?>
+                                                        </small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="me-2">
+                                                        <i class="fa-solid fa-eye text-primary me-1"></i>
                                                         <?php echo number_format(12545); ?>
                                                     </span>
-                                                    <span class="text-danger">
-                                                        <i class="fa-solid fa-heart me-1"></i>
+                                                    <span>
+                                                        <i class="fa-solid fa-heart text-danger me-1"></i>
                                                         <?php echo number_format(12545); ?>
                                                     </span>
                                                 </td>
-                                                <td><?php echo number_format(124); ?> ภาพ</td>
+                                                <td>
+                                                    <i class="fa-solid fa-image text-info me-1"></i>
+                                                    <?php echo number_format($plant["imgCount"]); ?> ภาพ
+                                                </td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
