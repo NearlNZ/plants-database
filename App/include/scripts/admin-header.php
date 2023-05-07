@@ -15,7 +15,7 @@
     }
     
     //Get account data
-    $sql = "SELECT userID, userFname, userLname, userProfile, username, userLevel, userRegist, userLastLogin
+    $sql = "SELECT userID, userFname, userLname, userProfile, username, userLevel, userRegist, userStatus, userLastLogin
             FROM users
             WHERE userID = ?;";
     

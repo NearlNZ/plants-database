@@ -121,12 +121,13 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, TL.tagID, U.userFname, U.userLname,
-                                                count(imgID) AS imgCount
+                                $sql = "SELECT  P.plantID, P.plantName, P.plantView, P.plantRegist, TL.tagID, U.userFname, U.userLname,
+                                                count(favID) AS favoriteCount, count(imgID) AS imgCount
                                         FROM    plants P 
                                                 LEFT JOIN tag_lists TL ON P.plantID = TL.PlantID
                                                 LEFT JOIN plant_images PI ON P.plantID = PI.plantID
                                                 LEFT JOIN users U ON P.userID = U.userID
+                                                LEFT JOIN favorite_plants FP ON P.plantID = FP.plantID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -209,17 +210,16 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span class="me-2">
+                                                    <span class="d-inline-block w-50">
                                                         <i class="fa-solid fa-eye text-primary me-1"></i>
-                                                        <?php echo number_format(12545); ?>
+                                                        <?php echo number_format($plant["favoriteCount"]); ?>
                                                     </span>
-                                                    <span>
+                                                    <span class="d-inline-block w-50">
                                                         <i class="fa-solid fa-heart text-danger me-1"></i>
-                                                        <?php echo number_format(12545); ?>
+                                                        <?php echo number_format($plant["plantView"]); ?>
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <i class="fa-solid fa-image text-info me-1"></i>
                                                     <?php echo number_format($plant["imgCount"]); ?> ภาพ
                                                 </td>
                                                 <td class="text-center">
@@ -246,8 +246,8 @@
                                         <?php $plantIndex++;} }else{ ?>
 
                                             <tr>
-                                                <td class="text-center text-warning py-3" colspan="6">
-                                                    --- ไม่พบข้อมูลในระบบ ---
+                                                <td class="text-center text-muted py-3" colspan="6">
+                                                    --- ไม่พบข้อมูลสำหรับแสดงผล ---
                                                 </td>
                                             </tr>
 

@@ -16,40 +16,57 @@
         <!-- Dashboard -->
         <li class="menu-item">
             <a href="dashboard" class="menu-link">
-                <i class="menu-icon fa-solid fa-chart-column"></i>
+                <i class="menu-icon fa-solid fa-chart-pie"></i>
                 <div>Dashboard</div>
             </a>
         </li>
 
-        <!-- Plant -->
+        <!-- Plant collection -->
         <li class="menu-item">
-            <a href="plant-manage" class="menu-link">
+            <a href="collection" class="menu-link">
                 <i class="menu-icon fa-solid fa-seedling"></i>
-                <div>รายการพืช</div>
+                <div>คอลเลคชั่นพืช</div>
             </a>
         </li>
 
-        <!-- Tag -->
+        <!-- Plant collection -->
         <li class="menu-item">
-            <a href="tag-manage" class="menu-link">
-                <i class="menu-icon fa-solid fa-tags"></i>
-                <div>หมวดหมู่พืช</div>
+            <a href="member" class="menu-link">
+                <i class="menu-icon fa-solid fa-users"></i>
+                <div>รายการสมาชิก</div>
             </a>
         </li>
 
-        <!-- User -->
-        <li class="menu-item">
-            <a href="user-manage" class="menu-link">
-                <i class="menu-icon fa-solid fa-user"></i>
-                <div>บัญชีผู้ใช้</div>
-            </a>
-        </li>
-
-        <!-- Report -->
+        <!-- Manage group -->
         <li class="menu-item havesub">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon fa-solid fa-file-contract"></i>
-                <div>พิมพ์รายงาน</div>
+                <i class="menu-icon fa-solid fa-folder-open"></i>
+                <div>จัดการข้อมูล</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="plant-manage" class="menu-link">
+                        <div>รายการพืช</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="tag-manage" class="menu-link">
+                        <div>หมวดหมู่พืช</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="user-manage" class="menu-link">
+                        <div>บัญชีผู้ใช้</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Report group -->
+        <li class="menu-item havesub">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon fa-solid fa-laptop-file"></i>
+                <div>สร้างรายงาน</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
@@ -59,7 +76,7 @@
                 </li>
                 <li class="menu-item">
                     <a href="#" class="menu-link">
-                        <div>รายการบัญชีผู้ใช้</div>
+                        <div>บัญชีผู้ใช้</div>
                     </a>
                 </li>
             </ul>

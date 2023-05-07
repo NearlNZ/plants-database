@@ -175,7 +175,7 @@
                                                 </td>
                                                 <td>
                                                     <i class="fa-solid fa-seedling text-success me-1"></i>
-                                                    <?php echo number_format($tag["plantCount"])." รายการ"; ?>
+                                                    <?php echo number_format($tag["plantCount"]); ?>
                                                 </td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -197,8 +197,8 @@
                                         <?php $tagIndex++;} }else{ ?>
 
                                             <tr>
-                                                <td class="text-center text-warning py-3" colspan="4">
-                                                    --- ไม่พบข้อมูลในระบบ ---
+                                                <td class="text-center text-muted py-3" colspan="5">
+                                                    --- ไม่พบข้อมูลสำหรับแสดงผล ---
                                                 </td>
                                             </tr>
 
