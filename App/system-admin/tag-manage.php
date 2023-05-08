@@ -12,6 +12,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>หมวดหมู่พืช</title>
+        <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -239,7 +240,7 @@
             $(function(){
                 select = $(".select2");
                 select.length&&select.each(function(){
-                    var element=$(this);
+                    let element=$(this);
                     element.wrap('<div class="position-relative"></div>').select2({
                         dropdownParent:element.parent()
                     });

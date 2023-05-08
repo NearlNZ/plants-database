@@ -4,6 +4,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Login</title>
+        <link rel="shortcut icon" href="assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="assets/font/Kanit.css"/>
@@ -130,10 +131,10 @@
         <!-- Page JS -->
         <script src="include/scripts/customFunctions.js"></script>
         <script>
-            //Data import 
+            //Send request create login session
             $('#formLogin').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
+                let form = $(this);
 
                 ajaxRequest({
                     type: 'POST',

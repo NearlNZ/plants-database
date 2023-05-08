@@ -3,7 +3,8 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>requestError</title>
+        <title>Request Error</title>
+        <link rel="shortcut icon" href="assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="assets/font/Kanit.css" />

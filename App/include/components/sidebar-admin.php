@@ -16,7 +16,7 @@
         <!-- Dashboard -->
         <li class="menu-item">
             <a href="dashboard" class="menu-link">
-                <i class="menu-icon fa-solid fa-chart-pie"></i>
+                <i class="menu-icon fa-solid fa-chart-simple"></i>
                 <div>Dashboard</div>
             </a>
         </li>
@@ -33,7 +33,7 @@
         <li class="menu-item">
             <a href="member" class="menu-link">
                 <i class="menu-icon fa-solid fa-users"></i>
-                <div>รายการสมาชิก</div>
+                <div>รายชื่อสมาชิก</div>
             </a>
         </li>
 
