@@ -14,13 +14,13 @@ function activeSidebar(){
 
         //Add the "active" classe to the menu item with a matching URL
         $('.menu-item').each(function () {
-            var menuItemUrl = $(this).find('a').attr('href');
+            let menuItemUrl = $(this).find('a').attr('href');
 
             if (menuItemUrl === pageUrl) {
                 $(this).addClass('active');
 
                 //If the menu item is a sub-menu, add the "active" and "open" classes to the "havesub" element
-                var parentSubMenu = $(this).parent('.menu-sub');
+                let parentSubMenu = $(this).parent('.menu-sub');
                 if (parentSubMenu.length) {
                     parentHavesub = parentSubMenu.closest('.havesub').addClass('active open');
                 }

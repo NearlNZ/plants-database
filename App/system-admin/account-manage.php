@@ -11,7 +11,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>หมวดหมู่พืช</title>
+        <title>บัญชีผู้ใช้</title>
         <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
@@ -38,6 +38,7 @@
 
         <!-- Page Style -->
         <link rel="stylesheet" href="../assets/css/custom-style.css"/>
+        <style> .select2-search__field{ display: none;} </style>
     </head>
     <body class="body-light">
         <!-- Wrapper -->
@@ -61,12 +62,12 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a class="active">หมวดหมู่พืช</a>
+                                        <a class="active">บัญชีผู้ใช้</a>
                                     </li>
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">tag-manage</span>
+                            <span class="active-menu-url">account-manage</span>
                             <!-- /Breadcrumb & Active menu-->
 
                             <!-- Search card -->
@@ -74,12 +75,35 @@
                                 <div class="card-body p-3">
                                     <form action="" method="GET">
                                         <div class="row g-2">
-                                            <div class="col-12">
-                                                ชื่อหมวดหมู่
+                                            <div class="col-12 col-lg-6">
+                                                ชื่อผู้ใช้ / Username
+                                                <input type="search" name="name" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
+                                                value="<?php if(isset($_GET["name"])) echo $_GET["name"]; ?>">
+                                            </div>
+                                            <div class="col-12 col-lg-3">
+                                                ระดับผู้ใช้
+                                                <select class="select2 form-select" name="level">
+                                                    <option selected value="All">ทั้งหมด</option>
+                                                    <option 
+                                                        <?php if(isset($_GET["level"]) && $_GET["level"] == "ผู้ดูแลระบบ") echo "selected";?> value="ผู้ดูแลระบบ">
+                                                            ผู้ดูแลระบบ
+                                                        </option>
+                                                    <option
+                                                        <?php if(isset($_GET["level"]) && $_GET["level"] == "สมาชิก") echo "selected";?> value="สมาชิก">
+                                                            สมาชิก
+                                                        </option>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-lg-3">
+                                                สถานะบัญชี
                                                 <div class="row g-3 g-lg-2">
                                                     <div class="col-12 col-lg">
-                                                        <input type="search" name="name" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
-                                                        value="<?php if(isset($_GET["name"])) echo $_GET["name"]; ?>">
+                                                        <select class="select2 form-select" name="status">
+                                                            <option selected value="All">ทั้งหมด</option>
+                                                            <option value="บัญชีปกติ">บัญชีปกติ</option>
+                                                            <option value="บัญชีถูกระงับ">บัญชีถูกระงับ</option>
+                                                        </select>
                                                     </div>
                                                     <!-- Search button-->
                                                     <div class="col-12 col-lg-auto">
@@ -98,9 +122,9 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  T.tagID, T.tagName, T.tagAdd, U.userFname, U.userLname, 
-                                                (SELECT count(*) FROM tag_lists WHERE tagID = T.tagID) as plantCount
-                                        FROM    Tags T LEFT JOIN users U ON U.userID = T.userID
+                                $sql = "SELECT  U.userID, U.userFname, U.userLname, U.userProfile, U.username, 
+                                                U.userLevel, U.userRegist, U.userStatus
+                                        FROM    users U
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -109,15 +133,28 @@
                                 //Check if filter send
                                 if(isset($_GET["search"])){
                                     $searchName = $_GET['name'] ?? '';
+                                    $searchLevel = $_GET['level'] ?? '';
+                                    $searchStatus = $_GET['status'] ?? '';
 
                                     if(!empty($searchName)){
-                                        $sql .= "AND tagName LIKE ? ";
+                                        $sql .= "AND (userFname LIKE ? OR username LIKE ?) ";
                                         $filter[] = "%$searchName%";
+                                        $filter[] = "%$searchName%";
+                                        $filterDatatype .= "ss";
+                                    }
+                                    if(!empty($searchLevel) && $searchLevel != "All"){
+                                        $sql .= "AND userLevel = ? ";
+                                        $filter[] = $searchLevel;
+                                        $filterDatatype .= "s";
+                                    }
+                                    if(!empty($searchStatus) && $searchStatus != "All"){
+                                        $sql .= "AND userStatus = ? ";
+                                        $filter[] = $searchStatus;
                                         $filterDatatype .= "s";
                                     }
                                 }
                                 
-                                $sql.= "ORDER BY plantCount DESC, tagName;";
+                                $sql.= "ORDER BY userRegist DESC, userFname, userLname;";
 
                                 $stmt = $database->prepare($sql);
                                 
@@ -126,10 +163,10 @@
                                 }
                                 
                                 $stmt->execute();
-                                $tagResult = $stmt-> get_result();
+                                $userResult = $stmt-> get_result();
                                 $stmt->close();
 
-                                $resultCount = $tagResult->num_rows;
+                                $resultCount = $userResult->num_rows;
                             ?>
                             
                             <!-- Data card -->
@@ -137,7 +174,7 @@
                                 <div class="card-header mb-0">
                                     <!-- Action -->
                                     <div class="row g-2">
-                                        <a class="btn btn-success col-12 col-lg-auto shadow-sm me-2" href="tag-add">
+                                        <a class="btn btn-success col-12 col-lg-auto shadow-sm me-2" href="account-add">
                                             <i class="fa-solid fa-plus me-2"></i>
                                             เพิ่มข้อมูล
                                         </a>
@@ -149,45 +186,79 @@
                                         <thead>
                                             <tr>
                                                 <th>ลำดับที่</th>
-                                                <th>ชื่อหมวดหมู่</th>
+                                                <th>ชื่อผู้ใช้</th>
+                                                <th>ระดับผู้ใช้</th>
                                                 <th>วันที่ลงทะเบียน</th>
-                                                <th>จำนวนพืช</th>
+                                                <th>สถานะบัญชี</th>
                                                 <th class="text-center" width="150px">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                         <?php 
-                                            if($resultCount > 0){ $tagIndex = 1; while($tag = $tagResult->fetch_assoc()){
+                                            if($resultCount > 0){ $userIndex = 1; while($user = $userResult->fetch_assoc()){
                                         ?>
 
                                             <tr>
-                                                <td><?php echo number_format($tagIndex); ?></td>
-                                                <td><?php echo $tag["tagName"]; ?></td>
+                                                <td><?php echo number_format($userIndex); ?></td>
                                                 <td>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="d-block">
-                                                            <?php echo date("j/n/Y", strtotime($tag["tagAdd"])); ?>
-                                                        </span>
-                                                        <small class="text-muted">
-                                                            <?php echo !empty($tag["userFname"]) ? "เพิ่มโดย ".$tag["userFname"]." ".$tag["userLname"] : ""; ?>
-                                                        </small>
+                                                    <div class="d-flex justify-content-start align-items-center user-name">
+                                                        <div class="avatar-wrapper">
+                                                            <div class="avatar me-2">
+                                                                <img src="../assets/img/avatars/<?php echo $user["userProfile"];?>" alt="user profile" class="rounded-circle">
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                            <span class="text-truncate">
+                                                                <?php echo $user["userFname"]." ".$user["userLname"];?>
+                                                            </span>
+                                                            <small class="text-truncate text-muted">
+                                                                <?php echo $user["username"];?>
+                                                            </small>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <i class="fa-solid fa-seedling text-success me-1"></i>
-                                                    <?php echo number_format($tag["plantCount"]); ?>
+                                                    <?php if($user["userLevel"] == "ผู้ดูแลระบบ"){ ?>
+                                                        <span class="badge bg-label-primary">
+                                                            <i class="fa-solid fa-user-tie fa-lg me-1"></i>
+                                                            ผู้ดูแลระบบ
+                                                        </span>
+                                                    <?php }else{ ?>
+                                                        <span class="badge bg-label-secondary">
+                                                            <i class="fa-solid fa-user fa-lg me-1"></i>
+                                                            สมาชิก
+                                                        </span>
+                                                    <?php } ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo date("j/n/Y", strtotime($user["userRegist"]));?>
+                                                </td>
+                                                <td td class="text-start">
+                                                    <?php if($user["userStatus"] == "บัญชีปกติ"){ ?>
+                                                        <span class="badge bg-label-success text-success">
+                                                            บัญชีปกติ
+                                                        </span>
+                                                    <?php }else{ ?>
+                                                        <span class="badge bg-label-danger text-danger">
+                                                            บัญชีถูกระงับ
+                                                        </span>
+                                                    <?php } ?>
                                                 </td>
                                                 <td class="text-center">
                                                     <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="tag-edit?tagID=<?php echo $tag['tagID'];?>">
+                                                        <a class="dropdown-item" href="account-profile?plantID=<?php echo $user['userID'];?>">
+                                                            <i class="bx bx-show-alt me-1"></i>
+                                                            ดูข้อมูล
+                                                        </a>
+                                                        <a class="dropdown-item" href="account-edit?plantID=<?php echo $user['userID'];?>">
                                                             <i class="bx bx-edit-alt me-1"></i>
                                                             แก้ไขข้อมูล
                                                         </a>
-                                                        <a class="dropdown-item deleteBtn" href="../data/tag/deleteTag?tagID=<?php echo $tag['tagID'];?>">
+                                                        <a class="dropdown-item deleteBtn" href="../data/user/deleteAccount?userID=<?php echo $user['userID'];?>">
                                                             <i class="bx bx-trash me-1"></i>
                                                             ลบข้อมูล
                                                         </a>
@@ -195,10 +266,10 @@
                                                 </td>
                                             </tr>
                                         
-                                        <?php $tagIndex++;} }else{ ?>
+                                        <?php $userIndex++;} }else{ ?>
 
                                             <tr>
-                                                <td class="text-center text-muted py-3" colspan="5">
+                                                <td class="text-center text-muted py-3" colspan="6">
                                                     --- ไม่พบข้อมูลสำหรับแสดงผล ---
                                                 </td>
                                             </tr>
@@ -254,7 +325,7 @@
                 
                 showConfirm({
                     icon: 'question',
-                    text: 'ต้องการลบข้อมูลที่เลือกหรือไม่',
+                    text: 'ต้องการลบบัญชีที่เลือกหรือไม่',
                     confirmButtonText: 'ดำเนินการต่อ',
                     confirmCallback: function(){
                         ajaxRequest({

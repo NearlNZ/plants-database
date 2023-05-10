@@ -9,6 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>ข้อมูลพืช</title>
+        <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -244,7 +245,7 @@
         <script>
             $('#formAddPlant').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
+                let form = $(this);
 
                 ajaxRequest({
                     type: 'POST',
@@ -270,8 +271,8 @@
 
             $('#formAddImg').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
-                var data = new FormData($('#formAddImg')[0]);
+                let form = $(this);
+                let data = new FormData($('#formAddImg')[0]);
 
                 ajaxRequest({
                     type: 'POST',

@@ -9,6 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>บัญชีผู้ใช้</title>
+        <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -178,8 +179,8 @@
             //Update profile
             $('#formUpdateProfile').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
-                var data = new FormData($('#formUpdateProfile')[0]);
+                let form = $(this);
+                let data = new FormData($('#formUpdateProfile')[0]);
 
                 ajaxRequest({
                     type: 'POST',
@@ -209,7 +210,7 @@
             //Reset password
             $('#formResetPassword').submit(function(e) {
                 e.preventDefault();
-                var form = $(this);
+                let form = $(this);
 
                 ajaxRequest({
                     type: 'POST',

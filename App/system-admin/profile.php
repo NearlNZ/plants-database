@@ -12,6 +12,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>บัญชีของฉัน</title>
+        <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -97,7 +98,7 @@
                                     <div class="row p-0 g-3">
                                         <div class="col-md-6 col-lg-12">
                                             <!-- Card profile info -->
-                                            <div class="card">
+                                            <div class="card h-100">
                                                 <div class="card-body">
                                                     <p class="text-muted">ข้อมูลผู้ใช้</p>
                                                     <table class="table table-borderless p-0 m-0">
@@ -132,7 +133,7 @@
                                                             <tr>
                                                                 <td class="text-start fw-semibold text-seondary">
                                                                     <i class="fa-solid fa-calendar me-2"></i>
-                                                                    ลงทะเบียน
+                                                                    วันลงทะเบียน
                                                                 </td>
                                                                 <td td class="text-start">
                                                                     <?php echo date("j/n/Y", strtotime($user->userRegist));?>
@@ -140,14 +141,19 @@
                                                             </tr>
                                                             <tr>
                                                                 <td class="text-start fw-semibold text-seondary">
-                                                                    <i class="fa-solid fa-clock-rotate-left me-2"></i>
-                                                                    ใช้งานล่าสุด
+                                                                    <i class="fa-solid fa-circle-check me-2"></i>
+                                                                    สถานะบัญชี
                                                                 </td>
                                                                 <td td class="text-start">
-                                                                    <?php 
-                                                                        $lastlogin = !empty($user->userLastLogin) ? date("j/n/Y - H:i", strtotime($user->userLastLogin)) : "ผู้ใช้ไม่มีการเข้าสู่ระบบ";
-                                                                        echo $lastlogin;
-                                                                    ?>
+                                                                    <?php if($user->userStatus == "บัญชีปกติ"){ ?>
+                                                                        <span class="badge bg-label-success text-success">
+                                                                            บัญชีปกติ
+                                                                        </span>
+                                                                    <?php }else{ ?>
+                                                                        <span class="badge bg-label-danger text-danger">
+                                                                            บัญชีถูกระงับ
+                                                                        </span>
+                                                                    <?php } ?>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -177,28 +183,19 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td class="text-start fw-semibold">
-                                                                    <i class="fa-solid fa-heart text-danger me-2"></i>
-                                                                    รายการโปรด
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <?php echo number_format($activities["favoriteCount"]);?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold">
                                                                     <i class="fa-solid fa-seedling text-success me-2"></i>
                                                                     เพิ่มข้อมูลพืช
                                                                 </td>
-                                                                <td class="text-center">
+                                                                <td class="text-end">
                                                                     <?php echo number_format($activities["plantAdd"]);?>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="text-start fw-semibold">
                                                                     <i class="fa-solid fa-tags text-warning me-2"></i>
-                                                                    เพิ่มหมวดหมู่ 
+                                                                    เพิ่มหมวดหมู่พืช 
                                                                 </td>
-                                                                <td class="text-center">
+                                                                <td class="text-end">
                                                                     <?php echo number_format($activities["tagAdd"]);?>
                                                                 </td>
                                                             </tr>
@@ -207,12 +204,28 @@
                                                                     <i class="fa-solid fa-image text-info me-2"></i>
                                                                     เพิ่มภาพพืช
                                                                 </td>
-                                                                <td class="text-center">
+                                                                <td class="text-end">
                                                                     <?php echo number_format($activities["imgAdd"]);?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-start fw-semibold">
+                                                                    <i class="fa-solid fa-heart text-danger me-2"></i>
+                                                                    รายการโปรด
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <?php echo number_format($activities["favoriteCount"]);?>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
+                                                </div>
+                                                <div class="card-body border-top py-2 text-center">
+                                                    เข้าใช้งานล่าสุดเมื่อ
+                                                    <?php 
+                                                        $lastlogin = !empty($user->userLastLogin) ? date("j/n/Y H:i", strtotime($user->userLastLogin)) : "-";
+                                                        echo $lastlogin;
+                                                    ?>
                                                 </div>
                                             </div>
                                             <!-- Card profile activities -->

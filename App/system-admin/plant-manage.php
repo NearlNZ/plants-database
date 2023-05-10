@@ -12,6 +12,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>ข้อมูลพืช</title>
+        <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="../assets/font/Kanit.css"/>
@@ -75,8 +76,8 @@
                                         <div class="row g-2">
                                             <div class="col-12 col-lg-6">
                                                 ชื่อพืช
-                                                <input type="search" name="word" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
-                                                value="<?php if(isset($_GET["word"])) echo $_GET["word"]; ?>">
+                                                <input type="search" name="name" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
+                                                value="<?php if(isset($_GET["name"])) echo $_GET["name"]; ?>">
                                             </div>
                                             <div class="col-12 col-lg-6">
                                                 หมวดหมู่
@@ -91,7 +92,7 @@
                                                                         ORDER BY tagName;";
                                                                     
                                                                 $tagResult = $database->query($sql);
-                                                                if($result->num_rows > 0){
+                                                                if($tagResult->num_rows > 0){
                                                                     while($tag = $tagResult->fetch_assoc()){
                                                             ?>
                                                                 <option value="<?php echo $tag['tagID']; ?>"
@@ -121,12 +122,13 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, TL.tagID, U.userFname, U.userLname,
-                                                count(imgID) AS imgCount
+                                $sql = "SELECT  P.plantID, P.plantName, P.plantView, P.plantRegist, TL.tagID, U.userFname, U.userLname,
+                                                count(favID) AS favoriteCount, count(imgID) AS imgCount
                                         FROM    plants P 
                                                 LEFT JOIN tag_lists TL ON P.plantID = TL.PlantID
                                                 LEFT JOIN plant_images PI ON P.plantID = PI.plantID
                                                 LEFT JOIN users U ON P.userID = U.userID
+                                                LEFT JOIN favorite_plants FP ON P.plantID = FP.plantID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -134,12 +136,12 @@
 
                                 //Check if filter send
                                 if(isset($_GET["search"])){
-                                    $searchWord = $_GET['word'] ?? '';
+                                    $searchName = $_GET['name'] ?? '';
                                     $searchTag = $_GET['tag'] ?? '';
 
-                                    if(!empty($searchWord)){
+                                    if(!empty($searchName)){
                                         $sql .= "AND plantName LIKE ? ";
-                                        $filter[] = "%$searchWord%";
+                                        $filter[] = "%$searchName%";
                                         $filterDatatype .= "s";
                                     }
                                     if(!empty($searchTag) && $searchTag != "All"){
@@ -209,17 +211,16 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span class="me-2">
+                                                    <span class="d-inline-block w-50">
                                                         <i class="fa-solid fa-eye text-primary me-1"></i>
-                                                        <?php echo number_format(12545); ?>
+                                                        <?php echo number_format($plant["favoriteCount"]); ?>
                                                     </span>
-                                                    <span>
+                                                    <span class="d-inline-block w-50">
                                                         <i class="fa-solid fa-heart text-danger me-1"></i>
-                                                        <?php echo number_format(12545); ?>
+                                                        <?php echo number_format($plant["plantView"]); ?>
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <i class="fa-solid fa-image text-info me-1"></i>
                                                     <?php echo number_format($plant["imgCount"]); ?> ภาพ
                                                 </td>
                                                 <td class="text-center">
@@ -246,8 +247,8 @@
                                         <?php $plantIndex++;} }else{ ?>
 
                                             <tr>
-                                                <td class="text-center text-warning py-3" colspan="6">
-                                                    --- ไม่พบข้อมูลในระบบ ---
+                                                <td class="text-center text-muted py-3" colspan="6">
+                                                    --- ไม่พบข้อมูลสำหรับแสดงผล ---
                                                 </td>
                                             </tr>
 
@@ -288,7 +289,7 @@
             $(function(){
                 select = $(".select2");
                 select.length&&select.each(function(){
-                    var element=$(this);
+                    let element=$(this);
                     element.wrap('<div class="position-relative"></div>').select2({
                         dropdownParent:element.parent()
                     });
