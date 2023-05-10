@@ -29,14 +29,6 @@
             </a>
         </li>
 
-        <!-- Plant collection -->
-        <li class="menu-item">
-            <a href="member" class="menu-link">
-                <i class="menu-icon fa-solid fa-users"></i>
-                <div>รายชื่อสมาชิก</div>
-            </a>
-        </li>
-
         <!-- Manage group -->
         <li class="menu-item havesub">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -55,7 +47,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="user-manage" class="menu-link">
+                    <a href="account-manage" class="menu-link">
                         <div>บัญชีผู้ใช้</div>
                     </a>
                 </li>
@@ -70,12 +62,12 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="plant-report" class="menu-link">
                         <div>รายการพืช</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="account-report" class="menu-link">
                         <div>บัญชีผู้ใช้</div>
                     </a>
                 </li>

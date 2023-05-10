@@ -76,8 +76,8 @@
                                         <div class="row g-2">
                                             <div class="col-12 col-lg-6">
                                                 ชื่อพืช
-                                                <input type="search" name="word" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
-                                                value="<?php if(isset($_GET["word"])) echo $_GET["word"]; ?>">
+                                                <input type="search" name="name" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
+                                                value="<?php if(isset($_GET["name"])) echo $_GET["name"]; ?>">
                                             </div>
                                             <div class="col-12 col-lg-6">
                                                 หมวดหมู่
@@ -92,7 +92,7 @@
                                                                         ORDER BY tagName;";
                                                                     
                                                                 $tagResult = $database->query($sql);
-                                                                if($result->num_rows > 0){
+                                                                if($tagResult->num_rows > 0){
                                                                     while($tag = $tagResult->fetch_assoc()){
                                                             ?>
                                                                 <option value="<?php echo $tag['tagID']; ?>"
@@ -136,12 +136,12 @@
 
                                 //Check if filter send
                                 if(isset($_GET["search"])){
-                                    $searchWord = $_GET['word'] ?? '';
+                                    $searchName = $_GET['name'] ?? '';
                                     $searchTag = $_GET['tag'] ?? '';
 
-                                    if(!empty($searchWord)){
+                                    if(!empty($searchName)){
                                         $sql .= "AND plantName LIKE ? ";
-                                        $filter[] = "%$searchWord%";
+                                        $filter[] = "%$searchName%";
                                         $filterDatatype .= "s";
                                     }
                                     if(!empty($searchTag) && $searchTag != "All"){
