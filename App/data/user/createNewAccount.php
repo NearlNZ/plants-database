@@ -10,11 +10,14 @@
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     $userRegist = date("Y-m-d");
-
+    $userLevel = $_POST['userLevel'] ?? 'สมาชิก';
+    $userStatus = $_POST['userStatus'] ?? 'บัญชีปกติ';
     $userProfile = (!empty($_FILES['userProfile']['tmp_name'])) ? $_FILES['userProfile'] : 'default-avatar.png';
 
+    //==============================================================================
+    
     //1) Check for required parameter
-    if($userFname == '' || $userLname == '' || $password=="" || $username==""){
+    if($userFname == "" || $userLname == "" || $password=="" || $username==""){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
@@ -24,7 +27,7 @@
         exit();
     }
 
-    //2) Check if user already exist
+    //2) Check user existence
     $sql = "SELECT userID
             FROM users
             WHERE username = ?
@@ -48,15 +51,15 @@
     }
 
     //3) Try to upload profile if not null
-    $uploaddir = '../../assets/img/avatars/';
-        
-    //Generate profile img name
     if($userProfile != 'default-avatar.png'){
+        $uploaddir = '../../assets/img/avatars/';
+
+        //Generate profile img name
         list($name, $extension) = explode(".",$userProfile['name']);
         $name = uniqid("USER-").rand(100,999);
         $file="$name.$extension";
             
-        //Copy img to server
+        //Copy img to server storage
         $uploadfile = $uploaddir.$file;
         if (copy($userProfile['tmp_name'], $uploadfile)) {
             $userProfile = $file;          
@@ -71,22 +74,24 @@
         }
     }
 
-    //Pass) Create account
+    //==============================================================================
+
+    //Pass) Create new account
     $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users(userID, userFname, userLname, userProfile, username, password, userRegist)
-            VALUES(?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO users(userID, userFname, userLname, userProfile, username, password, userRegist, userLevel, userStatus)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('sssssss', $userID, $userFname, $userLname, $userProfile, $username, $hashPassword, $userRegist);
+    $stmt->bind_param('sssssssss', $userID, $userFname, $userLname, $userProfile, $username, $hashPassword, $userRegist, $userLevel, $userStatus);
 
     if($stmt->execute()){
         $stmt->close();
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'ลงทะเบียนบัญชีผู้ใช้สำเร็จ กลับสู่หน้า Login';
+        $response->text = 'ลงทะเบียนบัญชีผู้ใช้สำเร็จ กำลังกลับสู่หน้า Login';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

@@ -30,13 +30,11 @@
 
         <!-- Vendors CSS -->
         <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
-        <link rel="stylesheet" href="../assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
         <script src="../assets/vendor/select2/select2.js"></script>
-        <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- Page Style -->

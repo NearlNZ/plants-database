@@ -27,10 +27,16 @@
 
     //Check account exist
     if($result->num_rows == 0){
-        header("Location: ../login.php");
+        header("Location: ../login");
         exit();
     }
 
     //Create user account object
     $user = (object) $result->fetch_assoc();
+
+    //Check account suspended
+    if($user->userStatus == "บัญชีถูกระงับ"){
+        header("Location: ../logout");
+        exit();
+    }
 ?>

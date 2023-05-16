@@ -4,6 +4,8 @@
     $response = new stdClass();
     require_once("../database.php");
 
+    //==============================================================================
+
     //Set parameter
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
@@ -20,7 +22,7 @@
     }
 
     //2) Check if username exist
-    $sql = "SELECT userID, password, userLevel
+    $sql = "SELECT userID, password, userLevel, userStatus
             FROM users
             WHERE username = ? 
             LIMIT 1;";
@@ -54,10 +56,24 @@
         exit();
     }
 
-    //Pass) Create session for user & timestamp last login
+    //4) Check if account suspended
+    if($user['userStatus'] == "บัญชีถูกระงับ"){
+        $response->status = "warning";
+        $response->title = 'จำกัดการใช้งาน';
+        $response->text = "บัญชีผู้ใช้ของท่านถูกระงับการใช้งานชั่วคราวโดยผู้ดูแลระบบ";
+
+		echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $database->close();
+        exit();
+    }
+
+    //==============================================================================
+
+    //Pass) Create session for user
     $_SESSION['CSP-session-userID'] = $user['userID'];
     $_SESSION['CSP-session-userLevel'] = $user['userLevel'];
 
+    //Timestamp last login
     $userID = $user['userID'];
     $loginTime = date('Y-m-d H:i:s');
 

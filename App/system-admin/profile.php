@@ -27,13 +27,11 @@
 
         <!-- Vendors CSS -->
         <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
-        <link rel="stylesheet" href="../assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
         <script src="../assets/vendor/select2/select2.js"></script>
-        <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- Page Style -->
@@ -98,134 +96,168 @@
                                     <div class="row p-0 g-3">
                                         <div class="col-md-6 col-lg-12">
                                             <!-- Card profile info -->
-                                            <div class="card h-100">
-                                                <div class="card-body">
-                                                    <p class="text-muted">ข้อมูลผู้ใช้</p>
-                                                    <table class="table table-borderless p-0 m-0">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold text-seondary">
-                                                                    <i class="fa-solid fa-comment me-2"></i>
-                                                                    ชื่อ-สกุล
-                                                                </td>
-                                                                <td class="text-start">
-                                                                    <?php echo $user->userFname." ".$user->userLname;?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold text-seondary">
-                                                                    <i class="fa-solid fa-user me-2"></i>
-                                                                    Username
-                                                                </td>
-                                                                <td td class="text-start">
-                                                                    <?php echo $user->username;?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold text-seondary">
-                                                                    <i class="fa-solid fa-user-tag me-1"></i>
-                                                                    ระดับผู้ใช้
-                                                                </td>
-                                                                <td td class="text-start">
-                                                                    <?php echo $user->userLevel;?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold text-seondary">
-                                                                    <i class="fa-solid fa-calendar me-2"></i>
-                                                                    วันลงทะเบียน
-                                                                </td>
-                                                                <td td class="text-start">
-                                                                    <?php echo date("j/n/Y", strtotime($user->userRegist));?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold text-seondary">
-                                                                    <i class="fa-solid fa-circle-check me-2"></i>
-                                                                    สถานะบัญชี
-                                                                </td>
-                                                                <td td class="text-start">
-                                                                    <?php if($user->userStatus == "บัญชีปกติ"){ ?>
-                                                                        <span class="badge bg-label-success text-success">
-                                                                            บัญชีปกติ
-                                                                        </span>
-                                                                    <?php }else{ ?>
-                                                                        <span class="badge bg-label-danger text-danger">
-                                                                            บัญชีถูกระงับ
-                                                                        </span>
-                                                                    <?php } ?>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                            <div class="accordion h-100" id="accordionInfo">
+                                                <div class="card accordion-item h-100">
+                                                    <h2 class="accordion-header py-2 d-block d-md-none">
+                                                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#cardInfo" aria-expanded="false" aria-controls="cardInfo" role="tabpanel">
+                                                            <i class="fa-solid fa-address-book me-2"></i>
+                                                            ข้อมูลบัญชีผู้ใช้
+                                                        </button>
+                                                    </h2>
+                                                    <h2 class="accordion-header py-1 d-none d-md-block">
+                                                        <span class="accordion-button d-block">
+                                                            <i class="fa-solid fa-address-book me-2"></i>
+                                                            ข้อมูลบัญชีผู้ใช้
+                                                        </span>
+                                                    </h2>
+                                                    <div id="cardInfo" class="accordion-collapse collapse d-md-block" data-bs-parent="#accordionInfo">
+                                                        <div class="accordion-body border-top">
+                                                            <table class="table table-borderless my-3">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold text-seondary">
+                                                                            <i class="fa-solid fa-message me-2"></i>
+                                                                            ชื่อ-สกุล
+                                                                        </td>
+                                                                        <td class="text-start">
+                                                                            <?php echo $user->userFname." ".$user->userLname;?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold text-seondary">
+                                                                            <i class="fa-solid fa-user me-2"></i>
+                                                                            Username
+                                                                        </td>
+                                                                        <td td class="text-start">
+                                                                            <?php echo $user->username;?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold text-seondary">
+                                                                            <i class="fa-solid fa-user-tag me-1"></i>
+                                                                            ระดับผู้ใช้
+                                                                        </td>
+                                                                        <td td class="text-start">
+                                                                            <?php echo $user->userLevel; ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold text-seondary">
+                                                                            <i class="fa-solid fa-calendar me-2"></i>
+                                                                            วันลงทะเบียน
+                                                                        </td>
+                                                                        <td td class="text-start">
+                                                                            <?php echo date("j/n/Y", strtotime($user->userRegist));?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold text-seondary">
+                                                                            <i class="fa-solid fa-circle-check me-2"></i>
+                                                                            สถานะบัญชี
+                                                                        </td>
+                                                                        <td td class="text-start">
+                                                                            <?php
+                                                                                $statusText = $user->userStatus;
+                                                                                $statusColorClass = "bg-label-success text-success";
+                                                                                if($statusText == "บัญชีถูกระงับ"){
+                                                                                    $statusColorClass = "bg-label-danger text-danger";
+                                                                                }
+                                                                            ?>
+
+                                                                            <span class="badge rounded-pill <?php echo $statusColorClass; ?>">
+                                                                                <?php echo $statusText; ?>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!-- /Card profile info -->
                                         </div>
                                         <div class="col">
                                             <!-- Card profile activities -->
-                                            <div class="card h-100">
-                                                <div class="card-body">
-                                                    <?php
-                                                        //Select user activities (count of plant they add etc.)
-                                                        $userID = $user->userID;
-                                                        $sql = "SELECT
-                                                                (SELECT count(favID) FROM favorite_plants WHERE userID = '$userID') AS favoriteCount,
-                                                                (SELECT count(plantID) FROM plants WHERE userID = '$userID') AS plantAdd,
-                                                                (SELECT count(tagID) FROM tags WHERE userID = '$userID') AS tagAdd,
-                                                                (SELECT count(imgID) FROM plant_images WHERE userID = '$userID') AS imgAdd;";
-                                                        $activitiesresult = $database->query($sql);
-                                                        $activities = $activitiesresult->fetch_assoc();
-                                                    ?>
+                                            <div class="accordion h-100" id="accordionActivities">
+                                                <div class="card accordion-item h-100">
+                                                    <h2 class="accordion-header py-2 d-block d-md-none">
+                                                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#cardActivities" aria-expanded="true" aria-controls="cardActivities" role="tabpanel">
+                                                            <i class="fa-solid fa-arrow-trend-up me-2"></i>
+                                                            กิจกรรมของผู้ใช้
+                                                        </button>
+                                                    </h2>
+                                                    <h2 class="accordion-header py-1 d-none d-md-block">
+                                                        <span type="button" class="accordion-button d-block">
+                                                            <i class="fa-solid fa-arrow-trend-up me-2"></i>
+                                                            กิจกรรมของผู้ใช้
+                                                        </span>
+                                                    </h2>
+                                                    <div id="cardActivities" class="accordion-collapse collapse d-md-block" data-bs-parent="#accordionActivities">
+                                                        <div class="accordion-body border-top">
+                                                            <?php
+                                                                //Select user activities (count of plant they add etc.)
+                                                                $userID = $user->userID;
+                                                                $sql = "SELECT
+                                                                        (SELECT count(favID) FROM favorite_plants WHERE userID = '$userID') AS favoriteCount,
+                                                                        (SELECT count(plantID) FROM plants WHERE userID = '$userID') AS plantAdd,
+                                                                        (SELECT count(tagID) FROM tags WHERE userID = '$userID') AS tagAdd,
+                                                                        (SELECT count(imgID) FROM plant_images WHERE userID = '$userID') AS imgAdd;";
+                                                                $activitiesresult = $database->query($sql);
+                                                                $activities = $activitiesresult->fetch_assoc();
+                                                            ?>
 
-                                                    <p class="text-muted">กิจกรรมของผู้ใช้</p>
-                                                    <table class="table table-borderless">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold">
-                                                                    <i class="fa-solid fa-seedling text-success me-2"></i>
-                                                                    เพิ่มข้อมูลพืช
-                                                                </td>
-                                                                <td class="text-end">
-                                                                    <?php echo number_format($activities["plantAdd"]);?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold">
-                                                                    <i class="fa-solid fa-tags text-warning me-2"></i>
-                                                                    เพิ่มหมวดหมู่พืช 
-                                                                </td>
-                                                                <td class="text-end">
-                                                                    <?php echo number_format($activities["tagAdd"]);?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold">
-                                                                    <i class="fa-solid fa-image text-info me-2"></i>
-                                                                    เพิ่มภาพพืช
-                                                                </td>
-                                                                <td class="text-end">
-                                                                    <?php echo number_format($activities["imgAdd"]);?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-start fw-semibold">
-                                                                    <i class="fa-solid fa-heart text-danger me-2"></i>
-                                                                    รายการโปรด
-                                                                </td>
-                                                                <td class="text-end">
-                                                                    <?php echo number_format($activities["favoriteCount"]);?>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="card-body border-top py-2 text-center">
-                                                    เข้าใช้งานล่าสุดเมื่อ
-                                                    <?php 
-                                                        $lastlogin = !empty($user->userLastLogin) ? date("j/n/Y H:i", strtotime($user->userLastLogin)) : "-";
-                                                        echo $lastlogin;
-                                                    ?>
+                                                            <table class="table table-borderless my-3">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold">
+                                                                            <i class="fa-solid fa-seedling text-success me-2"></i>
+                                                                            เพิ่มข้อมูลพืช
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <?php echo number_format($activities["plantAdd"]);?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold">
+                                                                            <i class="fa-solid fa-tags text-warning me-2"></i>
+                                                                            เพิ่มหมวดหมู่พืช 
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <?php echo number_format($activities["tagAdd"]);?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold">
+                                                                            <i class="fa-solid fa-image text-info me-2"></i>
+                                                                            เพิ่มภาพพืช
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <?php echo number_format($activities["imgAdd"]);?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-start fw-semibold">
+                                                                            <i class="fa-solid fa-heart text-danger me-2"></i>
+                                                                            รายการโปรด
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <?php echo number_format($activities["favoriteCount"]);?>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                            <div class="text-center text-muted">
+                                                                ---
+                                                                <?php 
+                                                                    $lastlogin = !empty($user->userLastLogin) ? date("เข้าใช้งานล่าสุดเมื่อ j/n/Y H:i", strtotime($user->userLastLogin)) : "ไม่มีบันทึกการใช้งาน";
+                                                                    echo $lastlogin;
+                                                                ?>
+                                                                ---
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!-- Card profile activities -->
