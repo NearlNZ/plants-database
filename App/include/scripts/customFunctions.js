@@ -1,4 +1,4 @@
-//Dynamic add active to sidebar (Require jquery.min.js)
+//Dynamic add active to sidebar
 function activeSidebar(){
     let pageUrl = "";
 
@@ -32,7 +32,7 @@ $(document).ready(function () {
     activeSidebar()
 });
 
-//Ajax (Require jquery.min.js)
+//Ajax Request
 function ajaxRequest(option){
     const{
         type = 'POST',
@@ -69,6 +69,15 @@ function ajaxRequest(option){
     });
 }
 
+//Back button
+function goBack() {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = '../index.php';
+    }
+}
+
 //Logout (Require sweetalert2.all.min.js)
 function logout(){
     showConfirm({
@@ -88,28 +97,29 @@ function logout(){
 }
 
 //Print table content
-function printContent(contentContainer) {
-	let content = contentContainer.html();
+// function printContent(contentContainer) {
+// 	let content = contentContainer.html();
 
-	printWindow = window.open("");
-	printWindow.document.write('<link rel="stylesheet" href="../assets/font/Kanit.css"/>');
-    printWindow.document.write('<link rel="stylesheet" href="../assets/css/template.css"/>');
-	printWindow.document.write('<script src="../assets/js/bootstrap.min.js"></script>');
-	printWindow.document.write('<link rel="stylesheet" href="../assets/css/custom-style.css"/>');
+// 	printWindow = window.open("");
+// 	printWindow.document.write('<link rel="stylesheet" href="../assets/font/Kanit.css"/>');
+//     printWindow.document.write('<link rel="stylesheet" href="../assets/css/template.css"/>');
+// 	printWindow.document.write('<script src="../assets/js/bootstrap.min.js"></script>');
+// 	printWindow.document.write('<link rel="stylesheet" href="../assets/css/custom-style.css"/>');
     
-	printWindow.document.write('<script src="../assets/vendor/fontawesome/js/all.min.js"></script>');
-	printWindow.document.write('<STYLE type="text/css">body {font-family: "Kanit";} td {font-size: 12px;} th {font-size: 13px !important;}</STYLE>');
-	printWindow.document.write('<STYLE media="print">.not-print {display: none;} tr, td, th {padding: 10 !important;}</STYLE>');
-	printWindow.document.write('<img src="../assets/img/element/comsci-logo.png" class="border me-2 mb-2" style="width:50px;"></img><span class="h4">ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์</span><br><br>');
+// 	printWindow.document.write('<script src="../assets/vendor/fontawesome/js/all.min.js"></script>');
+//     printWindow.document.write('<script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>');
+// 	printWindow.document.write('<STYLE type="text/css">body {font-family: "Kanit";} td {font-size: 12px;} th {font-size: 13px !important;}</STYLE>');
+// 	printWindow.document.write('<STYLE media="print">.not-print {display: none;} tr, td, th {padding: 10 !important;}</STYLE>');
+// 	printWindow.document.write('<img src="../assets/img/element/comsci-logo.png" class="border me-2 mb-2" style="width:50px;"></img><span class="h4">ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์</span><br><br>');
 	
-    printWindow.document.write(content);
+//     printWindow.document.write(content);
 	
-	setTimeout(function(){
-		printWindow.print();
-		printWindow.close();
-	}, 100);
+// 	setTimeout(function(){
+// 		printWindow.print();
+// 		printWindow.close();
+// 	}, 100);
 	
-}
+// }
 
 //Show confirm befor process (Require sweetalert2.all.min.js)
 function showConfirm(option){
@@ -127,10 +137,10 @@ function showConfirm(option){
         title: title,
         text: text,
         reverseButtons: true,
+        showConfirmButton: true,
         showCancelButton: true,
         cancelButtonColor: '#fff',
         cancelButtonText: '<span class="text-black">' + cancelButtonText + '</span>',
-        confirmButtonColor: '#696cff',
         confirmButtonText: '<span class="text-white">' + confirmButtonText + '</span>'
     }).then((result) => {
         if (result.isConfirmed){

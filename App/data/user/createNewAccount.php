@@ -4,12 +4,12 @@
     require_once("../database.php");
 
     //Set parameter
-    $userID = uniqid("USER-").rand(100,999);
+    $userID = uniqid("U-").rand(100,999);
     $userFname = $_POST['userFname'] ?? '';
     $userLname = $_POST['userLname'] ?? '';
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
-    $userRegist = date("Y-m-d");
+    $userRegist = date("Y-m-d H:i:s");
     $userLevel = $_POST['userLevel'] ?? 'สมาชิก';
     $userStatus = $_POST['userStatus'] ?? 'บัญชีปกติ';
     $userProfile = (!empty($_FILES['userProfile']['tmp_name'])) ? $_FILES['userProfile'] : 'default-avatar.png';
@@ -20,7 +20,7 @@
     if($userFname == "" || $userLname == "" || $password=="" || $username==""){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
@@ -56,7 +56,7 @@
 
         //Generate profile img name
         list($name, $extension) = explode(".",$userProfile['name']);
-        $name = uniqid("USER-").rand(100,999);
+        $name = uniqid("UIMG-").rand(100,999);
         $file="$name.$extension";
             
         //Copy img to server storage
@@ -91,7 +91,7 @@
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'ลงทะเบียนบัญชีผู้ใช้สำเร็จ กำลังกลับสู่หน้า Login';
+        $response->text = 'ลงทะเบียนบัญชีผู้ใหม่ใช้สำเร็จ';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

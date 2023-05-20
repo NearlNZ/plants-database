@@ -2,7 +2,7 @@
     //Include database connection
 	require_once("../data/database.php");
 
-    //include permission check
+    //Include admin account check
     require_once('../include/scripts/admin-header.php');
 ?>
 
@@ -27,18 +27,17 @@
 
         <!-- Vendors CSS -->
         <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
+        <link rel="stylesheet" href="../assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
+        <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
         <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- Page Style -->
         <link rel="stylesheet" href="../assets/css/custom-style.css"/>
-        <style> 
-            .select2-search__field{ display: none;}
-        </style>
     </head>
     <body class="body-light">
         <!-- Wrapper -->
@@ -84,14 +83,11 @@
                                                 ระดับผู้ใช้
                                                 <select class="select2 form-select" name="level">
                                                     <option selected value="All">ทั้งหมด</option>
-                                                    <option 
-                                                        <?php if(isset($_GET["level"]) && $_GET["level"] == "ผู้ดูแลระบบ") echo "selected";?> value="ผู้ดูแลระบบ">
-                                                            ผู้ดูแลระบบ
-                                                        </option>
-                                                    <option
-                                                        <?php if(isset($_GET["level"]) && $_GET["level"] == "สมาชิก") echo "selected";?> value="สมาชิก">
-                                                            สมาชิก
-                                                        </option>
+                                                    <option <?php if(isset($_GET["level"]) && $_GET["level"] == "ผู้ดูแลระบบ") echo "selected";?> value="ผู้ดูแลระบบ">
+                                                        ผู้ดูแลระบบ
+                                                    </option>
+                                                    <option <?php if(isset($_GET["level"]) && $_GET["level"] == "สมาชิก") echo "selected";?> value="สมาชิก">
+                                                        สมาชิก
                                                     </option>
                                                 </select>
                                             </div>
@@ -101,8 +97,12 @@
                                                     <div class="col-12 col-lg">
                                                         <select class="select2 form-select" name="status">
                                                             <option selected value="All">ทั้งหมด</option>
-                                                            <option value="บัญชีปกติ">บัญชีปกติ</option>
-                                                            <option value="บัญชีถูกระงับ">บัญชีถูกระงับ</option>
+                                                            <option <?php if(isset($_GET["status"]) && $_GET["status"] == "บัญชีปกติ") echo "selected";?> value="บัญชีปกติ">
+                                                                บัญชีปกติ
+                                                            </option>
+                                                            <option <?php if(isset($_GET["status"]) && $_GET["status"] == "บัญชีถูกระงับ") echo "selected";?> value="บัญชีถูกระงับ">
+                                                                บัญชีถูกระงับ
+                                                            </option>
                                                         </select>
                                                     </div>
                                                     <!-- Search button-->
@@ -197,7 +197,7 @@
                                         <tbody>
 
                                         <?php 
-                                            if($resultCount > 0){ $accountIndex = 1; while($acc = $accountResult->fetch_assoc()){
+                                            if($resultCount > 0){ $accountIndex = 1; while($account = $accountResult->fetch_assoc()){
                                         ?>
 
                                             <tr>
@@ -206,22 +206,22 @@
                                                     <div class="d-flex justify-content-start align-items-center user-name">
                                                         <div class="avatar-wrapper">
                                                             <div class="avatar me-2">
-                                                                <img src="../assets/img/avatars/<?php echo $acc["userProfile"];?>" alt="user profile" class="rounded-circle">
+                                                                <img src="../assets/img/avatars/<?php echo $account["userProfile"];?>" alt="user profile" class="rounded-circle">
                                                             </div>
                                                         </div>
                                                         <div class="d-flex flex-column">
                                                             <span class="text-truncate">
-                                                                <?php echo $acc["userFname"]." ".$acc["userLname"];?>
+                                                                <?php echo $account["userFname"]." ".$account["userLname"];?>
                                                             </span>
                                                             <small class="text-truncate text-muted">
-                                                                <?php echo $acc["username"];?>
+                                                                <?php echo $account["username"];?>
                                                             </small>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="text-end px-0" width="10px">
                                                     <?php 
-                                                        $levelText = $acc["userLevel"];
+                                                        $levelText = $account["userLevel"];
                                                         $levelIconClass = "";
                                                         if($levelText == "ผู้ดูแลระบบ"){
                                                             $levelIconClass = "fa-solid fa-crown text-warning";
@@ -234,11 +234,11 @@
                                                     <?php echo $levelText;?>
                                                 </td>
                                                 <td>
-                                                    <?php echo date("j/n/Y", strtotime($acc["userRegist"]));?>
+                                                    <?php echo date("j/n/Y", strtotime($account["userRegist"]));?>
                                                 </td>
                                                 <td td class="text-start">
                                                     <?php
-                                                        $statusText = $acc["userStatus"];
+                                                        $statusText = $account["userStatus"];
                                                         $statusColorClass = "bg-label-success text-success";
                                                         if($statusText == "บัญชีถูกระงับ"){
                                                             $statusColorClass = "bg-label-danger text-danger";
@@ -254,18 +254,23 @@
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="account-profile?plantID=<?php echo $acc['userID'];?>">
-                                                            <i class="bx bx-show-alt me-1"></i>
-                                                            ดูข้อมูล
-                                                        </a>
-                                                        <a class="dropdown-item" href="account-edit?plantID=<?php echo $acc['userID'];?>">
-                                                            <i class="bx bx-edit-alt me-1"></i>
-                                                            แก้ไขข้อมูล
-                                                        </a>
-                                                        <?php if ($acc["userID"] != $user->userID){ ?>
-                                                            <a class="dropdown-item deleteBtn" href="../data/user/deleteAccount?userID=<?php echo $acc['userID'];?>">
+                                                        <?php if ($account["userID"] != $currentUser->userID){ ?>
+                                                            <a class="dropdown-item" href="account-view?userID=<?php echo $account['userID'];?>">
+                                                                <i class="bx bx-show-alt me-1"></i>
+                                                                ดูข้อมูล
+                                                            </a>
+                                                            <a class="dropdown-item" href="account-edit?userID=<?php echo $account['userID'];?>">
+                                                                <i class="bx bx-edit-alt me-1"></i>
+                                                                แก้ไขข้อมูล
+                                                            </a>
+                                                            <a class="dropdown-item deleteBtn" href="../data/user/deleteAccount?userID=<?php echo $account['userID'];?>">
                                                                 <i class="bx bx-trash me-1"></i>
                                                                 ลบข้อมูล
+                                                            </a>
+                                                        <?php }else{ ?>
+                                                            <a class="dropdown-item" href="profile">
+                                                                <i class="bx bx-show-alt me-1"></i>
+                                                                ดูข้อมูล
                                                             </a>
                                                         <?php } ?>
                                                     </div>
@@ -331,7 +336,8 @@
                 
                 showConfirm({
                     icon: 'question',
-                    text: 'ต้องการลบบัญชีที่เลือกหรือไม่',
+                    title: "ลบบัญชีผู้ใช้",
+                    text: 'การลบบัญชีผู้ใช้จะไม่สามารถกู้คืนข้อมูลในภายหลังได้',
                     confirmButtonText: 'ดำเนินการต่อ',
                     confirmCallback: function(){
                         ajaxRequest({

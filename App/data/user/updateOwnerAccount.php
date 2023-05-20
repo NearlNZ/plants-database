@@ -4,21 +4,19 @@
     require_once("../database.php");
 
     //Account permission check ("all member" permission)
-    require_once("../../include/scripts/admin-permission-check.php");
+    require_once("../../include/scripts/member-permission-check.php");
 
     //Set parameter
     $userID = $_POST['userID'] ?? '';
     $userFname = $_POST['userFname'] ?? '';
     $userLname = $_POST['userLname'] ?? '';
-    $userLevel = $_POST['userLevel'] ?? '';
-    $userStatus = $_POST['userStatus'] ?? '';
     $userCurrentProfile = $_POST['userCurrentProfile'] ?? 'default-avatar.png';
     $userProfile = (!empty($_FILES['userProfile']['tmp_name'])) ? $_FILES['userProfile'] : $userCurrentProfile;
 
     //==============================================================================
     
     //1) Check for required parameter
-    if($userID == "" || $userFname == "" || $userLname == "" || $userLevel == "" || $userStatus == ""){
+    if($userID == "" || $userFname == "" || $userLname == ""){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
@@ -87,12 +85,12 @@
 
     //Pass) Update account
     $sql = "UPDATE users
-            SET userFname = ?, userLname = ?, userProfile = ?, userLevel = ?, userStatus = ?
+            SET userFname = ?, userLname = ?, userProfile = ?
             WHERE userID = ?;";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssssss', $userFname, $userLname, $userProfile, $userLevel, $userStatus, $userID);
+    $stmt->bind_param('ssss', $userFname, $userLname, $userProfile, $userID);
 
     if($stmt->execute()){
         $stmt->close();

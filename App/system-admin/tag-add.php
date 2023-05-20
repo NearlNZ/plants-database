@@ -2,7 +2,7 @@
     //Include database connection
     require_once("../data/database.php");
 
-    //include permission check
+    //Include admin account check
     require_once('../include/scripts/admin-header.php');
 ?>
 
@@ -26,10 +26,12 @@
         <script src="../assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
+        <link rel="stylesheet" href="../assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
+        <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- Page Style -->
@@ -81,7 +83,7 @@
                                                 <div class="row g-2">
                                                     <div class="col-12">
                                                         ชื่อหมวดหมู่
-                                                        <input type="hidden" name="userID" value="<?php echo $user->userID; ?>">
+                                                        <input type="hidden" name="userID" value="<?php echo $currentUser->userID; ?>">
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="fa-regular fa-message"></i></span>
                                                             <input type="text" name="tagName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" maxlength="50" autofocus autocomplete="off" required>
@@ -90,7 +92,7 @@
                                                 </div>
                                                 <div class="mt-3">
                                                     <button type="submit" class="btn btn-primary me-2">บันทึกข้อมูล</button>
-                                                    <a href="tag-manage" class="btn btn-label-secondary">ย้อนกลับ</a>
+                                                    <a href="#" onclick="goBack()" class="btn btn-label-secondary">ย้อนกลับ</a>
                                                 </div>
                                             </form>
                                         </div>

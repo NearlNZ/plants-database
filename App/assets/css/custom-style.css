@@ -14,6 +14,20 @@ body {
     background-color:#222e3c;
 }
 
+.btn-label-danger {
+    color: #ff3e1d;
+    border-color: transparent;
+    background: #ffe0db;
+}
+
+.btn-label-danger:hover {
+    color: #fff;
+    background-color: #e6381a;
+    border-color: transparent;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
+    transform: translateY(-1px);
+}
+
 .btn-label-secondary {
     color: #8592a3;
     border-color: transparent;
@@ -70,26 +84,13 @@ body {
     object-fit:cover;
 }
 
-.icon-circle-primary {
+.icon-circle {
     display:flex;
     justify-content:center;
     align-items:center;
-    background-color: #DCEAF4;
-    color: #2E5EDE;
     border-radius:50%;
-    height:50px;
-    width:50px;
-}
-
-.icon-circle-success {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background-color: #DAFFCE;
-    color: #02BF4A;
-    border-radius:50%;
-    height:50px;
-    width:50px;
+    height:40px;
+    width:40px;
 }
 
 .img-cover {
@@ -99,11 +100,8 @@ body {
 	object-fit: cover;
 }
 
-.maxh-200 {
-    max-height: 200px;
-}
-
-.scroll-y {
+.table-scroll-y {
+    max-height: 480px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }

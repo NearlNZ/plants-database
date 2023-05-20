@@ -4,17 +4,17 @@
     require_once("../database.php");
 
     //Account permission check ("all member" permission)
-    require_once("../../include/scripts/admin-permission-check.php");
+    require_once("../../include/scripts/member-permission-check.php");
 
     //Set parameter
     $userID = $_POST['userID'] ?? '';
+    $currentPassword = $_POST['currentPassword'] ?? '';
     $newPassword = $_POST['newPassword'] ?? '';
-    $confirmPassword = $_POST['confirmPassword'] ?? '';
 
     //==============================================================================
 
     //1) Check for required parameter
-    if($userID == '' || $newPassword == '' || $confirmPassword == ''){
+    if($userID == '' || $currentPassword == '' || $newPassword == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
@@ -47,11 +47,12 @@
         exit();
     };
 
-    //3) Check new password match
-    if($newPassword != $confirmPassword){
+    //3) Check password correction
+    $user = $userResult->fetch_assoc();
+    if(!password_verify($currentPassword, $user['password'])){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'รหัสผ่านไม่ตรงกัน โปรดตรวจสอบอีกครั้ง';
+        $response->text = 'รหัสผ่านปัจจุบันไม่ถูกต้อง โปรดตรวจสอบอีกครั้ง';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();

@@ -15,7 +15,7 @@
     if($userID == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
@@ -23,7 +23,7 @@
     }
 
     //2) Check account existence
-    $sql = "SELECT userID, userProfile
+    $sql = "SELECT userID, userProfile, userLevel
             FROM users
             WHERE userID = ?
             LIMIT 1;";
@@ -44,10 +44,33 @@
         $database->close();
         exit();
     }
-
     $user = $userResult->fetch_assoc();
 
-    //3) Delete account profile image if not "default-avatar.png"
+    //3) Check minimum admin account if delete admin account
+    if($user["userLevel"] == "ผู้ดูแลระบบ"){
+        $sql = "SELECT userID
+            FROM users
+            WHERE userID <> ? AND userLevel = 'ผู้ดูแลระบบ';";
+
+        $stmt =  $database->stmt_init(); 
+        $stmt->prepare($sql);
+        $stmt->bind_param('s', $userID);
+        $stmt->execute();
+        $adminResult = $stmt-> get_result();
+        $stmt->close();
+
+        if($adminResult->num_rows < 1){
+            $response->status = 'warning';
+            $response->title = 'เกิดข้อผิดพลาด';
+            $response->text = 'ไม่สามารถลบบัญชีผู้ใช้ได้ จำเป็นต้องมีบัญชีสำหรับผู้ดูแลระบบอย่างน้อย 1 บัญชี';
+            
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            $database->close();
+            exit();
+        }
+    }
+
+    //4) Delete account profile image if not "default-avatar.png"
     if($user["userProfile"] != "default-avatar.png"){
         $imgPath = "../../assets/img/avatars/";
         $img = $imgPath.$user["userProfile"];

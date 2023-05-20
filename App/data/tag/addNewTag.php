@@ -7,8 +7,8 @@
     require_once("../../include/scripts/member-permission-check.php");
 
     //Set parameter
-    $tagID = uniqid("TAG-").rand(100,999);
-    $tagAdd = date('Y-m-d');
+    $tagID = uniqid("T-").rand(100,999);
+    $tagAdd = date('Y-m-d H:i:s');
     $tagName = $_POST['tagName'] ?? '';
     $userID = $_POST['userID'] ?? '';
 
@@ -18,7 +18,7 @@
     if($tagName == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();

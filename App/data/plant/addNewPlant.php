@@ -16,8 +16,8 @@
     }
 
     //Set parameter
-    $plantID = uniqid("PLANT-").rand(100,999);
-    $userID = $_SESSION['CSP-session-userID'];
+    $plantID = uniqid("P-").rand(100,999);
+    $userID = $_POST['userID'];
     $plantName = $_POST['plantName'] ?? '';
     $tagID = !empty($_POST['tagID']) ? $_POST['tagID'] : Null;
     $plantDescription = $_POST["plantDescription"] ?? '';
@@ -27,7 +27,7 @@
     if($plantName == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();

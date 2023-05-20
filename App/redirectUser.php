@@ -13,7 +13,7 @@
         exit();
     }
     else{
-        header('Location: login');
+        header('Location: logout');
         exit();
     }
 ?>

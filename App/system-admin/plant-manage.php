@@ -2,7 +2,7 @@
     //Include database connection
 	require_once("../data/database.php");
 
-    //include permission check
+    //Include admin account check
     require_once('../include/scripts/admin-header.php');
 ?>
 
@@ -27,10 +27,12 @@
 
         <!-- Vendors CSS -->
         <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
+        <link rel="stylesheet" href="../assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
+        <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
         <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
@@ -204,18 +206,19 @@
                                                             <?php echo date("j/n/Y", strtotime($plant["plantRegist"])); ?>
                                                         </span>
                                                         <small class="text-muted">
-                                                            <?php echo !empty($plant["userFname"]) ? "เพิ่มโดย ".$plant["userFname"]." ".$plant["userLname"] : ""; ?>
+                                                            เพิ่มโดย 
+                                                            <?php echo !empty($plant["userFname"]) ? $plant["userFname"]." ".$plant["userLname"] : "(บัญชีที่ถูกลบ)"; ?>
                                                         </small>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <span class="d-inline-block w-50">
                                                         <i class="fa-solid fa-eye text-primary me-1"></i>
-                                                        <?php echo number_format($plant["favoriteCount"]); ?>
+                                                        <?php echo number_format($plant["plantView"]); ?>
                                                     </span>
                                                     <span class="d-inline-block w-50">
                                                         <i class="fa-solid fa-heart text-danger me-1"></i>
-                                                        <?php echo number_format($plant["plantView"]); ?>
+                                                        <?php echo number_format($plant["favoriteCount"]); ?>
                                                     </span>
                                                 </td>
                                                 <td>
