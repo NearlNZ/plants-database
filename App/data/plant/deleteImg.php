@@ -15,7 +15,7 @@
         exit();
     }
 
-    //Set parameter
+    //Set variables
     $imgID = $_GET["imgID"] ?? '';
 
     //2) Check for required parameter

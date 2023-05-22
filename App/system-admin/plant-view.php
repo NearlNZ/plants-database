@@ -11,7 +11,7 @@
     <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>หมวดหมู่พืช</title>
+        <title>รายการพืช</title>
         <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
@@ -59,46 +59,69 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a href="tag-manage">หมวดหมู่พืช</a>
+                                        <a href="plant-manage">รายการพืช</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a class="active">เพิ่มข้อมูล</a>
+                                        <a class="active">ข้อมูลพืช</a>
                                     </li>
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">tag-manage</span>
+                            <span class="active-menu-url">plant-manage</span>
                             <!-- /Breadcrumb & Active menu-->
 
+                            <?php
+                                $plantID = $_GET["plantID"] ?? "";
+                                
+                                function selectPlantData ($database, $plantID){
+                                    if(empty($plantID)){
+                                        return false;
+                                    }
+
+                                    $sql = "SELECT  P.plantID, P.plantName, P.plantRegist, P.plantView, U.userFname, U.userLname,
+                                                    (SELECT count(favID) FROM favorite_plants WHERE plantID = P.plantID) AS favoriteCount
+                                            FROM plants P LEFT JOIN users U ON P.userID = U.userID
+                                            WHERE plantID = ?";
+                                    
+                                    $stmt = $database->stmt_init(); 
+                                    $stmt->prepare($sql);
+                                    $stmt->bind_param('s', $plantID);
+                                    $stmt->execute();
+                                    $tagResult = $stmt-> get_result();
+                                    $stmt->close();
+
+                                    if($tagResult->num_rows == 0){
+                                        return false;
+                                    }
+
+                                    return $tagResult->fetch_assoc();
+                                }
+
+                                $plant = selectPlantData($database, $plantID);
+                                
+                                //Case data exist
+                                if($plant != false){
+                                    //Add plant view +1 each time page load
+                                    $sql = "UPDATE plants
+                                            SET plantView = plantview + 1
+                                            WHERE plantID = ?;";
+                                    $stmt = $database->stmt_init(); 
+                                    $stmt->prepare($sql);
+                                    $stmt->bind_param('s', $plantID);
+                                    $stmt->execute();
+                                    $stmt->close();
+                            ?>
+
                             <div class="row g-3">
-                                <!-- Card form -->
-                                <div class="col-12">
-                                    <div class="card mb-4">
-                                        <h5 class="card-body py-3 mb-0 border-bottom">
-                                            <i class="fa-solid fa-tags me-1"></i>
-                                            เพิ่มข้อมูลหมวดหมู่
-                                        </h5>
-                                        <div class="card-body">
-                                            <form id="formAddTag" method="post" action="../data/tag/addNewTag">
-                                                <div class="row g-2">
-                                                    <div class="col-12">
-                                                        ชื่อหมวดหมู่
-                                                        <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i class="fa-regular fa-message"></i></span>
-                                                            <input type="text" name="tagName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" maxlength="50" autofocus autocomplete="off" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="mt-3">
-                                                    <button type="submit" class="btn btn-primary me-2">บันทึกข้อมูล</button>
-                                                    <a href="#" onclick="goBack()" class="btn btn-label-secondary">ย้อนกลับ</a>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /Card form -->
+                                <?php print_r($plant);?>
                             </div>
+
+                            <?php
+                                //Case data not found
+                                }else{
+                                    include("../include/components/card-dataNotFound.php");
+                                }
+                            ?>
                         </div>
                         <!-- /Content -->
 

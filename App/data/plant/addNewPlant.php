@@ -15,7 +15,7 @@
         exit();
     }
 
-    //Set parameter
+    //Set variables
     $plantID = uniqid("P-").rand(100,999);
     $userID = $_POST['userID'];
     $plantName = $_POST['plantName'] ?? '';

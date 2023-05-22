@@ -15,7 +15,7 @@
         exit();
     }
 
-    //Set parameter
+    //Set variables
     $plantID = $_GET["plantID"] ?? '';
 
     //2) Check for required parameter

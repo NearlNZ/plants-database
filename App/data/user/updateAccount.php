@@ -6,7 +6,7 @@
     //Account permission check ("all member" permission)
     require_once("../../include/scripts/admin-permission-check.php");
 
-    //Set parameter
+    //Set variables
     $userID = $_POST['userID'] ?? '';
     $userFname = $_POST['userFname'] ?? '';
     $userLname = $_POST['userLname'] ?? '';

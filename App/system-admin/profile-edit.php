@@ -82,7 +82,7 @@
                                         <hr class="my-0">
 
                                         <div class="card-body">
-                                            <form id="formUpdateProfile" method="post" action="../data/user/updateOwnerAccount">
+                                            <form id="formUpdateProfile" method="post" action="../data/user/owner-updateAccount">
                                                 <div class="row g-3">
                                                     <input type="hidden" name="userID" value="<?php echo $currentUser->userID; ?>">
                                                     <input type="file" id="userProfile" class="d-none" name="userProfile" accept=".jpg,.jpeg,.png">
@@ -124,7 +124,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-6 order-md-0 order-1">
-                                                    <form id="formResetPassword" method="post" action="../data/user/resetOwnerPassword">
+                                                    <form id="formResetPassword" method="post" action="../data/user/owner-resetPassword">
                                                         <input type="hidden" name="userID" value="<?php echo $currentUser->userID; ?>">
                                                         <div class="row g-3">
                                                             <div class="col-12">
@@ -182,7 +182,7 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <form id="formDeleteAccount" method="post" action="../data/user/deleteOwnerAccount">
+                                            <form id="formDeleteAccount" method="post" action="../data/user/owner-deleteAccount">
                                                 <input type="hidden" name="userID" value="<?php echo $currentUser->userID; ?>">
                                                 <div class="form-check mb-3">
                                                     <input class="form-check-input border-secondary" type="checkbox" name="confirmDelete" id="confirmDelete" required>

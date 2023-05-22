@@ -15,7 +15,7 @@
         exit();
     }
 
-    //Set parameter
+    //Set variables
     $plantID = $_POST['plantID'] ?? '';
     $plantName = $_POST['plantName'] ?? '';
     $tagID = !empty($_POST['tagID']) ? $_POST['tagID'] : Null;

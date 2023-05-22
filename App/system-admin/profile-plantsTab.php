@@ -40,7 +40,7 @@
                     </td>    
                     <td>
                         <span class="d-inline-block w-50">
-                            <i class="fa-solid fa-eye text-primary me-1"></i>
+                            <i class="fa-solid fa-eye text-secondary me-1"></i>
                             <?php echo number_format($plant["plantView"]); ?>
                         </span>
                         <span class="d-inline-block ms-2">

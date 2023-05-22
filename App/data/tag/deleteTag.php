@@ -6,7 +6,7 @@
     //Account permission check ("all member" permission)
     require_once("../../include/scripts/member-permission-check.php");
 
-    //Set parameter
+    //Set variables
     $tagID = $_GET["tagID"] ?? '';
 
     //==============================================================================

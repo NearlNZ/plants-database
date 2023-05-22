@@ -6,8 +6,9 @@
     //Account permission check ("all member" permission)
     require_once("../../include/scripts/member-permission-check.php");
 
-    //Set parameter
+    //Set variables
     $userID = $_POST['userID'] ?? '';
+    $currentUser = $_SESSION['CSP-session-userID'];
     $userFname = $_POST['userFname'] ?? '';
     $userLname = $_POST['userLname'] ?? '';
     $userCurrentProfile = $_POST['userCurrentProfile'] ?? 'default-avatar.png';
@@ -50,7 +51,18 @@
     }
     $user = $userResult->fetch_assoc();
 
-    //3) Try to upload new profile if not "default-avatar.png"
+    //3) Check account owner
+    if ($user["userID"] != $currentUser) {
+        $response->status = "warning";
+        $response->title = "ไม่สามารถดำเนินการได้";
+        $response->text = "ไม่สามารถลบบัญชีผู้ใช้ของสมาชิกอื่นได้";
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $database->close();
+        exit();
+    }
+
+    //4) Try to upload new profile if not "default-avatar.png"
     if($userProfile != 'default-avatar.png' && $userProfile != $userCurrentProfile){
         $uploaddir = '../../assets/img/avatars/';
 
@@ -74,7 +86,7 @@
         }
     }
 
-    //4) Try to delete old profile image if user upload new
+    //5) Try to delete old profile image if user upload new
     if($user["userProfile"] != "default-avatar.png" && $userProfile != $userCurrentProfile){
         $imgPath = "../../assets/img/avatars/";
         $img = $imgPath.$user["userProfile"];

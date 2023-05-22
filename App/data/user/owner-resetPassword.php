@@ -3,16 +3,19 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //Account permission check ("only admin" permission)
+    //Account permission check ("all member" permission)
     require_once("../../include/scripts/member-permission-check.php");
 
-    //Set parameter
+    //Set variables
     $userID = $_POST['userID'] ?? '';
+    $currentUser = $_SESSION['CSP-session-userID'];
+    $currentPassword = $_POST['currentPassword'] ?? '';
+    $newPassword = $_POST['newPassword'] ?? '';
 
     //==============================================================================
 
     //1) Check for required parameter
-    if($userID == ''){
+    if($userID == '' || $currentPassword == '' || $newPassword == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
@@ -22,8 +25,8 @@
         exit();
     }
 
-    //2) Check account existence
-    $sql = "SELECT userID, userProfile, userLevel
+    //2) Check if user exist
+    $sql = "SELECT userID, password
             FROM users
             WHERE userID = ?
             LIMIT 1;";
@@ -32,80 +35,62 @@
     $stmt->prepare($sql);
     $stmt->bind_param('s', $userID);
     $stmt->execute();
-    $userResult = $stmt-> get_result();
+    $userResult = $stmt->get_result();
     $stmt->close();
 
+    $user = $userResult->fetch_assoc();
+    
     if($userResult->num_rows == 0){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'ไม่พบบัญชีผู้ใช้ในระบบ โปรดตรวจสอบอีกครั้ง';
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $database->close();
+        exit();
+    };
+
+    //3) Check account owner
+    if ($user["userID"] != $currentUser) {
+        $response->status = "warning";
+        $response->title = "ไม่สามารถดำเนินการได้";
+        $response->text = "ไม่สามารถรีเซ็ตรหัสผ่านของสมาชิกอื่นได้";
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $database->close();
+        exit();
+    }
+
+    //4) Check password correction
+    if(!password_verify($currentPassword, $user['password'])){
+        $response->status = 'warning';
+        $response->title = 'เกิดข้อผิดพลาด';
+        $response->text = 'รหัสผ่านปัจจุบันไม่ถูกต้อง โปรดตรวจสอบอีกครั้ง';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
         exit();
     }
 
-    $user = $userResult->fetch_assoc();
-
-    //3) Check account owner
-    if ($user["userID"] != $userID) {
-        $response->status = "warning";
-        $response->title = "ไม่สามารถดำเนินการได้";
-        $response->text = "ไม่สามารถลบบัญชีผู้ใช้ของสมาชิกอื่นได้";
-
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $database->close();
-        exit();
-    }
-
-    //4) Check minimum admin account if delete admin account
-    if($user["userLevel"] == "ผู้ดูแลระบบ"){
-        $sql = "SELECT userID
-            FROM users
-            WHERE userID <> ? AND userLevel = 'ผู้ดูแลระบบ';";
-
-        $stmt =  $database->stmt_init(); 
-        $stmt->prepare($sql);
-        $stmt->bind_param('s', $userID);
-        $stmt->execute();
-        $adminResult = $stmt-> get_result();
-        $stmt->close();
-
-        if($adminResult->num_rows < 1){
-            $response->status = 'warning';
-            $response->title = 'เกิดข้อผิดพลาด';
-            $response->text = 'ไม่สามารถลบบัญชีผู้ใช้ได้ จำเป็นต้องมีบัญชีสำหรับผู้ดูแลระบบอย่างน้อย 1 บัญชี';
-            
-            echo json_encode($response, JSON_UNESCAPED_UNICODE);
-            $database->close();
-            exit();
-        }
-    }
-
-    //5) Delete account profile image if not "default-avatar.png"
-    if($user["userProfile"] != "default-avatar.png"){
-        $imgPath = "../../assets/img/avatars/";
-        $img = $imgPath.$user["userProfile"];
-        unlink($img);
-    }
-
     //==============================================================================
 
-    //Pass) Delete account
-    $sql = "DELETE
-            FROM users
-            WHERE userID = ?;";
+    //Pass) Update password
+    $hashPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    $sql = "UPDATE users 
+            SET password = ?
+            WHERE userID = ?";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $userID);
+    $stmt->bind_param('ss', $hashPassword, $userID);
 
     if($stmt->execute()){
         $stmt->close();
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'ลบบัญชีผู้สำเร็จแล้ว กำลังออกจากระบบ';
+        $response->text = 'บันทึกรหัสใหม่แล้ว จะมีผลในการเข้าสู่ระบบครั้งถัดไป';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

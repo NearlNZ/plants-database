@@ -3,7 +3,7 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //Set parameter
+    //Set variables
     $userID = uniqid("U-").rand(100,999);
     $userFname = $_POST['userFname'] ?? '';
     $userLname = $_POST['userLname'] ?? '';

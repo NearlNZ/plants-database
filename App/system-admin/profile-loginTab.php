@@ -18,32 +18,19 @@
         <tbody class="border-top">
             <?php
                 if ($loginResult->num_rows > 0) {
+                    $iconClass = array(
+                        "คอมพิวเตอร์" => ["color" => "success", "icon" => "fa-solid fa-laptop"],
+                        "สมาร์ทโฟน" => ["color" => "warning", "icon" => "fa-solid fa-mobile-screen-button"],
+                        "แท็บเล็ต" => ["color" => "info", "icon" => "fa-solid fa-tablet-screen-button"],
+                        "อุปกรณ์ที่ไม่รู้จัก" => ["color" => "secondary", "icon" => "fa-solid fa-question"]
+                    );
                     while ($record = $loginResult->fetch_assoc()) {
-                        $device = $record["logDevice"];
-                        $colorClass = "secondary";
-                        $iconClass = "fa-solid fa-question";
-
-                        if($device == "คอมพิวเตอร์"){
-                            $colorClass = "warning";
-                            $iconClass = "fa-solid fa-laptop";
-                        }
-                        else if($device == "สมาร์ทโฟน"){
-                            $colorClass = "info";
-                            $iconClass = "fa-solid fa-mobile-screen-button";
-                        }
-                        else if($device == "แท็บเล็ต"){
-                            $colorClass = "success";
-                            $iconClass = "fa-solid fa-tablet-screen-button";
-                        }
+                        $device = $record["logDevice"];    
             ?>
 
                 <tr>
-                    <td width="40px">
-                        <div class="d-flex justify-content-start align-items-center">
-                            <div class="icon-circle bg-label-<?php echo $colorClass; ?>">
-                                <i class="<?php echo $iconClass; ?> fa-xl"></i>
-                            </div>
-                        </div>
+                    <td class="text-center" width="40px">
+                        <i class="<?php echo $iconClass[$device]["icon"].' text-'.$iconClass[$device]["color"]; ?> fa-lg"></i>
                     </td>
                     <td>
                         <span class="text-truncate">

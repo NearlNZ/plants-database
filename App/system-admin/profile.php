@@ -315,13 +315,13 @@
                                         </ul>
                                         <div class="tab-content h-100">
                                             <div class="tab-pane fade show active" id="card-pills-favorite" role="tabpanel">
-                                                <?php include_once("profile-pills-favorite.php");?>
+                                                <?php include_once("profile-favoriteTab.php");?>
                                             </div>
                                             <div class="tab-pane fade" id="card-pills-plants" role="tabpanel">
-                                                <?php include_once("profile-pills-plants.php");?>
+                                                <?php include_once("profile-plantsTab.php");?>
                                             </div>
                                             <div class="tab-pane fade" id="card-pills-login" role="tabpanel">
-                                                <?php include_once("profile-pills-login.php");?>
+                                                <?php include_once("profile-loginTab.php");?>
                                             </div>
                                         </div>
                                     </div>

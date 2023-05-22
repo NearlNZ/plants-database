@@ -15,7 +15,7 @@
         exit();
     }
 
-    //Set parameter
+    //Set variables
     $plantID = $_POST['plantID'] ?? '';
     $plantImg = $_POST['plantImg'] ?? null;
 

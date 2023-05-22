@@ -6,11 +6,11 @@
     //Account permission check ("all member" permission)
     require_once("../../include/scripts/member-permission-check.php");
 
-    //Set parameter
+    //Set variables
     $tagID = uniqid("T-").rand(100,999);
     $tagAdd = date('Y-m-d H:i:s');
     $tagName = $_POST['tagName'] ?? '';
-    $userID = $_POST['userID'] ?? '';
+    $currentUser = $_SESSION['CSP-session-userID'] ?? '';
 
     //==============================================================================
 
@@ -55,7 +55,7 @@
     
     $stmt = $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssss', $tagID, $userID, $tagName, $tagAdd);
+    $stmt->bind_param('ssss', $tagID, $currentUser, $tagName, $tagAdd);
 
     if($stmt->execute()){
         $stmt->close();

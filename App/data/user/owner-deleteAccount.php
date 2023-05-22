@@ -4,10 +4,11 @@
     require_once("../database.php");
 
     //Account permission check ("only admin" permission)
-    require_once("../../include/scripts/admin-permission-check.php");
+    require_once("../../include/scripts/member-permission-check.php");
 
     //Set variables
-    $userID = $_GET['userID'] ?? '';
+    $userID = $_POST['userID'] ?? '';
+    $currentUser = $_SESSION['CSP-session-userID'];
 
     //==============================================================================
 
@@ -44,9 +45,21 @@
         $database->close();
         exit();
     }
+
     $user = $userResult->fetch_assoc();
 
-    //3) Check minimum admin account if delete admin account
+    //3) Check account owner
+    if ($user["userID"] != $currentUser) {
+        $response->status = "warning";
+        $response->title = "ไม่สามารถดำเนินการได้";
+        $response->text = "ไม่สามารถลบบัญชีผู้ใช้ของสมาชิกอื่นได้";
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $database->close();
+        exit();
+    }
+
+    //4) Check minimum admin account if delete admin account
     if($user["userLevel"] == "ผู้ดูแลระบบ"){
         $sql = "SELECT userID
             FROM users
@@ -70,7 +83,7 @@
         }
     }
 
-    //4) Delete account profile image if not "default-avatar.png"
+    //5) Delete account profile image if not "default-avatar.png"
     if($user["userProfile"] != "default-avatar.png"){
         $imgPath = "../../assets/img/avatars/";
         $img = $imgPath.$user["userProfile"];
@@ -93,7 +106,7 @@
 
         $response->status = 'success';
         $response->title = 'ดำเนินการสำเร็จ';
-        $response->text = 'ลบบัญชีผู้ใช้ที่เลือกสำเร็จแล้ว';
+        $response->text = 'ลบบัญชีผู้สำเร็จแล้ว กำลังออกจากระบบ';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{

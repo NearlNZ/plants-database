@@ -39,7 +39,7 @@
                     </td> 
                     <td>
                         <span class="d-inline-block w-50">
-                            <i class="fa-solid fa-eye text-primary me-1"></i>
+                            <i class="fa-solid fa-eye text-secondary me-1"></i>
                             <?php echo number_format($plant["plantView"]); ?>
                         </span>
                         <span class="d-inline-block ms-2">
@@ -58,7 +58,7 @@
                             </a>
 
                             <?php if($userID == $currentUser->userID){ ?>
-                            <a class="dropdown-item deleteBtn" href="../data/plant/removeFavorite?plantID=<?php echo $plant['plantID'];?>">
+                            <a class="dropdown-item deleteBtn" href="../data/plant/updateFavoritePlant?plantID=<?php echo $plant['plantID'];?>">
                                 <i class="bx bx-x me-1"></i>
                                 ยกเลิกรายการโปรด
                             </a>
@@ -80,3 +80,37 @@
         </tbody>
     </table>
 </div>
+<script>
+    //Delete record
+    $('.deleteBtn').click(function(){
+        event.preventDefault();
+        let url = $(this).attr('href');
+                
+        showConfirm({
+            icon: 'question',
+            text: 'ต้องการนำรายการที่เลือกออกหรือไม่',
+            confirmButtonText: 'ดำเนินการต่อ',
+            confirmCallback: function(){
+                ajaxRequest({
+                    type: 'GET',
+                    url: url,
+                    successCallback: function(response){
+                        if(response.status == "success"){
+                            showResponse({
+                                response: response,
+                                timer: 2000,
+                                callback: function(){
+                                    window.location.reload();
+                                }
+                            });
+                        }else{
+                            showResponse({
+                                response: response
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
