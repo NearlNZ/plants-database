@@ -19,7 +19,7 @@
         <script src="assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
+        <link rel="stylesheet" href="assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
@@ -97,10 +97,10 @@
                                                             <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                                         </div>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary btn-block btn-lg shadow mb-2">
+                                                    <button type="submit" class="btn btn-primary btn-block rounded-pill btn-lg shadow mb-2">
                                                         <span class="h6 text-light">เข้าสู่ระบบ</span>
                                                     </button>
-                                                    <a href="register" class="btn btn-success btn-block btn-lg shadow mb-3">
+                                                    <a href="register" class="btn btn-success btn-block rounded-pill btn-lg shadow mb-3">
                                                         <span class="h6 text-light">ลงทะเบียนสมาชิก</span>
                                                     </a>
                                                     <div class="text-center">

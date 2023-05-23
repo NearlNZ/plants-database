@@ -2,7 +2,7 @@
     //Include database connection
     require_once("../data/database.php");
 
-    //include permission check
+    //Include admin account check
     require_once('../include/scripts/admin-header.php');
 ?>
 
@@ -26,7 +26,7 @@
         <script src="../assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="../assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
+        <link rel="stylesheet" href="../assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
@@ -98,13 +98,14 @@
 
                                 $tag = selectTagData($database, $tagID);
                                 if($tag != false){
+                                //Case data exist
                             ?>
 
                             <div class="row g-3">
                                 <!-- Card form -->
                                 <div class="col-12">
                                     <div class="card mb-4">
-                                        <h5 class="card-header">
+                                        <h5 class="card-body py-3 mb-0 border-bottom">
                                             <i class="fa-solid fa-tags me-1"></i>
                                             แก้ไขข้อมูลหมวดหมู่
                                         </h5>
@@ -115,7 +116,7 @@
                                                         ชื่อหมวดหมู่
                                                         <input type="hidden" name="tagID" value="<?php echo $tag['tagID']; ?>">
                                                         <div class="input-group input-group-merge">
-                                                            <span class="input-group-text"><i class="fa-solid fa-tag"></i></span>
+                                                            <span class="input-group-text"><i class="fa-regular fa-message"></i></span>
                                                             <input type="text" name="tagName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" maxlength="50" autofocus autocomplete="off" required
                                                             value="<?php echo $tag['tagName']; ?>">
                                                         </div>
@@ -123,7 +124,7 @@
                                                 </div>
                                                 <div class="mt-3">
                                                     <button type="submit" class="btn btn-primary me-2">บันทึกข้อมูล</button>
-                                                    <a href="tag-manage" class="btn btn-label-secondary">ย้อนกลับ</a>
+                                                    <a href="#" onclick="goBack()" class="btn btn-label-secondary">ย้อนกลับ</a>
                                                 </div>
                                             </form>
                                         </div>
@@ -133,33 +134,9 @@
                             </div>
 
                             <?php
+                                //Case data not found
                                 }else{
-                            ?>
-
-                            <div class="row g-4 h-100">
-                                <!-- Card Not found -->
-                                <div class="col-12">
-                                    <div class="card h-100">
-                                        <div class="card-body justify-content-center align-items-center d-flex">
-                                            <div class="text-center">
-                                                <img class="img-fluid" width="480px" src="../assets/img/page/data-not-found.png" alt="data not found"/>
-                                                <p class="h2 mt-2 fw-bold" style="color: #6749F1;">
-                                                    ไม่พบข้อมูลในระบบ
-                                                </p>
-                                                <p class="h5 mt-0">
-                                                    โปรดตรวจสอบความถูกต้องแล้วลองอีกครั้ง
-                                                </p>
-                                                <a href="tag-manage" class="btn btn-primary mt-2">
-                                                    ย้อนกลับ
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /Card Not found -->
-                            </div>
-
-                            <?php
+                                    include("../include/components/card-dataNotFound.php");
                                 }
                             ?>
                         </div>

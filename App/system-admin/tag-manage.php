@@ -27,13 +27,13 @@
 
         <!-- Vendors CSS -->
         <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
-        <link rel="stylesheet" href="../assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
+        <link rel="stylesheet" href="../assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
-        <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+        <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- Page Style -->
@@ -134,7 +134,7 @@
                             
                             <!-- Data card -->
                             <div class="card mt-3">
-                                <div class="card-header mb-0">
+                                <div class="card-body py-3">
                                     <!-- Action -->
                                     <div class="row g-2">
                                         <a class="btn btn-success col-12 col-lg-auto shadow-sm me-2" href="tag-add">
@@ -170,7 +170,8 @@
                                                             <?php echo date("j/n/Y", strtotime($tag["tagAdd"])); ?>
                                                         </span>
                                                         <small class="text-muted">
-                                                            <?php echo !empty($tag["userFname"]) ? "เพิ่มโดย ".$tag["userFname"]." ".$tag["userLname"] : ""; ?>
+                                                            เพิ่มโดย 
+                                                            <?php echo !empty($tag["userFname"]) ? $tag["userFname"]." ".$tag["userLname"] : "(บัญชีที่ถูกลบ)"; ?>
                                                         </small>
                                                     </div>
                                                 </td>

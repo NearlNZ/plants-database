@@ -3,29 +3,26 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //1) Exit if user not verified.
-    session_start();
-    if (!isset($_SESSION['CSP-session-userID'])) {
-        echo "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
-        $database->close();
-        exit();
-    }
+    //Account permission check ("all member" permission)
+    require_once("../../include/scripts/member-permission-check.php");
 
-    //Set parameter
+    //Set variables
     $tagID = $_GET["tagID"] ?? '';
 
-    //2) Check for required parameter
+    //==============================================================================
+
+    //1) Check for required parameter
     if($tagID == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
         exit();
     }
 
-    //3) Check if this cate not exist
+    //2) Check tag existence
     $sql = "SELECT tagID
             FROM tags
             WHERE tagID = ?";
@@ -46,6 +43,8 @@
         $database->close();
         exit();
     }
+
+    //==============================================================================
 
     //Pass) Delete category
     $sql = "DELETE

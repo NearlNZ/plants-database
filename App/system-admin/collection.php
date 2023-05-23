@@ -11,7 +11,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>รายการพืช</title>
+        <title>คอลเล็คชั่นพืช</title>
         <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
@@ -61,12 +61,12 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a class="active">รายการพืช</a>
+                                        <a class="active">คอลเล็คชั่นพืช</a>
                                     </li>
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">plant-manage</span>
+                            <span class="active-menu-url">collection</span>
                             <!-- /Breadcrumb & Active menu-->
 
                             <!-- Search card -->
@@ -122,14 +122,17 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  P.plantID, P.plantName, P.plantView, P.plantRegist, U.userFname, U.userLname,
-                                                (SELECT COUNT(favID) FROM favorite_plants WHERE plantID = P.plantID) AS favoriteCount, 
-                                                (SELECT COUNT(imgID) FROM plant_images WHERE plantID = P.plantID) AS imgCount
-                                        FROM    plants P 
+                                $userID = $currentUser->userID;
+                                $sql = "SELECT  P.plantID, P.plantName, P.plantView,
+                                                FP.favID AS currentUserFavorite,
+                                                (SELECT COUNT(favID) FROM favorite_plants WHERE plantID = P.plantID) AS favoriteCount,
+                                                (SELECT COUNT(imgID) FROM plant_images WHERE plantID = P.plantID) AS imgCount,
+                                                (SELECT imgPath FROM plant_images WHERE plantID = P.plantID ORDER BY imgUpload LIMIT 1) AS coverImage
+                                        FROM    plants P
                                                 LEFT JOIN tag_lists TL ON P.plantID = TL.PlantID
                                                 LEFT JOIN plant_images PI ON P.plantID = PI.plantID
                                                 LEFT JOIN users U ON P.userID = U.userID
-                                                LEFT JOIN favorite_plants FP ON P.plantID = FP.plantID
+                                                LEFT JOIN favorite_plants FP ON P.plantID = FP.plantID AND FP.userID = '$userID'
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -152,11 +155,10 @@
                                     }
                                 }
                                 
-                                $sql.= "GROUP BY plantID
-                                        ORDER BY plantRegist DESC, plantName;";
+                                $sql.= "GROUP BY P.plantID
+                                        ORDER BY P.plantRegist DESC, P.plantName;";
 
                                 $stmt = $database->prepare($sql);
-                                
                                 if (!empty($filter)){ 
                                     $stmt->bind_param($filterDatatype, ...$filter);
                                 }
@@ -166,102 +168,83 @@
                                 $stmt->close();
 
                                 $resultCount = $plantResult->num_rows;
+                                if($resultCount > 0){
                             ?>
                             
-                            <!-- Data card -->
-                            <div class="card mt-3">
-                                <div class="card-body py-3">
-                                    <!-- Action -->
-                                    <div class="row g-2">
-                                        <a class="btn btn-success col-12 col-lg-auto shadow-sm me-2" href="plant-add">
-                                            <i class="fa-solid fa-plus me-2"></i>
-                                            เพิ่มข้อมูล
-                                        </a>
+                            <!-- Collection card container -->
+                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 mt-2 g-3">
+                                <?php 
+                                    while($plant = $plantResult->fetch_assoc()){
+                                        $plantImage = !empty($plant["coverImage"]) ? $plant["coverImage"] : "default-plant.png";
+                                        $favoriteColorClass = !empty($plant['currentUserFavorite']) ? 'text-danger' : 'text-light';
+                                        $isFavorite = !empty($plant['currentUserFavorite']) ? 'true' : 'false';
+                                ?>
+
+                                <!-- Collection card -->
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <div class="img-container-3by2">
+                                            <img class="card-img-top fit-cover" alt="<?php echo $plant["plantName"]; ?>"
+                                            src="../assets/img/plantImgs/<?php echo $plantImage; ?>" />
+
+                                            <div class="card-img-overlay text-end">
+                                                <a href="../data/plant/updateFavoritePlant?plantID=<?php echo $plant["plantID"]; ?>" 
+                                                class="btn btn-light btn-icon rounded-pill favorite-button <?php echo $favoriteColorClass; ?>">      
+                                                    <i class="fa-solid fa-heart fa-lg"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <h5 class="card-title text-center fw-semibold">
+                                                <?php echo $plant["plantName"]; ?>
+                                            </h5>
+                                            <div class="row text-center my-3 py-2 py-lg-0">
+                                                <div class="col-4 text-primary">
+                                                    <h5 class="mb-1"><?php echo number_format($plant['imgCount']); ?></h5>
+                                                    <i class="fa-solid fa-image"></i>
+                                                </div>
+                                                <div class="col-4 text-secondary">
+                                                    <h5 class="mb-1"><?php echo number_format($plant['plantView']); ?></h5>
+                                                    <i class="fa-solid fa-eye "></i>
+                                                </div>
+                                                <div class="col-4 text-danger">
+                                                    <h5 class="favorite-count mb-1"><?php echo number_format($plant['favoriteCount']); ?></h5>
+                                                    <i class="fa-solid fa-heart"></i>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <a href="plant-view?plantID=<?php echo $plant["plantID"]; ?>" 
+                                                class="btn btn-label-primary rounded-pill w-100">
+                                                    <i class="fa-solid fa-seedling me-1"></i>
+                                                    ดูข้อมูลพืช
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- /Action -->
                                 </div>
-                                <div id="dataTable" class="table-responsive">
-                                    <table class="table table-hover card-table table-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>ลำดับที่</th>
-                                                <th>ชื่อพืช</th>
-                                                <th>วันที่ลงทะเบียน</th>
-                                                <th>สถิติผู้เข้าชม</th>
-                                                <th>คลังภาพ</th>
-                                                <th class="text-center" width="150px">จัดการข้อมูล</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                <!-- /Collection card -->
 
-                                        <?php 
-                                            if($resultCount > 0){ $plantIndex = 1; while($plant = $plantResult->fetch_assoc()){
-                                        ?>
+                                <?php } ?>
+                            </div>
 
-                                            <tr>
-                                                <td><?php echo number_format($plantIndex); ?></td>
-                                                <td><?php echo $plant["plantName"]; ?></td>
-                                                <td>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="d-block">
-                                                            <?php echo date("j/n/Y", strtotime($plant["plantRegist"])); ?>
-                                                        </span>
-                                                        <small class="text-muted">
-                                                            เพิ่มโดย 
-                                                            <?php echo !empty($plant["userFname"]) ? $plant["userFname"]." ".$plant["userLname"] : "(บัญชีที่ถูกลบ)"; ?>
-                                                        </small>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="d-inline-block w-50">
-                                                        <i class="fa-solid fa-eye text-secondary me-1"></i>
-                                                        <?php echo number_format($plant["plantView"]); ?>
-                                                    </span>
-                                                    <span class="d-inline-block w-50">
-                                                        <i class="fa-solid fa-heart text-danger me-1"></i>
-                                                        <?php echo number_format($plant["favoriteCount"]); ?>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <?php echo number_format($plant["imgCount"]); ?> ภาพ
-                                                </td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                                    </button>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="plant-view?plantID=<?php echo $plant['plantID'];?>">
-                                                            <i class="bx bx-show-alt me-1"></i>
-                                                            ดูข้อมูล
-                                                        </a>
-                                                        <a class="dropdown-item" href="plant-edit?plantID=<?php echo $plant['plantID'];?>">
-                                                            <i class="bx bx-edit-alt me-1"></i>
-                                                            แก้ไขข้อมูล
-                                                        </a>
-                                                        <a class="dropdown-item deleteBtn" href="../data/plant/deletePlant?plantID=<?php echo $plant['plantID'];?>">
-                                                            <i class="bx bx-trash me-1"></i>
-                                                            ลบข้อมูล
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        
-                                        <?php $plantIndex++;} }else{ ?>
-
-                                            <tr>
-                                                <td class="text-center text-muted py-3" colspan="6">
-                                                    --- ไม่พบข้อมูลสำหรับแสดงผล ---
-                                                </td>
-                                            </tr>
-
-                                        <?php } ?>
-                                            
-                                        </tbody>
-                                    </table>
+                            <?php }else{ ?>
+                            <div class="row mt-2 g-3">
+                                <div class="col-12">
+                                        <div class="card h-100">
+                                            <div class="card-body justify-content-center align-items-center d-flex">
+                                                <div class="text-center py-5">
+                                                    <img class="img-fluid mt-3" width="520px" src="../assets/img/page/plant-not-found.jpg" alt="data not found" />
+                                                    <p class="h3 mt-3 fw-bold text-success">
+                                                        ไม่พบข้อมูลพืชสำหรับแสดงผล
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- /Data card -->
-
+                            <?php } ?>
+                            <!-- /Collection card container -->
                         </div>
                         <!-- /Content -->
 
@@ -298,35 +281,34 @@
                 });
             });
 
-            //Delete record
-            $('.deleteBtn').click(function(){
+            //Control favorite button
+            $('.favorite-button').on('click', function(event) {
                 event.preventDefault();
-                let url = $(this).attr('href');
-                
-                showConfirm({
-                    icon: 'question',
-                    text: 'ต้องการลบข้อมูลที่เลือกหรือไม่',
-                    confirmButtonText: 'ดำเนินการต่อ',
-                    confirmCallback: function(){
-                        ajaxRequest({
-                            type: 'GET',
-                            url: url,
-                            successCallback: function(response){
-                                if(response.status == "success"){
-                                    showResponse({
-                                        response: response,
-                                        timer: 2000,
-                                        callback: function(){
-                                            window.location.reload();
-                                        }
-                                    });
-                                }else{
-                                    showResponse({
-                                        response: response
-                                    });
-                                }
+                let button = $(this);
+                let url = button.attr('href');
+
+                ajaxRequest({
+                    type: 'GET',
+                    url: url,
+                    successCallback: function(response){
+                        if(response.status == "success"){
+                            let isFavorite = response.isFavorite;
+                            let favoriteCount = response.favoriteCount;
+                            let parentCard = button.closest('.card');
+                            let favoriteCountElement = parentCard.find('.favorite-count');
+
+                            if (isFavorite === true) {
+                                button.removeClass('text-light').addClass('text-danger');
+                            } else {
+                                button.removeClass('text-danger').addClass('text-light');
                             }
-                        });
+
+                            favoriteCountElement.text(favoriteCount);
+                        }else{
+                            showResponse({
+                                response: response
+                            });
+                        }
                     }
                 });
             });

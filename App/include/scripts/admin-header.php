@@ -5,17 +5,17 @@
     $userLevel = $_SESSION['CSP-session-userLevel'] ?? null;
 
     if($userID == null){
-        header("Location: ../login.php");
+        header("Location: ../logout.php");
         exit();
     }
 
     if($userLevel == null || $userLevel != "ผู้ดูแลระบบ"){
-        header("Location: ../login.php");
+        header("Location: ../logout.php");
         exit();
     }
     
     //Get account data
-    $sql = "SELECT userID, userFname, userLname, userProfile, username, userLevel, userRegist, userStatus, userLastLogin
+    $sql = "SELECT userID, userFname, userLname, userProfile, username, userLevel, userRegist, userStatus
             FROM users
             WHERE userID = ?;";
     
@@ -27,10 +27,16 @@
 
     //Check account exist
     if($result->num_rows == 0){
-        header("Location: ../login.php");
+        header("Location: ../logout.php");
         exit();
     }
 
     //Create user account object
-    $user = (object) $result->fetch_assoc();
+    $currentUser = (object) $result->fetch_assoc();
+
+    //Check account suspended
+    if($currentUser->userStatus == "บัญชีถูกระงับ"){
+        header("Location: ../logout.php");
+        exit();
+    }
 ?>

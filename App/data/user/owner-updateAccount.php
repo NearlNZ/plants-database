@@ -4,21 +4,20 @@
     require_once("../database.php");
 
     //Account permission check ("all member" permission)
-    require_once("../../include/scripts/admin-permission-check.php");
+    require_once("../../include/scripts/member-permission-check.php");
 
     //Set variables
     $userID = $_POST['userID'] ?? '';
+    $currentUser = $_SESSION['CSP-session-userID'];
     $userFname = $_POST['userFname'] ?? '';
     $userLname = $_POST['userLname'] ?? '';
-    $userLevel = $_POST['userLevel'] ?? '';
-    $userStatus = $_POST['userStatus'] ?? '';
     $userCurrentProfile = $_POST['userCurrentProfile'] ?? 'default-avatar.png';
     $userProfile = (!empty($_FILES['userProfile']['tmp_name'])) ? $_FILES['userProfile'] : $userCurrentProfile;
 
     //==============================================================================
     
     //1) Check for required parameter
-    if($userID == "" || $userFname == "" || $userLname == "" || $userLevel == "" || $userStatus == ""){
+    if($userID == "" || $userFname == "" || $userLname == ""){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
@@ -52,7 +51,18 @@
     }
     $user = $userResult->fetch_assoc();
 
-    //3) Try to upload new profile if not "default-avatar.png"
+    //3) Check account owner
+    if ($user["userID"] != $currentUser) {
+        $response->status = "warning";
+        $response->title = "ไม่สามารถดำเนินการได้";
+        $response->text = "ไม่สามารถลบบัญชีผู้ใช้ของสมาชิกอื่นได้";
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $database->close();
+        exit();
+    }
+
+    //4) Try to upload new profile if not "default-avatar.png"
     if($userProfile != 'default-avatar.png' && $userProfile != $userCurrentProfile){
         $uploaddir = '../../assets/img/avatars/';
 
@@ -76,7 +86,7 @@
         }
     }
 
-    //4) Try to delete old profile image if user upload new
+    //5) Try to delete old profile image if user upload new
     if($user["userProfile"] != "default-avatar.png" && $userProfile != $userCurrentProfile){
         $imgPath = "../../assets/img/avatars/";
         $img = $imgPath.$user["userProfile"];
@@ -87,12 +97,12 @@
 
     //Pass) Update account
     $sql = "UPDATE users
-            SET userFname = ?, userLname = ?, userProfile = ?, userLevel = ?, userStatus = ?
+            SET userFname = ?, userLname = ?, userProfile = ?
             WHERE userID = ?;";
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssssss', $userFname, $userLname, $userProfile, $userLevel, $userStatus, $userID);
+    $stmt->bind_param('ssss', $userFname, $userLname, $userProfile, $userID);
 
     if($stmt->execute()){
         $stmt->close();

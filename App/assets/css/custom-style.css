@@ -14,6 +14,20 @@ body {
     background-color:#222e3c;
 }
 
+.btn-label-danger {
+    color: #ff3e1d;
+    border-color: transparent;
+    background: #ffe0db;
+}
+
+.btn-label-danger:hover {
+    color: #fff;
+    background-color: #e6381a;
+    border-color: transparent;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
+    transform: translateY(-1px);
+}
+
 .btn-label-secondary {
     color: #8592a3;
     border-color: transparent;
@@ -24,6 +38,20 @@ body {
     color: #fff;
     background-color: #788393;
     border-color: #788393;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-label-success {
+    color: #05A047;
+    border-color: transparent;
+    background: #e8fadf;
+}
+
+.btn-label-success:hover {
+    color: #fff;
+    background-color: #05A047;
+    border-color: #05A047;
     box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
     transform: translateY(-1px);
 }
@@ -40,6 +68,22 @@ body {
     color: #fff;
     box-shadow: 0 0.125rem 0.25rem 0 rgba(105,108,255,.4);
     transform: translateY(-1px);
+}
+
+.img-container-3by2 {
+    height: 200px;
+    padding-bottom: 66.67%; 
+    overflow: hidden;
+    position: relative;
+}
+
+.img-container-3by2 img {
+    object-position: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .clickable {
@@ -70,26 +114,19 @@ body {
     object-fit:cover;
 }
 
-.icon-circle-primary {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background-color: #DCEAF4;
-    color: #2E5EDE;
-    border-radius:50%;
-    height:50px;
-    width:50px;
+.full-h {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.icon-circle-success {
+.icon-circle {
     display:flex;
     justify-content:center;
     align-items:center;
-    background-color: #DAFFCE;
-    color: #02BF4A;
     border-radius:50%;
-    height:50px;
-    width:50px;
+    height:40px;
+    width:40px;
 }
 
 .img-cover {
@@ -99,11 +136,8 @@ body {
 	object-fit: cover;
 }
 
-.maxh-200 {
-    max-height: 200px;
-}
-
-.scroll-y {
+.table-scroll-y {
+    max-height: 480px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }

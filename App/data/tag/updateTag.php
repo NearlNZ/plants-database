@@ -3,34 +3,27 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //1) Exit if user not verified.
-    session_start();
-    if (!isset($_SESSION['CSP-session-userID'])) {
-        $response->status = "warning";
-        $response->title = "เกิดข้อผิดพลาด";
-        $response->text = "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
+    //Account permission check ("all member" permission)
+    require_once("../../include/scripts/member-permission-check.php");
 
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $database->close();
-        exit();
-    }
-
-    //Set parameter
+    //Set variables
     $tagID = $_POST["tagID"] ?? '';
     $tagName = $_POST["tagName"] ?? '';
 
-    //2) Check for required parameter
+    //==============================================================================
+
+    //1) Check for required parameter
     if($tagID == '' || $tagName == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
         exit();
     }
 
-    //3) Check if this tagID not exist
+    //2) Check tag existence
     $sql = "SELECT tagID
             FROM tags
             WHERE tagID = ?";
@@ -52,7 +45,7 @@
         exit();
     }
 
-    //4) Check if tagName duplicate
+    //3) Check tagName duplicated
     $sql = "SELECT tagID
             FROM tags
             WHERE tagName = ? AND tagID <> ?;";
@@ -73,6 +66,8 @@
         $database->close();
         exit();
     }
+
+    //==============================================================================
 
     //Pass) Update category
     $sql = "UPDATE tags

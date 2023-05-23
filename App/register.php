@@ -18,7 +18,7 @@
         <script src="assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
+        <link rel="stylesheet" href="assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
@@ -37,8 +37,8 @@
                 <!-- Card form -->
                 <div class="col-12 col-md-8 col-lg-7">
                     <div class="card mb-2">
-                        <h5 class="card-header mb-0">
-                            <i class="fa-solid fa-address-card me-1"></i>
+                        <h5 class="card-body fw-bold border-bottom mb-0 py-3 text-center">
+                            <i class="fa-solid fa-user-large me-1"></i>
                             ลงทะเบียนผู้ใช้ใหม่
                         </h5>
                         <div class="card-body">
@@ -66,14 +66,14 @@
                                     <div class="col-12">
                                         ชื่อ
                                         <div class="input-group input-group-merge">
-                                            <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
+                                            <span class="input-group-text"><i class="fa-regular fa-message"></i></span>
                                             <input type="text" name="userFname" class="form-control" value="" maxlength="50" placeholder="ระบุชื่อ" autofocus autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         นามสกุล
                                         <div class="input-group input-group-merge">
-                                            <span class="input-group-text"><i class="fa-regular fa-comment"></i></span>
+                                            <span class="input-group-text"><i class="fa-regular fa-message"></i></span>
                                             <input type="text" name="userLname" class="form-control" value="" maxlength="50" placeholder="ระบุนามสกุล" autocomplete="off" required>
                                         </div>
                                     </div>

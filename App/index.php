@@ -18,12 +18,10 @@
         <script src="assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="assets/vendor/perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="assets/vendor/fontawesome/js/all.min.js"></script>
-        <script src="assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
 
         <!-- Page Style -->
         <link rel="stylesheet" href="assets/css/custom-style.css"/>

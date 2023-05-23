@@ -3,32 +3,29 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //1) Exit if user not verified.
-    session_start();
-    if (!isset($_SESSION['CSP-session-userID'])) {
-        echo "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
-        $database->close();
-        exit();
-    }
+    //Account permission check ("all member" permission)
+    require_once("../../include/scripts/member-permission-check.php");
 
-    //Set parameter
-    $tagID = uniqid("TAG-").rand(100,999);
-    $tagAdd = date('Y-m-d');
+    //Set variables
+    $tagID = uniqid("T-").rand(100,999);
+    $tagAdd = date('Y-m-d H:i:s');
     $tagName = $_POST['tagName'] ?? '';
-    $userID = $_POST['userID'] ?? '';
+    $currentUser = $_SESSION['CSP-session-userID'] ?? '';
 
-    //2) Check for required parameter
+    //==============================================================================
+
+    //1) Check for required parameter
     if($tagName == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
         exit();
     }
 
-    //3) Check if tagName duplicate
+    //2) Check tagName duplicated
     $sql = "SELECT tagID
             FROM tags
             WHERE tagName = ?;";
@@ -50,13 +47,15 @@
         exit();
     }
 
-    //Pass) Create new category
+    //==============================================================================
+
+    //Pass) Create new tag
     $sql = "INSERT INTO tags (tagID, userID, tagName, tagAdd)
             VALUES(?, ?, ?, ?);";
     
     $stmt = $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssss', $tagID, $userID, $tagName, $tagAdd);
+    $stmt->bind_param('ssss', $tagID, $currentUser, $tagName, $tagAdd);
 
     if($stmt->execute()){
         $stmt->close();

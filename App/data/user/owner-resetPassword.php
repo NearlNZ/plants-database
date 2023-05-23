@@ -4,17 +4,18 @@
     require_once("../database.php");
 
     //Account permission check ("all member" permission)
-    require_once("../../include/scripts/admin-permission-check.php");
+    require_once("../../include/scripts/member-permission-check.php");
 
     //Set variables
     $userID = $_POST['userID'] ?? '';
+    $currentUser = $_SESSION['CSP-session-userID'];
+    $currentPassword = $_POST['currentPassword'] ?? '';
     $newPassword = $_POST['newPassword'] ?? '';
-    $confirmPassword = $_POST['confirmPassword'] ?? '';
 
     //==============================================================================
 
     //1) Check for required parameter
-    if($userID == '' || $newPassword == '' || $confirmPassword == ''){
+    if($userID == '' || $currentPassword == '' || $newPassword == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
@@ -25,7 +26,7 @@
     }
 
     //2) Check if user exist
-    $sql = "SELECT password
+    $sql = "SELECT userID, password
             FROM users
             WHERE userID = ?
             LIMIT 1;";
@@ -34,8 +35,10 @@
     $stmt->prepare($sql);
     $stmt->bind_param('s', $userID);
     $stmt->execute();
-    $userResult = $stmt-> get_result();
+    $userResult = $stmt->get_result();
     $stmt->close();
+
+    $user = $userResult->fetch_assoc();
     
     if($userResult->num_rows == 0){
         $response->status = 'warning';
@@ -47,11 +50,22 @@
         exit();
     };
 
-    //3) Check new password match
-    if($newPassword != $confirmPassword){
+    //3) Check account owner
+    if ($user["userID"] != $currentUser) {
+        $response->status = "warning";
+        $response->title = "ไม่สามารถดำเนินการได้";
+        $response->text = "ไม่สามารถรีเซ็ตรหัสผ่านของสมาชิกอื่นได้";
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        $database->close();
+        exit();
+    }
+
+    //4) Check password correction
+    if(!password_verify($currentPassword, $user['password'])){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'รหัสผ่านไม่ตรงกัน โปรดตรวจสอบอีกครั้ง';
+        $response->text = 'รหัสผ่านปัจจุบันไม่ถูกต้อง โปรดตรวจสอบอีกครั้ง';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();

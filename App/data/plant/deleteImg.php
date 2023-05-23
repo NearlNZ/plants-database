@@ -15,14 +15,14 @@
         exit();
     }
 
-    //Set parameter
+    //Set variables
     $imgID = $_GET["imgID"] ?? '';
 
     //2) Check for required parameter
     if($imgID == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลให้ครบถ้วน';
+        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
         
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         $database->close();
