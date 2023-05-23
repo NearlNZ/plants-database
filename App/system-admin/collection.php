@@ -175,21 +175,25 @@
                             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 mt-2 g-3">
                                 <?php 
                                     while($plant = $plantResult->fetch_assoc()){
-                                        $plantImage = !empty($plant["coverImage"]) ? $plant["coverImage"] : "default-plant.png";
-                                        $favoriteColorClass = !empty($plant['currentUserFavorite']) ? 'text-danger' : 'text-light';
-                                        $isFavorite = !empty($plant['currentUserFavorite']) ? 'true' : 'false';
+                                        $plantID = $plant["plantID"];
+                                        $plantName = $plant["plantName"];
+                                        $plantCoverImage = !empty($plant["coverImage"]) ? $plant["coverImage"] : "default-plant.png";
+                                        $favoriteButtonColor = !empty($plant['currentUserFavorite']) ? 'text-danger' : 'text-light';
+                                        $imageCount = number_format($plant['imgCount']);
+                                        $viewCount = number_format($plant['plantView']);
+                                        $favoriteCount = number_format($plant['favoriteCount']);
                                 ?>
 
                                 <!-- Collection card -->
                                 <div class="col">
                                     <div class="card h-100">
                                         <div class="img-container-3by2">
-                                            <img class="card-img-top fit-cover" alt="<?php echo $plant["plantName"]; ?>"
-                                            src="../assets/img/plantImgs/<?php echo $plantImage; ?>" />
+                                            <img class="card-img-top fit-cover" alt="<?php echo $plantName; ?>"
+                                            src="../assets/img/plantImgs/<?php echo $plantCoverImage; ?>" />
 
                                             <div class="card-img-overlay text-end">
-                                                <a href="../data/plant/updateFavoritePlant?plantID=<?php echo $plant["plantID"]; ?>" 
-                                                class="btn btn-light btn-icon rounded-pill favorite-button <?php echo $favoriteColorClass; ?>">      
+                                                <a href="../data/plant/updateFavoritePlant?plantID=<?php echo $plantID; ?>" 
+                                                class="btn btn-light btn-icon rounded-pill favorite-button <?php echo $favoriteButtonColor; ?>">      
                                                     <i class="fa-solid fa-heart fa-lg"></i>
                                                 </a>
                                             </div>
@@ -200,20 +204,20 @@
                                             </h5>
                                             <div class="row text-center my-3 py-2 py-lg-0">
                                                 <div class="col-4 text-primary">
-                                                    <h5 class="mb-1"><?php echo number_format($plant['imgCount']); ?></h5>
+                                                    <h5 class="mb-1"><?php echo $imageCount; ?></h5>
                                                     <i class="fa-solid fa-image"></i>
                                                 </div>
                                                 <div class="col-4 text-secondary">
-                                                    <h5 class="mb-1"><?php echo number_format($plant['plantView']); ?></h5>
+                                                    <h5 class="mb-1"><?php echo $viewCount; ?></h5>
                                                     <i class="fa-solid fa-eye "></i>
                                                 </div>
                                                 <div class="col-4 text-danger">
-                                                    <h5 class="favorite-count mb-1"><?php echo number_format($plant['favoriteCount']); ?></h5>
+                                                    <h5 class="favorite-count mb-1"><?php echo $favoriteCount; ?></h5>
                                                     <i class="fa-solid fa-heart"></i>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-center">
-                                                <a href="plant-view?plantID=<?php echo $plant["plantID"]; ?>" 
+                                                <a href="plant-view?plantID=<?php echo $plantID; ?>" 
                                                 class="btn btn-label-primary rounded-pill w-100">
                                                     <i class="fa-solid fa-seedling me-1"></i>
                                                     ดูข้อมูลพืช
