@@ -7,7 +7,6 @@
     require_once("../../include/scripts/member-permission-check.php");
 
     //Set variables
-    $userID = $_POST['userID'] ?? '';
     $currentUser = $_SESSION['CSP-session-userID'];
     $userFname = $_POST['userFname'] ?? '';
     $userLname = $_POST['userLname'] ?? '';
@@ -17,7 +16,7 @@
     //==============================================================================
     
     //1) Check for required parameter
-    if($userID == "" || $userFname == "" || $userLname == ""){
+    if($userFname == "" || $userLname == ""){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
         $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
@@ -35,7 +34,7 @@
 
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $userID);
+    $stmt->bind_param('s', $currentUser);
     $stmt->execute();
     $userResult = $stmt-> get_result();
     $stmt->close();
@@ -51,18 +50,7 @@
     }
     $user = $userResult->fetch_assoc();
 
-    //3) Check account owner
-    if ($user["userID"] != $currentUser) {
-        $response->status = "warning";
-        $response->title = "ไม่สามารถดำเนินการได้";
-        $response->text = "ไม่สามารถลบบัญชีผู้ใช้ของสมาชิกอื่นได้";
-
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $database->close();
-        exit();
-    }
-
-    //4) Try to upload new profile if not "default-avatar.png"
+    //3) Try to upload new profile if not "default-avatar.png"
     if($userProfile != 'default-avatar.png' && $userProfile != $userCurrentProfile){
         $uploaddir = '../../assets/img/avatars/';
 
@@ -86,7 +74,7 @@
         }
     }
 
-    //5) Try to delete old profile image if user upload new
+    //4) Try to delete old profile image if user upload new
     if($user["userProfile"] != "default-avatar.png" && $userProfile != $userCurrentProfile){
         $imgPath = "../../assets/img/avatars/";
         $img = $imgPath.$user["userProfile"];
@@ -102,7 +90,7 @@
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('ssss', $userFname, $userLname, $userProfile, $userID);
+    $stmt->bind_param('ssss', $userFname, $userLname, $userProfile, $currentUser);
 
     if($stmt->execute()){
         $stmt->close();

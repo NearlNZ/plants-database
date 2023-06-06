@@ -7,6 +7,7 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <ul class="navbar-nav d-none d-md-block">
+            <i class="fa-solid fa-seedling fa-lg text-success me-1"></i>
             ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์
         </ul>
     </div>

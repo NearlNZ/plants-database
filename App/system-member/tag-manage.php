@@ -2,8 +2,8 @@
     //Include database connection
 	require_once("../data/database.php");
 
-    //Include admin account check
-    require_once('../include/scripts/admin-header.php');
+    //Include member account check
+    require_once('../include/scripts/member-header.php');
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>รายการพืช</title>
+        <title>หมวดหมู่พืช</title>
         <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
@@ -26,14 +26,12 @@
         <script src="../assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
         <link rel="stylesheet" href="../assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
         <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
-        <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- Page Style -->
@@ -44,7 +42,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-admin.php");?>
+                <?php require_once("../include/components/sidebar-member.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -61,12 +59,12 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a class="active">รายการพืช</a>
+                                        <a class="active">หมวดหมู่พืช</a>
                                     </li>
                                 </ol>
                             </nav>
 
-                            <span class="active-menu-url">plant-manage</span>
+                            <span class="active-menu-url">tag-manage</span>
                             <!-- /Breadcrumb & Active menu-->
 
                             <!-- Search card -->
@@ -74,36 +72,12 @@
                                 <div class="card-body p-3">
                                     <form action="" method="GET">
                                         <div class="row g-2">
-                                            <div class="col-12 col-lg-6">
-                                                ชื่อพืช
-                                                <input type="search" name="name" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
-                                                value="<?php if(isset($_GET["name"])) echo $_GET["name"]; ?>">
-                                            </div>
-                                            <div class="col-12 col-lg-6">
-                                                หมวดหมู่
+                                            <div class="col-12">
+                                                ชื่อหมวดหมู่
                                                 <div class="row g-3 g-lg-2">
                                                     <div class="col-12 col-lg">
-                                                        <select class="select2 form-select" name="tag">
-                                                            <option selected value="ทั้งหมด">ทั้งหมด</option>
-
-                                                            <?php
-                                                                $sql = "SELECT tagName
-                                                                        FROM tags
-                                                                        ORDER BY tagName;";
-                                                                    
-                                                                $tagResult = $database->query($sql);
-                                                                if($tagResult->num_rows > 0){
-                                                                    while($tag = $tagResult->fetch_assoc()){
-                                                            ?>
-                                                                <option value="<?php echo $tag['tagName']; ?>"
-                                                                <?php if(isset($_GET["tag"]) && $_GET["tag"] == $tag['tagName']) echo "selected"; ?>>
-                                                                    <?php echo $tag["tagName"]; ?>
-                                                                </option>
-                                                            <?php
-                                                                    }
-                                                                }
-                                                            ?>
-                                                        </select>
+                                                        <input type="search" name="name" class="form-control" placeholder="ค้นหา..." autofocus autocomplete="off"
+                                                        value="<?php if(isset($_GET["name"])) echo $_GET["name"]; ?>">
                                                     </div>
                                                     <!-- Search button-->
                                                     <div class="col-12 col-lg-auto">
@@ -122,16 +96,9 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  P.plantID, P.plantName, P.otherName, P.plantView, P.plantRegist, U.userID, U.username,
-                                                (SELECT imgPath FROM plant_images WHERE plantID = P.plantID ORDER BY imgUpload LIMIT 1) AS coverImage,
-                                                (SELECT COUNT(favID) FROM favorite_plants WHERE plantID = P.plantID) AS favoriteCount, 
-                                                (SELECT COUNT(imgID) FROM plant_images WHERE plantID = P.plantID) AS imgCount
-                                        FROM    plants P 
-                                                LEFT JOIN tag_lists TL ON P.plantID = TL.PlantID
-                                                LEFT JOIN tags T ON TL.tagID = T.tagID
-                                                LEFT JOIN plant_images PI ON P.plantID = PI.plantID
-                                                LEFT JOIN users U ON P.userID = U.userID
-                                                LEFT JOIN favorite_plants FP ON P.plantID = FP.plantID
+                                $sql = "SELECT  T.tagID, T.tagName, T.tagAdd, U.userID, U.username, 
+                                                (SELECT count(*) FROM tag_lists WHERE tagID = T.tagID) as plantCount
+                                        FROM    Tags T LEFT JOIN users U ON U.userID = T.userID
                                         WHERE 1=1 ";
 
                                 $filter = array();
@@ -140,24 +107,15 @@
                                 //Check if filter send
                                 if(isset($_GET["search"])){
                                     $searchName = $_GET['name'] ?? '';
-                                    $searchTag = $_GET['tag'] ?? '';
 
                                     if(!empty($searchName)){
-                                        $sql .= "AND (plantName LIKE ? OR otherName LIKE ? OR commonName LIKE ?) ";
+                                        $sql .= "AND tagName LIKE ? ";
                                         $filter[] = "%$searchName%";
-                                        $filter[] = "%$searchName%";
-                                        $filter[] = "%$searchName%";
-                                        $filterDatatype .= "sss";
-                                    }
-                                    if(!empty($searchTag) && $searchTag != "ทั้งหมด"){
-                                        $sql .= "AND tagName = ? ";
-                                        $filter[] = $searchTag;
                                         $filterDatatype .= "s";
                                     }
                                 }
                                 
-                                $sql.= "GROUP BY plantID
-                                        ORDER BY plantRegist DESC, plantName;";
+                                $sql.= "ORDER BY plantCount DESC, tagName;";
 
                                 $stmt = $database->prepare($sql);
                                 
@@ -166,10 +124,10 @@
                                 }
                                 
                                 $stmt->execute();
-                                $plantResult = $stmt-> get_result();
+                                $tagResult = $stmt-> get_result();
                                 $stmt->close();
 
-                                $resultCount = $plantResult->num_rows;
+                                $resultCount = $tagResult->num_rows;
                             ?>
                             
                             <!-- Data card -->
@@ -177,7 +135,7 @@
                                 <div class="card-body py-3">
                                     <!-- Action -->
                                     <div class="row g-2">
-                                        <a class="btn btn-success col-12 col-lg-auto shadow-sm me-2" href="plant-add">
+                                        <a class="btn btn-success col-12 col-lg-auto shadow-sm me-2" href="tag-add">
                                             <i class="fa-solid fa-plus me-2"></i>
                                             เพิ่มข้อมูล
                                         </a>
@@ -189,111 +147,75 @@
                                         <thead>
                                             <tr>
                                                 <th>ลำดับที่</th>
-                                                <th>ชื่อพืช</th>
+                                                <th>ชื่อหมวดหมู่</th>
                                                 <th>วันที่ลงทะเบียน</th>
-                                                <th>สถิติผู้เข้าชม</th>
-                                                <th>คลังภาพ</th>
+                                                <th>จำนวนพืช</th>
                                                 <th class="text-center">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                         <?php 
-                                            if($resultCount > 0){ $plantIndex = 1; while($plant = $plantResult->fetch_assoc()){
-                                                $plantID = $plant["plantID"];
-                                                $plantName = $plant["plantName"];
-                                                $otherName = !empty($plant["otherName"]) ? $plant["otherName"] : "";
-                                                $plantRegist = date("j/n/Y", strtotime($plant["plantRegist"]));
-                                                $viewCount = $plant["plantView"];
-                                                $favoriteCount = $plant["favoriteCount"];
-                                                $imageCount = $plant["imgCount"];
-                                                $plantCoverImage = !empty($plant["coverImage"]) ? $plant["coverImage"] : "default-plant.png";
-
-                                                $ownerID = $plant['userID'];
-                                                $ownerUsername = !empty($plant["username"]) ? $plant["username"] : "(บัญชีที่ถูกลบ)";
-                                                
-                                                //Create ower account link (only if exist)
-                                                $accountLink = '';
-                                                if($ownerID != $currentUser->userID){
-                                                    $accountLink = "href='account-view?userID=".$ownerID."'";
-                                                }
-                                                else if($ownerID == $currentUser->userID){
-                                                    $accountLink = "href='profile'";
-                                                }
+                                            if($resultCount > 0){ $tagIndex = 1; while($tag = $tagResult->fetch_assoc()){
                                         ?>
 
                                             <tr>
                                                 <td class="text-center cell-fit">
-                                                    <?php echo number_format($plantIndex); ?>
+                                                    <?php echo number_format($tagIndex); ?>
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex justify-content-start align-items-center">
-                                                        <div class="avatar-wrapper">
-                                                            <div class="avatar me-2">
-                                                                <img src="../assets/img/plantImgs/<?php echo $plantCoverImage;?>" alt="<?php echo $plantName;?>" class="rounded fit-cover">
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-flex flex-column">
-                                                            <span class="text-truncate" style="max-width: 300px;">
-                                                                <?php echo $plantName; ?>
-                                                            </span>
-                                                            <small class="text-truncate text-muted" style="max-width: 300px;">
-                                                                <?php echo $otherName; ?>
-                                                            </small>
-                                                        </div>
-                                                    </div>
+                                                    <?php echo $tag["tagName"]; ?>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex flex-column">
                                                         <span class="d-block">
-                                                            <?php echo $plantRegist; ?>
+                                                            <?php echo date("j/n/Y", strtotime($tag["tagAdd"])); ?>
                                                         </span>
                                                         <small class="text-muted">
+                                                            <?php
+                                                                $accountLink = '';
+                                                                if($tag['userID'] != $currentUser->userID){
+                                                                    $accountLink = "href='account-view?userID=".$tag['userID']."'";
+                                                                }
+                                                                else if($tag['userID'] == $currentUser->userID){
+                                                                    $accountLink = "href='profile'";
+                                                                }
+                                                            ?>
+
                                                             เพิ่มโดย
-                                                            <a class="text-secondary text-decoration-underline" <?php echo $accountLink;?>>
-                                                                <?php echo  $ownerUsername?>
+                                                            <a class="text-secondary text-decoration-underline" <?php if($accountLink != '') echo $accountLink;?>>
+                                                                <?php echo !empty($tag["username"]) ? $tag["username"] : "(บัญชีที่ถูกลบ)"; ?>
                                                             </a>
                                                         </small>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span class="d-inline-block w-50">
-                                                        <i class="fa-solid fa-eye text-secondary me-1"></i>
-                                                        <?php echo number_format($viewCount); ?>
-                                                    </span>
-                                                    <span class="d-inline-block w-50">
-                                                        <i class="fa-solid fa-heart text-danger me-1"></i>
-                                                        <?php echo number_format($favoriteCount); ?>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <?php echo number_format($imageCount); ?> ภาพ
+                                                    <i class="fa-solid fa-seedling text-success me-1"></i>
+                                                    <?php echo number_format($tag["plantCount"]); ?>
                                                 </td>
                                                 <td class="text-center cell-fit">
                                                     <button type="button" class="btn btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="plant-view?plantID=<?php echo $plantID;?>">
-                                                            <i class="bx bx-show-alt me-1"></i>
-                                                            แสดงข้อมูล
-                                                        </a>
-                                                        <a class="dropdown-item" href="plant-edit?plantID=<?php echo $plantID;?>">
+                                                        <a class="dropdown-item" href="tag-edit?tagID=<?php echo $tag['tagID'];?>">
                                                             <i class="bx bx-edit-alt me-1"></i>
                                                             แก้ไขข้อมูล
                                                         </a>
-                                                        <a class="dropdown-item deleteBtn" href="../data/plant/deletePlant?plantID=<?php echo $plantID;?>">
+                                                        <?php if($currentUser->userID == $tag['userID']){ ?>
+                                                        <a class="dropdown-item deleteBtn" href="../data/tag/deleteTag?tagID=<?php echo $tag['tagID'];?>">
                                                             <i class="bx bx-trash me-1"></i>
                                                             ลบข้อมูล
                                                         </a>
+                                                        <?php } ?>
                                                     </div>
                                                 </td>
                                             </tr>
                                         
-                                        <?php $plantIndex++;} }else{ ?>
+                                        <?php $tagIndex++;} }else{ ?>
 
                                             <tr>
-                                                <td class="text-center text-muted py-3" colspan="6">
+                                                <td class="text-center text-muted py-3" colspan="5">
                                                     --- ไม่พบข้อมูลสำหรับแสดงผล ---
                                                 </td>
                                             </tr>

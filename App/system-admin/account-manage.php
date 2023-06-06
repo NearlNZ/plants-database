@@ -191,7 +191,7 @@
                                                 <th class="ps-2">ระดับผู้ใช้</th>
                                                 <th>วันที่ลงทะเบียน</th>
                                                 <th>สถานะบัญชี</th>
-                                                <th class="text-center" width="150px">จัดการข้อมูล</th>
+                                                <th class="text-center">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -201,20 +201,22 @@
                                         ?>
 
                                             <tr>
-                                                <td><?php echo number_format($accountIndex); ?></td>
+                                                <td class="text-center cell-fit">
+                                                    <?php echo number_format($accountIndex); ?>
+                                                </td>
                                                 <td>
                                                     <div class="d-flex justify-content-start align-items-center user-name">
                                                         <div class="avatar-wrapper">
                                                             <div class="avatar me-2">
-                                                                <img src="../assets/img/avatars/<?php echo $account["userProfile"];?>" alt="user profile" class="rounded-circle">
+                                                                <img src="../assets/img/avatars/<?php echo $account["userProfile"];?>" alt="user avatar" class="rounded-circle fit-cover">
                                                             </div>
                                                         </div>
                                                         <div class="d-flex flex-column">
-                                                            <span class="text-truncate">
-                                                                <?php echo $account["userFname"]." ".$account["userLname"];?>
+                                                            <span class="text-truncate" style="max-width: 300px;">
+                                                                <?php echo $account["userFname"]." ".$account["userLname"] ;?>
                                                             </span>
-                                                            <small class="text-truncate text-muted">
-                                                                <?php echo $account["username"];?>
+                                                            <small class="text-truncate text-muted" style="max-width: 300px;">
+                                                                <?php echo $account["username"] ;?>
                                                             </small>
                                                         </div>
                                                     </div>
@@ -249,15 +251,15 @@
                                                         <?php echo $statusText; ?>
                                                     </span>
                                                 </td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                <td class="text-center cell-fit">
+                                                    <button type="button" class="btn btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <?php if ($account["userID"] != $currentUser->userID){ ?>
                                                             <a class="dropdown-item" href="account-view?userID=<?php echo $account['userID'];?>">
                                                                 <i class="bx bx-show-alt me-1"></i>
-                                                                ดูข้อมูล
+                                                                แสดงข้อมูล
                                                             </a>
                                                             <a class="dropdown-item" href="account-edit?userID=<?php echo $account['userID'];?>">
                                                                 <i class="bx bx-edit-alt me-1"></i>
@@ -270,7 +272,7 @@
                                                         <?php }else{ ?>
                                                             <a class="dropdown-item" href="profile">
                                                                 <i class="bx bx-show-alt me-1"></i>
-                                                                ดูข้อมูล
+                                                                แสดงข้อมูล
                                                             </a>
                                                         <?php } ?>
                                                     </div>

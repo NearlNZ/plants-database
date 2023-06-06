@@ -26,14 +26,12 @@
         <script src="../assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
         <link rel="stylesheet" href="../assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
         <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
-        <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- Page Style -->
@@ -113,7 +111,7 @@
                                         </h5>
                                         <div class="card-body">
                                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                                <img src="../assets/img/avatars/<?php echo $user['userProfile']; ?>" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar">
+                                                <img src="../assets/img/avatars/<?php echo $user['userProfile']; ?>" alt="user avatar" class="d-block rounded fit-cover" height="100" width="100" id="uploadedAvatar">
                                                 <div class="button-wrapper">
                                                     <label id="uploadButton" class="btn btn-primary me-2 mb-4" tabindex="0">
                                                         <span class="d-none d-sm-block">อัพโหลดรูปภาพ</span>
@@ -136,7 +134,7 @@
                                                     <input type="file" id="userProfile" class="d-none" name="userProfile" accept=".jpg,.jpeg,.png">
                                                     <input type="hidden" name="userCurrentProfile" value="<?php echo $user['userProfile']; ?>">
                                                     <div class="col-12 col-lg-6">
-                                                        ชื่อ
+                                                        ชื่อ <span class="text-danger">*</span>
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="fa-regular fa-message"></i></span>
                                                             <input type="text" name="userFname" class="form-control" maxlength="50" placeholder="ระบุชื่อ" autofocus autocomplete="off" required
@@ -144,7 +142,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-6">
-                                                        นามสกุล
+                                                        นามสกุล <span class="text-danger">*</span>
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="fa-regular fa-message"></i></span>
                                                             <input type="text" name="userLname" class="form-control" maxlength="50" placeholder="ระบุนามสกุล" autocomplete="off" required
@@ -152,18 +150,40 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-lg-6">
-                                                        ระดับบัญชีผู้ใช้
-                                                        <select id="userLevel" class="select2 form-select" name="userLevel" required>
-                                                            <option <?php if($user['userLevel'] == "สมาชิก") echo "selected"; ?> value="สมาชิก">สมาชิก</option>
-                                                            <option <?php if($user['userLevel'] == "ผู้ดูแลระบบ") echo "selected"; ?> value="ผู้ดูแลระบบ">ผู้ดูแลระบบ</option>
-                                                        </select>
+                                                        ระดับบัญชีผู้ใช้ <span class="text-danger">*</span>
+                                                        <div class="btn-group w-100" role="group" aria-label="userLevel radio toggle">
+                                                            <input id="memberRadio" type="radio" class="btn-check" name="userLevel" value="สมาชิก" required
+                                                            <?php if($user['userLevel'] == "สมาชิก") echo "checked"; ?>>
+                                                            <label class="btn btn-outline-secondary w-50" for="memberRadio">
+                                                                <i class="fa-solid fa-user me-1"></i>
+                                                                สมาชิก
+                                                            </label>
+
+                                                            <input id="adminRadio" type="radio" class="btn-check" name="userLevel" value="ผู้ดูแลระบบ" required
+                                                            <?php if($user['userLevel'] == "ผู้ดูแลระบบ") echo "checked"; ?>>
+                                                            <label class="btn btn-outline-secondary w-50" for="adminRadio">
+                                                                <i class="fa-solid fa-crown me-1"></i>
+                                                                ผู้ดูแลระบบ
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                     <div class="col-12 col-lg-6">
-                                                        สถานะบัญชีผู้ใช้
-                                                        <select id="userStatus" class="select2 form-select" name="userStatus" required>
-                                                            <option <?php if($user['userStatus'] == "บัญชีปกติ") echo "selected"; ?> value="บัญชีปกติ">บัญชีปกติ</option>
-                                                            <option <?php if($user['userStatus'] == "บัญชีถูกระงับ") echo "selected"; ?> value="บัญชีถูกระงับ">บัญชีถูกระงับ</option>
-                                                        </select>
+                                                        สถานะบัญชีผู้ใช้ <span class="text-danger">*</span>
+                                                        <div class="btn-group w-100" role="group" aria-label="userStatus radio toggle">
+                                                            <input id="normalRadio" type="radio" class="btn-check" name="userStatus" value="บัญชีปกติ" required
+                                                            <?php if($user['userStatus'] == "บัญชีปกติ") echo "checked"; ?>>
+                                                            <label class="btn btn-outline-secondary w-50" for="normalRadio">
+                                                                <i class="fa-solid fa-check me-1"></i>
+                                                                บัญชีปกติ
+                                                            </label>
+
+                                                            <input id="suspendedRadio" type="radio" class="btn-check" name="userStatus" value="บัญชีถูกระงับ" required 
+                                                            <?php if($user['userStatus'] == "บัญชีถูกระงับ") echo "checked"; ?>>
+                                                            <label class="btn btn-outline-secondary w-50" for="suspendedRadio">
+                                                                <i class="fa-solid fa-xmark me-1"></i>
+                                                                บัญชีถูกระงับ
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="mt-3">
@@ -190,7 +210,7 @@
                                                         <input type="hidden" name="userID" value="<?php echo $user['userID']; ?>">
                                                         <div class="row g-3">
                                                             <div class="col-12">
-                                                                รหัสผ่านใหม่
+                                                                รหัสผ่านใหม่ <span class="text-danger">*</span>
                                                                 <div class="form-password-toggle">
                                                                     <div class="input-group input-group-merge">
                                                                         <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
@@ -200,7 +220,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-12">
-                                                                ยืนยันรหัสผ่านใหม่
+                                                                ยืนยันรหัสผ่านใหม่ <span class="text-danger">*</span>
                                                                 <div class="form-password-toggle">
                                                                     <div class="input-group input-group-merge">
                                                                         <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
@@ -219,7 +239,7 @@
                                                 </div>
                                                 <div class="col-md-6 order-md-1 order-0">
                                                     <div class="text-center mx-3 mx-md-0 mb-4 mb-md-0">
-                                                        <img src="../assets/img/element/img-reset-password.png" class="img-fluid" alt="Reset Password" width="300">
+                                                        <img src="../assets/img/element/img-reset-password.png" class="img-fluid" alt="reset Password" width="300">
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,17 +402,6 @@
                 });
             });
 
-            //Select
-            $(function(){
-                select = $(".select2");
-                select.length&&select.each(function(){
-                    let element=$(this);
-                    element.wrap('<div class="position-relative"></div>').select2({
-                        dropdownParent:element.parent()
-                    });
-                });
-            });
-
             //Control avartar upload
             let uploadedAvatar = document.getElementById("uploadedAvatar");
             const fileInput = document.getElementById("userProfile");
@@ -427,9 +436,9 @@
             });
 
             //Control user status select
-            let userStatusSelect = $("#userStatus");
-            userStatusSelect.change(function(){
-                userStatus = userStatusSelect.val();
+            let statusRadio = $('input[type="radio"][name="userStatus"]');
+            statusRadio.change(function() {
+                let userStatus = $(this).val();
                 if(userStatus == "บัญชีถูกระงับ"){
                     Swal.fire({
                         icon: 'info',
@@ -442,13 +451,13 @@
             });
 
             //Control user level select
-            let userLevelSelect = $("#userLevel");
-            userLevelSelect.change(function(){
-                userLevel = userLevelSelect.val();
+            let levelRadio = $('input[type="radio"][name="userLevel"]');
+            levelRadio.change(function() {
+                let userLevel = $(this).val();
                 if(userLevel == "ผู้ดูแลระบบ"){
                     Swal.fire({
                         icon: 'info',
-                        title: "เปลี่ยนแปลงระดับผู้ใช้งาน",
+                        title: "เปลี่ยนแปลงระดับผู้ใช้",
                         text: 'บัญชีผู้ใช้นี้จะเปลี่ยนเป็นผู้ดูแลระบบ ผู้ใช้บัญชีจะสามารถจัดการข้อมูลภายในระบบทั้งหมดได้',
                         showConfirmButton: true,
                         confirmButtonText: "เข้าใจแล้ว"

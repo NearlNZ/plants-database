@@ -709,6 +709,21 @@ progress {
   width: 16.6666666667%;
 }
 
+.row-cols-8 > * {
+  flex: 0 0 auto;
+  width: 12.5%;
+}
+
+.row-cols-10 > * {
+  flex: 0 0 auto;
+  width: 10%;
+}
+
+.row-cols-12 > * {
+  flex: 0 0 auto;
+  width: 8.33333%;
+}
+
 .col-auto {
   flex: 0 0 auto;
   width: auto;
@@ -5645,6 +5660,10 @@ textarea.form-control-lg {
   --bs-aspect-ratio: 75%;
 }
 
+.ratio-3x2 {
+  --bs-aspect-ratio: 66.67%;
+}
+
 .ratio-16x9 {
   --bs-aspect-ratio: 56.25%;
 }
@@ -6386,8 +6405,8 @@ label.btn {
 }
 .btn-success:hover {
   color: #fff;
-  background-color: #05A047;
-  border-color: #05A047;
+  background-color: #2ECC50;
+  border-color: #2ECC71;
   transform: translateY(-1px);
 }
 .btn-check:focus + .btn-success, .btn-success:focus, .btn-success.focus {
@@ -6399,8 +6418,8 @@ label.btn {
 }
 .btn-check:checked + .btn-success, .btn-check:active + .btn-success, .btn-success:active, .btn-success.active, .show > .btn-success.dropdown-toggle {
   color: #fff;
-  background-color: #60bc2f;
-  border-color: #60bc2f;
+  background-color: #2ECC40;
+  border-color: #2ECC71;
 }
 .btn-check:checked + .btn-success:focus, .btn-check:active + .btn-success:focus, .btn-success:active:focus, .btn-success.active:focus, .show > .btn-success.dropdown-toggle:focus {
   box-shadow: none;
@@ -7011,6 +7030,7 @@ button:focus {
 .input-group > .btn-group:last-child > .btn:not([class*=btn-outline-]):last-of-type {
   border-right-color: transparent;
 }
+/* btn-group add btn class */
 
 .badge {
   text-transform: uppercase;

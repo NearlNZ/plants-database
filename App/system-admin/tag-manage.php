@@ -26,14 +26,12 @@
         <script src="../assets/js/bootstrap.min.js"></script>
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="../assets/vendor/select2/select2.css"/>
         <link rel="stylesheet" href="../assets/vendor//perfect-scrollbar/perfect-scrollbar.css"/>
         <link rel="stylesheet" href="../assets/vendor/boxicons/boxicons.css"/>
 
         <!-- Vendors JS -->
         <script src="../assets/vendor/fontawesome/js/all.min.js"></script>
         <script src="../assets/vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
-        <script src="../assets/vendor/select2/select2.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- Page Style -->
@@ -98,7 +96,7 @@
                             <!-- /Search card -->
 
                             <?php
-                                $sql = "SELECT  T.tagID, T.tagName, T.tagAdd, U.userFname, U.userLname, 
+                                $sql = "SELECT  T.tagID, T.tagName, T.tagAdd, U.userID, U.username, 
                                                 (SELECT count(*) FROM tag_lists WHERE tagID = T.tagID) as plantCount
                                         FROM    Tags T LEFT JOIN users U ON U.userID = T.userID
                                         WHERE 1=1 ";
@@ -152,7 +150,7 @@
                                                 <th>ชื่อหมวดหมู่</th>
                                                 <th>วันที่ลงทะเบียน</th>
                                                 <th>จำนวนพืช</th>
-                                                <th class="text-center" width="150px">จัดการข้อมูล</th>
+                                                <th class="text-center">จัดการข้อมูล</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -162,16 +160,32 @@
                                         ?>
 
                                             <tr>
-                                                <td><?php echo number_format($tagIndex); ?></td>
-                                                <td><?php echo $tag["tagName"]; ?></td>
+                                                <td class="text-center cell-fit">
+                                                    <?php echo number_format($tagIndex); ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $tag["tagName"]; ?>
+                                                </td>
                                                 <td>
                                                     <div class="d-flex flex-column">
                                                         <span class="d-block">
                                                             <?php echo date("j/n/Y", strtotime($tag["tagAdd"])); ?>
                                                         </span>
                                                         <small class="text-muted">
-                                                            เพิ่มโดย 
-                                                            <?php echo !empty($tag["userFname"]) ? $tag["userFname"]." ".$tag["userLname"] : "(บัญชีที่ถูกลบ)"; ?>
+                                                            <?php
+                                                                $accountLink = '';
+                                                                if($tag['userID'] != $currentUser->userID){
+                                                                    $accountLink = "href='account-view?userID=".$tag['userID']."'";
+                                                                }
+                                                                else if($tag['userID'] == $currentUser->userID){
+                                                                    $accountLink = "href='profile'";
+                                                                }
+                                                            ?>
+
+                                                            เพิ่มโดย
+                                                            <a class="text-secondary text-decoration-underline" <?php if($accountLink != '') echo $accountLink;?>>
+                                                                <?php echo !empty($tag["username"]) ? $tag["username"] : "(บัญชีที่ถูกลบ)"; ?>
+                                                            </a>
                                                         </small>
                                                     </div>
                                                 </td>
@@ -179,8 +193,8 @@
                                                     <i class="fa-solid fa-seedling text-success me-1"></i>
                                                     <?php echo number_format($tag["plantCount"]); ?>
                                                 </td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                <td class="text-center cell-fit">
+                                                    <button type="button" class="btn btn-icon rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">

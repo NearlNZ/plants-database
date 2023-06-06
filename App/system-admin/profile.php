@@ -64,7 +64,7 @@
                                         </div>
                                         <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
                                             <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
-                                                <img src="../assets/img/avatars/<?php echo $currentUser->userProfile; ?>" alt="profile" class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img">
+                                                <img src="../assets/img/avatars/<?php echo $currentUser->userProfile; ?>" alt="user avatar" class="d-block ms-0 ms-sm-4 rounded user-profile-img fit-cover">
                                             </div>
                                             <div class="flex-grow-1 mt-3 mt-sm-5">
                                                 <div class="d-flex align-items-md-end align-items-center justify-content-between mx-4 flex-sm-row flex-column gap-4">
@@ -88,7 +88,7 @@
                                                             <i class="fa-regular fa-pen-to-square"></i>
                                                             <p class="d-inline d-sm-none d-lg-inline ms-1">แก้ไขข้อมูลผู้ใช้</p>
                                                         </a>
-                                                        <a href="#" onclick="goBack()" class="btn btn-secondary text-nowrap col-auto">
+                                                        <a href="#" onclick="goBack()" class="btn btn-label-secondary text-nowrap col-auto">
                                                             <i class="fa-solid fa-chevron-left"></i>
                                                             <p class="d-inline d-sm-none d-lg-inline ms-1">ย้อนกลับ</p>
                                                         </a>
@@ -289,39 +289,40 @@
                                 <!-- Right section -->
                                 <div class="col">
                                     <!--Card pills data table -->
+                                    <?php
+                                        $tabList = ['favorite', 'plants', 'login'];
+                                        $activeTab = $_GET['tab'] ?? 'favorite';
+                                        $activeTab = in_array($activeTab, $tabList) ? $activeTab : 'favorite';
+                                    ?>
+
                                     <div class="nav-align-top h-100">
                                         <ul class="nav nav-pills justify-content-center justify-content-md-start mb-3" role="tablist">
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#card-pills-favorite" 
-                                                aria-controls="card-pills-favorite" aria-selected="false">
+                                                <a href="?tab=favorite" class="nav-link <?php if($activeTab == 'favorite') echo 'active';?>">
                                                     <i class="fa-solid fa-heart"></i>
                                                     <span class="ms-1 d-none d-md-inline-block">รายการโปรด</span>
-                                                </button>
+                                                </a>
                                             </li>
                                             <li class="nav-item mx-2">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#card-pills-plants" 
-                                                aria-controls="card-pills-plants" aria-selected="true"  data-bs-placement="bottom">
+                                                <a href="?tab=plants" class="nav-link <?php if($activeTab == 'plants') echo 'active';?>">
                                                     <i class="fa-solid fa-seedling"></i>
                                                     <span class="ms-1 d-none d-md-inline-block">พืชที่ลงทะเบียน</span>
-                                                </button>
+                                                </a>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#card-pills-login" 
-                                                aria-controls="card-pills-login" aria-selected="false">
+                                                <a href="?tab=login" class="nav-link <?php if($activeTab == 'login') echo 'active';?>">
                                                     <i class="fa-solid fa-clock-rotate-left"></i>
                                                     <span class="ms-1 d-none d-md-inline-block">การเข้าสู่ระบบ</span>
-                                                </button>
+                                                </a>
                                             </li>
                                         </ul>
                                         <div class="tab-content h-100">
-                                            <div class="tab-pane fade show active" id="card-pills-favorite" role="tabpanel">
-                                                <?php include_once("profile-favoriteTab.php");?>
-                                            </div>
-                                            <div class="tab-pane fade" id="card-pills-plants" role="tabpanel">
-                                                <?php include_once("profile-plantsTab.php");?>
-                                            </div>
-                                            <div class="tab-pane fade" id="card-pills-login" role="tabpanel">
-                                                <?php include_once("profile-loginTab.php");?>
+                                            <div class="tab-pane fade show active" role="tabpanel">
+                                                <?php 
+                                                    if($activeTab == 'favorite') include_once("profile-favoriteTab.php");
+                                                    else if($activeTab == 'plants') include_once("profile-plantsTab.php");
+                                                    else if($activeTab == 'login') include_once("profile-loginTab.php");
+                                                ?>
                                             </div>
                                         </div>
                                     </div>

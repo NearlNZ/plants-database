@@ -2,8 +2,8 @@
     //Include database connection
 	require_once("../data/database.php");
 
-    //Include admin account check
-    require_once('../include/scripts/admin-header.php');
+    //Include member account check
+    require_once('../include/scripts/member-header.php');
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +44,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-admin.php");?>
+                <?php require_once("../include/components/sidebar-member.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -201,6 +201,7 @@
                                         <?php 
                                             if($resultCount > 0){ $plantIndex = 1; while($plant = $plantResult->fetch_assoc()){
                                                 $plantID = $plant["plantID"];
+                                                $creatorID = $plant["userID"];
                                                 $plantName = $plant["plantName"];
                                                 $otherName = !empty($plant["otherName"]) ? $plant["otherName"] : "";
                                                 $plantRegist = date("j/n/Y", strtotime($plant["plantRegist"]));
@@ -282,10 +283,12 @@
                                                             <i class="bx bx-edit-alt me-1"></i>
                                                             แก้ไขข้อมูล
                                                         </a>
+                                                        <?php if($currentUser->userID == $creatorID){ ?>
                                                         <a class="dropdown-item deleteBtn" href="../data/plant/deletePlant?plantID=<?php echo $plantID;?>">
                                                             <i class="bx bx-trash me-1"></i>
                                                             ลบข้อมูล
                                                         </a>
+                                                        <?php } ?>
                                                     </div>
                                                 </td>
                                             </tr>

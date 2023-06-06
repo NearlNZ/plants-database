@@ -139,10 +139,13 @@
                                                             <?php echo $cardData["plantCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>บันทึกล่าสุด <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?></small>
+                                                    <small class="text-muted">
+                                                        บันทึกล่าสุด
+                                                        <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?>
+                                                    </small>
                                                 </div>
                                                 <div class="card-icon">
-                                                    <span class="badge bg-label-success rounded">
+                                                    <span class="badge bg-label-success rounded shadow-sm">
                                                         <i class="fa-solid fa-seedling fa-xl m-2"></i>
                                                     </span>
                                                 </div>
@@ -168,10 +171,13 @@
                                                             <?php echo $cardData["tagCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>บันทึกล่าสุด <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?></small>
+                                                    <small class="text-muted">
+                                                        บันทึกล่าสุด
+                                                        <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?>
+                                                    </small>
                                                 </div>
                                                 <div class="card-icon">
-                                                    <span class="badge bg-label-warning rounded">
+                                                    <span class="badge bg-label-warning rounded shadow-sm">
                                                         <i class="fa-solid fa-tags fa-xl m-2"></i>
                                                     </span>
                                                 </div>
@@ -197,10 +203,13 @@
                                                             <?php echo $cardData["imgCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>บันทึกล่าสุด <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?></small>
+                                                    <small class="text-muted">
+                                                        บันทึกล่าสุด
+                                                        <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?>
+                                                    </small>
                                                 </div>
                                                 <div class="card-icon">
-                                                    <span class="badge bg-label-info rounded">
+                                                    <span class="badge bg-label-info rounded shadow-sm">
                                                         <i class="fa-solid fa-image fa-xl m-2"></i>
                                                     </span>
                                                 </div>
@@ -226,10 +235,13 @@
                                                             <?php echo $cardData["userCount"]["statText"]; ?>
                                                         </small>
                                                     </div>
-                                                    <small>บันทึกล่าสุด <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?></small>
+                                                    <small class="text-muted">
+                                                        บันทึกล่าสุด
+                                                        <?php echo date("j/n/Y", strtotime($lastStat["recordDate"])); ?>
+                                                    </small>
                                                 </div>
                                                 <div class="card-icon">
-                                                    <span class="badge bg-label-primary rounded">
+                                                    <span class="badge bg-label-primary rounded shadow-sm">
                                                         <i class="fa-solid fa-user fa-xl m-2"></i>
                                                     </span>
                                                 </div>

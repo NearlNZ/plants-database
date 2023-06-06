@@ -1,0 +1,8 @@
+# Remove file extensions from URL
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php
+
+# Set index of directory
+DirectoryIndex dashboard.php

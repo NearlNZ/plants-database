@@ -3,22 +3,15 @@
     $response = new stdClass();
     require_once("../database.php");
 
-    //1) Exit if user not verified.
-    session_start();
-    if (!isset($_SESSION['CSP-session-userID'])) {
-        $response->status = "warning";
-        $response->title = "เกิดข้อผิดพลาด";
-        $response->text = "จำเป็นต้องทำการยืนยันตัวตนก่อนใช้งาน";
-
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $database->close();
-        exit();
-    }
-
+    //Account permission check ("all member" permission)
+    require_once("../../include/scripts/member-permission-check.php");
+    
     //Set variables
-    $plantID = $_GET["plantID"] ?? '';
+    $plantID = $_GET['plantID'] ?? '';
 
-    //2) Check for required parameter
+    //==============================================================================
+
+    //1) Check for required parameter
     if($plantID == ''){
         $response->status = 'warning';
         $response->title = 'เกิดข้อผิดพลาด';
@@ -29,7 +22,7 @@
         exit();
     }
 
-    //3) Check if this plant not exist
+    //2) Check plant existence
     $sql = "SELECT plantID
             FROM plants
             WHERE plantID = ?";
@@ -51,9 +44,9 @@
         exit();
     }
 
-    //4) Remove all plant img
+    //3) Remove all plant images
     $sql = "SELECT imgID, imgPath
-            FROM plantimages
+            FROM plant_images
             WHERE plantID = ?";
 
     $stmt =  $database->stmt_init(); 
@@ -69,7 +62,9 @@
         }
     }
 
-    //Pass) Delete plant
+    //==============================================================================
+
+    //Pass) Delete plant data
     $sql = "DELETE
             FROM plants
             WHERE plantID = ?;";

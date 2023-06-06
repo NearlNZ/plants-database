@@ -2,8 +2,8 @@
     //Include database connection
 	require_once("../data/database.php");
 
-    //Include admin account check
-    require_once('../include/scripts/admin-header.php');
+    //Include member account check
+    require_once('../include/scripts/member-header.php');
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>บัญชีผู้ใช้</title>
+        <title>บัญชีของฉัน</title>
         <link rel="shortcut icon" href="../assets/img/element/tab-logo.ico" type="image/x-icon">
 
         <!-- Fonts -->
@@ -42,7 +42,7 @@
         <div class="layout-wrapper layout-content-navbar">
             <div class="layout-container">
                 <!-- Sidebar -->
-                <?php require_once("../include/components/sidebar-admin.php");?>
+                <?php require_once("../include/components/sidebar-member.php");?>
                 <!-- /Sidebar -->
 
                 <!-- Page -->
@@ -55,52 +55,6 @@
                     <div class="content-wrapper">
                         <!-- Content -->
                         <div class="container-fluid flex-grow-1 container-p-y">
-                            <!-- Breadcrumb & Active menu-->
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item">
-                                        <a href="account-manage">บัญชีผู้ใช้</a>
-                                    </li>
-                                    <li class="breadcrumb-item">
-                                        <a class="active">ข้อมูลบัญชีผู้ใช้</a>
-                                    </li>
-                                </ol>
-                            </nav>
-
-                            <span class="active-menu-url">account-manage</span>
-                            <!-- /Breadcrumb & Active menu-->
-
-                            <?php
-                                $userID = $_GET["userID"] ?? "";
-                                
-                                function selectUserData($database, $userID){
-                                    if(empty($userID)){
-                                        return false;
-                                    }
-
-                                    $sql = "SELECT userID, userFname, userLname, userProfile, username, userLevel, userRegist, userStatus
-                                            FROM users
-                                            WHERE userID = ?;";
-                                    
-                                    $stmt = $database->stmt_init(); 
-                                    $stmt->prepare($sql);
-                                    $stmt->bind_param('s', $userID);
-                                    $stmt->execute();
-                                    $userResult = $stmt-> get_result();
-                                    $stmt->close();
-
-                                    if($userResult->num_rows == 0){
-                                        return false;
-                                    }
-
-                                    return $userResult->fetch_assoc();
-                                }
-
-                                $user = selectUserData($database, $userID);
-                                if($user != false){
-                                //Case data exist
-                            ?>
-
                             <!-- Card profile banner -->
                             <div class="row">
                                 <div class="col-12">
@@ -110,27 +64,27 @@
                                         </div>
                                         <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
                                             <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
-                                                <img src="../assets/img/avatars/<?php echo $user['userProfile']; ?>" alt="user avatar" class="d-block ms-0 ms-sm-4 rounded user-profile-img fit-cover">
+                                                <img src="../assets/img/avatars/<?php echo $currentUser->userProfile; ?>" alt="user avatar" class="d-block ms-0 ms-sm-4 rounded user-profile-img fit-cover">
                                             </div>
                                             <div class="flex-grow-1 mt-3 mt-sm-5">
                                                 <div class="d-flex align-items-md-end align-items-center justify-content-between mx-4 flex-sm-row flex-column gap-4">
                                                     <div class="user-profile-info">
                                                         <h4 class="fw-bold">
-                                                            <?php echo $user['userFname']." ".$user['userLname'];?>
+                                                            <?php echo $currentUser->userFname." ".$currentUser->userLname;?>
                                                         </h4>
                                                         <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
                                                             <li class="list-inline-item">
                                                                 <i class="fa-solid fa-user text-primary me-1"></i>
-                                                                <?php echo $user['username'];?>
+                                                                <?php echo $currentUser->username;?>
                                                             </li>
                                                             <li class="list-inline-item">
                                                                 <i class="fa-solid fa-user-tag text-primary me-1"></i> 
-                                                                <?php echo $user['userLevel'];?>
+                                                                <?php echo $currentUser->userLevel;?>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                     <div class="row">
-                                                        <a href="account-edit?userID=<?php echo $user['userID'];?>" class="btn btn-primary text-nowrap col-auto me-1">
+                                                        <a href="profile-edit" class="btn btn-primary text-nowrap col-auto me-1">
                                                             <i class="fa-regular fa-pen-to-square"></i>
                                                             <p class="d-inline d-sm-none d-lg-inline ms-1">แก้ไขข้อมูลผู้ใช้</p>
                                                         </a>
@@ -181,7 +135,7 @@
                                                                             ชื่อ-สกุล
                                                                         </td>
                                                                         <td class="text-start">
-                                                                            <?php echo $user['userFname']." ".$user['userLname'];?>
+                                                                            <?php echo $currentUser->userFname." ".$currentUser->userLname;?>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -190,7 +144,7 @@
                                                                             Username
                                                                         </td>
                                                                         <td td class="text-start">
-                                                                            <?php echo $user['username'];?>
+                                                                            <?php echo $currentUser->username;?>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -199,7 +153,7 @@
                                                                             ระดับผู้ใช้
                                                                         </td>
                                                                         <td td class="text-start">
-                                                                            <?php echo $user['userLevel']; ?>
+                                                                            <?php echo $currentUser->userLevel; ?>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -208,7 +162,7 @@
                                                                             วันลงทะเบียน
                                                                         </td>
                                                                         <td td class="text-start">
-                                                                            <?php echo date("j/n/Y", strtotime($user['userRegist']));?>
+                                                                            <?php echo date("j/n/Y", strtotime($currentUser->userRegist));?>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -218,7 +172,7 @@
                                                                         </td>
                                                                         <td td class="text-start">
                                                                             <?php
-                                                                                $statusText = $user['userStatus'];
+                                                                                $statusText = $currentUser->userStatus;
                                                                                 $statusColorClass = "bg-label-success text-success";
                                                                                 if($statusText == "บัญชีถูกระงับ"){
                                                                                     $statusColorClass = "bg-label-danger text-danger";
@@ -262,7 +216,7 @@
                                                         <div class="accordion-body border-top">
                                                             <?php
                                                                 //Select user activities (count of plant they add etc.)
-                                                                $userID = $user['userID'];
+                                                                $userID = $currentUser->userID;
                                                                 $sql = "SELECT
                                                                         (SELECT count(favID) FROM favorite_plants WHERE userID = '$userID') AS favoriteCount,
                                                                         (SELECT count(plantID) FROM plants WHERE userID = '$userID') AS plantAdd,
@@ -344,19 +298,19 @@
                                     <div class="nav-align-top h-100">
                                         <ul class="nav nav-pills justify-content-center justify-content-md-start mb-3" role="tablist">
                                             <li class="nav-item">
-                                                <a href="?userID=<?php echo $userID;?>&tab=favorite" class="nav-link <?php if($activeTab == 'favorite') echo 'active';?>">
+                                                <a href="?tab=favorite" class="nav-link <?php if($activeTab == 'favorite') echo 'active';?>">
                                                     <i class="fa-solid fa-heart"></i>
                                                     <span class="ms-1 d-none d-md-inline-block">รายการโปรด</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item mx-2">
-                                                <a href="?userID=<?php echo $userID;?>&tab=plants" class="nav-link <?php if($activeTab == 'plants') echo 'active';?>">
+                                                <a href="?tab=plants" class="nav-link <?php if($activeTab == 'plants') echo 'active';?>">
                                                     <i class="fa-solid fa-seedling"></i>
                                                     <span class="ms-1 d-none d-md-inline-block">พืชที่ลงทะเบียน</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="?userID=<?php echo $userID;?>&tab=login" class="nav-link <?php if($activeTab == 'login') echo 'active';?>">
+                                                <a href="?tab=login" class="nav-link <?php if($activeTab == 'login') echo 'active';?>">
                                                     <i class="fa-solid fa-clock-rotate-left"></i>
                                                     <span class="ms-1 d-none d-md-inline-block">การเข้าสู่ระบบ</span>
                                                 </a>
@@ -376,13 +330,6 @@
                                 </div>
                                 <!-- /Right section -->
                             </div>
-
-                            <?php
-                                //Case data not found
-                                }else{
-                                    include("../include/components/card-dataNotFound.php");
-                                }
-                            ?>
                         </div>
                         <!-- /Content -->
 

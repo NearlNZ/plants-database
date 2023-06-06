@@ -7,6 +7,7 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <ul class="navbar-nav d-none d-md-block">
+            <i class="fa-solid fa-seedling fa-lg text-success me-1 d-none d-xl-inline"></i>
             ระบบฐานข้อมูลพืช สาขาวิทยาการคอมพิวเตอร์
         </ul>
         <ul class="navbar-nav flex-row align-items-center ms-auto">
@@ -14,7 +15,7 @@
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                        <img src="../assets/img/avatars/<?php echo $currentUser->userProfile;?>" alt="user profile" class="w-px-40 h-auto rounded-circle" />
+                        <img src="../assets/img/avatars/<?php echo $currentUser->userProfile;?>" alt="user avatar" class="w-px-40 h-px-40 rounded-circle fit-cover" />
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -23,7 +24,7 @@
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar avatar-online">
-                                        <img src="../assets/img/avatars/<?php echo $currentUser->userProfile;?>" alt class="w-px-40 h-auto rounded-circle" />
+                                        <img src="../assets/img/avatars/<?php echo $currentUser->userProfile;?>" alt class="w-px-40 h-px-40 rounded-circle fit-cove" />
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">

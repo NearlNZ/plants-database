@@ -43,7 +43,7 @@
                         </h5>
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="assets/img/avatars/default-avatar.png" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar">
+                                <img src="assets/img/avatars/default-avatar.png" alt="user avatar" class="d-block rounded fit-cover" height="100" width="100" id="uploadedAvatar">
                                 <div class="button-wrapper">
                                     <label id="uploadButton" class="btn btn-primary me-2 mb-4" tabindex="0">
                                         <span class="d-none d-sm-block">อัพโหลดรูปภาพ</span>

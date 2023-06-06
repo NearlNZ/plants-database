@@ -82,7 +82,7 @@
                                             <form id="formAddTag" method="post" action="../data/tag/addNewTag">
                                                 <div class="row g-2">
                                                     <div class="col-12">
-                                                        ชื่อหมวดหมู่
+                                                        ชื่อหมวดหมู่ <span class="text-danger">*</span>
                                                         <div class="input-group input-group-merge">
                                                             <span class="input-group-text"><i class="fa-regular fa-message"></i></span>
                                                             <input type="text" name="tagName" class="form-control" placeholder="ระบุชื่อหมวดหมู่" maxlength="50" autofocus autocomplete="off" required>

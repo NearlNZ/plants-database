@@ -7,23 +7,11 @@
     require_once("../../include/scripts/member-permission-check.php");
 
     //Set variables
-    $userID = $_POST['userID'] ?? '';
     $currentUser = $_SESSION['CSP-session-userID'];
 
     //==============================================================================
 
-    //1) Check for required parameter
-    if($userID == ''){
-        $response->status = 'warning';
-        $response->title = 'เกิดข้อผิดพลาด';
-        $response->text = 'โปรดระบุข้อมูลที่จำเป็นให้ครบถ้วน';
-        
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $database->close();
-        exit();
-    }
-
-    //2) Check account existence
+    //1) Check account existence
     $sql = "SELECT userID, userProfile, userLevel
             FROM users
             WHERE userID = ?
@@ -31,7 +19,7 @@
 
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $userID);
+    $stmt->bind_param('s', $currentUser);
     $stmt->execute();
     $userResult = $stmt-> get_result();
     $stmt->close();
@@ -48,18 +36,7 @@
 
     $user = $userResult->fetch_assoc();
 
-    //3) Check account owner
-    if ($user["userID"] != $currentUser) {
-        $response->status = "warning";
-        $response->title = "ไม่สามารถดำเนินการได้";
-        $response->text = "ไม่สามารถลบบัญชีผู้ใช้ของสมาชิกอื่นได้";
-
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        $database->close();
-        exit();
-    }
-
-    //4) Check minimum admin account if delete admin account
+    //2) Check minimum admin account if delete admin account
     if($user["userLevel"] == "ผู้ดูแลระบบ"){
         $sql = "SELECT userID
             FROM users
@@ -83,7 +60,7 @@
         }
     }
 
-    //5) Delete account profile image if not "default-avatar.png"
+    //3) Delete account profile image if not "default-avatar.png"
     if($user["userProfile"] != "default-avatar.png"){
         $imgPath = "../../assets/img/avatars/";
         $img = $imgPath.$user["userProfile"];
@@ -99,7 +76,7 @@
     
     $stmt =  $database->stmt_init(); 
     $stmt->prepare($sql);
-    $stmt->bind_param('s', $userID);
+    $stmt->bind_param('s', $currentUser);
 
     if($stmt->execute()){
         $stmt->close();

@@ -12,6 +12,10 @@
         header('Location: system-admin/dashboard');
         exit();
     }
+    else if($level == "สมาชิก"){
+        header('Location: system-member/collection');
+        exit();
+    }
     else{
         header('Location: logout');
         exit();

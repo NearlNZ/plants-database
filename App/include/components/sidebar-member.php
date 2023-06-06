@@ -13,14 +13,6 @@
 
     <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
-        <!-- Dashboard -->
-        <li class="menu-item">
-            <a href="dashboard" class="menu-link">
-                <i class="menu-icon fa-solid fa-chart-simple"></i>
-                <div>Dashboard</div>
-            </a>
-        </li>
-
         <!-- Plant collection -->
         <li class="menu-item">
             <a href="collection" class="menu-link">
@@ -44,11 +36,6 @@
                 <li class="menu-item">
                     <a href="tag-manage" class="menu-link">
                         <div>หมวดหมู่พืช</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="account-manage" class="menu-link">
-                        <div>บัญชีผู้ใช้</div>
                     </a>
                 </li>
             </ul>
